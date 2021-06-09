@@ -170,6 +170,33 @@ Log/LogUtil.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Log/LogUtil.cc.s
 .PHONY : Log/LogUtil.cc.s
 
+ResourceManager.o: ResourceManager.cc.o
+
+.PHONY : ResourceManager.o
+
+# target to build an object file
+ResourceManager.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/ResourceManager.cc.o
+.PHONY : ResourceManager.cc.o
+
+ResourceManager.i: ResourceManager.cc.i
+
+.PHONY : ResourceManager.i
+
+# target to preprocess a source file
+ResourceManager.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/ResourceManager.cc.i
+.PHONY : ResourceManager.cc.i
+
+ResourceManager.s: ResourceManager.cc.s
+
+.PHONY : ResourceManager.s
+
+# target to generate assembly for a file
+ResourceManager.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/ResourceManager.cc.s
+.PHONY : ResourceManager.cc.s
+
 Shader.o: Shader.cc.o
 
 .PHONY : Shader.o
@@ -196,6 +223,33 @@ Shader.s: Shader.cc.s
 Shader.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.s
 .PHONY : Shader.cc.s
+
+Texture2D.o: Texture2D.cc.o
+
+.PHONY : Texture2D.o
+
+# target to build an object file
+Texture2D.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Texture2D.cc.o
+.PHONY : Texture2D.cc.o
+
+Texture2D.i: Texture2D.cc.i
+
+.PHONY : Texture2D.i
+
+# target to preprocess a source file
+Texture2D.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Texture2D.cc.i
+.PHONY : Texture2D.cc.i
+
+Texture2D.s: Texture2D.cc.s
+
+.PHONY : Texture2D.s
+
+# target to generate assembly for a file
+Texture2D.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Texture2D.cc.s
+.PHONY : Texture2D.cc.s
 
 Thread/Task.o: Thread/Task.cc.o
 
@@ -344,9 +398,15 @@ help:
 	@echo "... Log/LogUtil.o"
 	@echo "... Log/LogUtil.i"
 	@echo "... Log/LogUtil.s"
+	@echo "... ResourceManager.o"
+	@echo "... ResourceManager.i"
+	@echo "... ResourceManager.s"
 	@echo "... Shader.o"
 	@echo "... Shader.i"
 	@echo "... Shader.s"
+	@echo "... Texture2D.o"
+	@echo "... Texture2D.i"
+	@echo "... Texture2D.s"
 	@echo "... Thread/Task.o"
 	@echo "... Thread/Task.i"
 	@echo "... Thread/Task.s"

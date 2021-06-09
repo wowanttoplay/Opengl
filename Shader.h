@@ -12,7 +12,7 @@
 class Shader {
 public:
     GLuint ID;
-    Shader();
+    Shader()  = default;
     Shader& Use();
 
     void    Compile(const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr);

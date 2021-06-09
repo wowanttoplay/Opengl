@@ -47,6 +47,7 @@
 					<Add directory="/usr/local/Cellar/glew/2.2.0_1/include/GL"/>
 					<Add directory="/usr/local/Cellar/glfw/3.3.4/include/GLFW"/>
 					<Add directory="/usr/local/Cellar/glm"/>
+					<Add directory="/usr/local/Cellar/assimp/include/assimp"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.5/include"/>
@@ -71,6 +72,7 @@
 					<Add directory="/usr/local/Cellar/glew/2.2.0_1/include/GL"/>
 					<Add directory="/usr/local/Cellar/glfw/3.3.4/include/GLFW"/>
 					<Add directory="/usr/local/Cellar/glm"/>
+					<Add directory="/usr/local/Cellar/assimp/include/assimp"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.5/include"/>
@@ -95,10 +97,22 @@
 		<Unit filename="/Users/virgil/Opengl/Log/LogUtil.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/ResourceManager.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/ResourceManager.h">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/Shader.cc">
 			<Option target="Opengl"/>
 		</Unit>
 		<Unit filename="/Users/virgil/Opengl/Shader.h">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/Texture2D.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/Texture2D.h">
 			<Option target="Opengl"/>
 		</Unit>
 		<Unit filename="/Users/virgil/Opengl/Thread/Task.cc">
