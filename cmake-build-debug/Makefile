@@ -170,6 +170,33 @@ Log/LogUtil.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Log/LogUtil.cc.s
 .PHONY : Log/LogUtil.cc.s
 
+Shader.o: Shader.cc.o
+
+.PHONY : Shader.o
+
+# target to build an object file
+Shader.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.o
+.PHONY : Shader.cc.o
+
+Shader.i: Shader.cc.i
+
+.PHONY : Shader.i
+
+# target to preprocess a source file
+Shader.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.i
+.PHONY : Shader.cc.i
+
+Shader.s: Shader.cc.s
+
+.PHONY : Shader.s
+
+# target to generate assembly for a file
+Shader.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.s
+.PHONY : Shader.cc.s
+
 Thread/Task.o: Thread/Task.cc.o
 
 .PHONY : Thread/Task.o
@@ -278,33 +305,6 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-shader/ShaderFactory.o: shader/ShaderFactory.cc.o
-
-.PHONY : shader/ShaderFactory.o
-
-# target to build an object file
-shader/ShaderFactory.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o
-.PHONY : shader/ShaderFactory.cc.o
-
-shader/ShaderFactory.i: shader/ShaderFactory.cc.i
-
-.PHONY : shader/ShaderFactory.i
-
-# target to preprocess a source file
-shader/ShaderFactory.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.i
-.PHONY : shader/ShaderFactory.cc.i
-
-shader/ShaderFactory.s: shader/ShaderFactory.cc.s
-
-.PHONY : shader/ShaderFactory.s
-
-# target to generate assembly for a file
-shader/ShaderFactory.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.s
-.PHONY : shader/ShaderFactory.cc.s
-
 window/Window.o: window/Window.cc.o
 
 .PHONY : window/Window.o
@@ -344,6 +344,9 @@ help:
 	@echo "... Log/LogUtil.o"
 	@echo "... Log/LogUtil.i"
 	@echo "... Log/LogUtil.s"
+	@echo "... Shader.o"
+	@echo "... Shader.i"
+	@echo "... Shader.s"
 	@echo "... Thread/Task.o"
 	@echo "... Thread/Task.i"
 	@echo "... Thread/Task.s"
@@ -356,9 +359,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... shader/ShaderFactory.o"
-	@echo "... shader/ShaderFactory.i"
-	@echo "... shader/ShaderFactory.s"
 	@echo "... window/Window.o"
 	@echo "... window/Window.i"
 	@echo "... window/Window.s"

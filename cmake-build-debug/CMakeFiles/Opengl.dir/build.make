@@ -129,22 +129,9 @@ CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/Thread/ThreadPool.cc -o CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.s
 
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o: CMakeFiles/Opengl.dir/flags.make
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o: ../shader/ShaderFactory.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o -c /Users/virgil/Opengl/shader/ShaderFactory.cc
-
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/shader/ShaderFactory.cc > CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.i
-
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/shader/ShaderFactory.cc -o CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.s
-
 CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o: CMakeFiles/Opengl.dir/flags.make
 CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o: ../Tool/PrintTool.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o -c /Users/virgil/Opengl/Tool/PrintTool.cc
 
 CMakeFiles/Opengl.dir/Tool/PrintTool.cc.i: cmake_force
@@ -157,7 +144,7 @@ CMakeFiles/Opengl.dir/Tool/PrintTool.cc.s: cmake_force
 
 CMakeFiles/Opengl.dir/Log/LogUtil.cc.o: CMakeFiles/Opengl.dir/flags.make
 CMakeFiles/Opengl.dir/Log/LogUtil.cc.o: ../Log/LogUtil.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/Log/LogUtil.cc.o -c /Users/virgil/Opengl/Log/LogUtil.cc
 
 CMakeFiles/Opengl.dir/Log/LogUtil.cc.i: cmake_force
@@ -168,15 +155,28 @@ CMakeFiles/Opengl.dir/Log/LogUtil.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/Log/LogUtil.cc.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/Log/LogUtil.cc -o CMakeFiles/Opengl.dir/Log/LogUtil.cc.s
 
+CMakeFiles/Opengl.dir/Shader.cc.o: CMakeFiles/Opengl.dir/flags.make
+CMakeFiles/Opengl.dir/Shader.cc.o: ../Shader.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Opengl.dir/Shader.cc.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/Shader.cc.o -c /Users/virgil/Opengl/Shader.cc
+
+CMakeFiles/Opengl.dir/Shader.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/Shader.cc.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/Shader.cc > CMakeFiles/Opengl.dir/Shader.cc.i
+
+CMakeFiles/Opengl.dir/Shader.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/Shader.cc.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/Shader.cc -o CMakeFiles/Opengl.dir/Shader.cc.s
+
 # Object files for target Opengl
 Opengl_OBJECTS = \
 "CMakeFiles/Opengl.dir/main.cpp.o" \
 "CMakeFiles/Opengl.dir/window/Window.cc.o" \
 "CMakeFiles/Opengl.dir/Thread/Task.cc.o" \
 "CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o" \
-"CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o" \
 "CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o" \
-"CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
+"CMakeFiles/Opengl.dir/Log/LogUtil.cc.o" \
+"CMakeFiles/Opengl.dir/Shader.cc.o"
 
 # External object files for target Opengl
 Opengl_EXTERNAL_OBJECTS =
@@ -185,9 +185,9 @@ Opengl: CMakeFiles/Opengl.dir/main.cpp.o
 Opengl: CMakeFiles/Opengl.dir/window/Window.cc.o
 Opengl: CMakeFiles/Opengl.dir/Thread/Task.cc.o
 Opengl: CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o
-Opengl: CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o
 Opengl: CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o
 Opengl: CMakeFiles/Opengl.dir/Log/LogUtil.cc.o
+Opengl: CMakeFiles/Opengl.dir/Shader.cc.o
 Opengl: CMakeFiles/Opengl.dir/build.make
 Opengl: /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib
 Opengl: /usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.dylib

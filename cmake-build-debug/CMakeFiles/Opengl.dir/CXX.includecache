@@ -12,27 +12,13 @@ glew.h
 glfw3.h
 -
 
-/Users/virgil/Opengl/Log/LogUtil.cc
-LogUtil.h
 /Users/virgil/Opengl/Log/LogUtil.h
-
-/Users/virgil/Opengl/Log/LogUtil.h
-
-/Users/virgil/Opengl/Thread/Task.cc
-Task.h
-/Users/virgil/Opengl/Thread/Task.h
 
 /Users/virgil/Opengl/Thread/Task.h
 string
 -
 functional
 -
-
-/Users/virgil/Opengl/Thread/ThreadPool.cc
-ThreadPool.h
-/Users/virgil/Opengl/Thread/ThreadPool.h
-Task.h
-/Users/virgil/Opengl/Thread/Task.h
 
 /Users/virgil/Opengl/Thread/ThreadPool.h
 memory
@@ -53,10 +39,6 @@ functional
 -
 string
 -
-
-/Users/virgil/Opengl/Tool/PrintTool.cc
-PrintTool.h
-/Users/virgil/Opengl/Tool/PrintTool.h
 
 /Users/virgil/Opengl/Tool/PrintTool.h
 iostream
@@ -83,34 +65,12 @@ Thread/ThreadPool.h
 /Users/virgil/Opengl/Thread/ThreadPool.h
 Thread/Task.h
 /Users/virgil/Opengl/Thread/Task.h
-shader/shader_data.h
-/Users/virgil/Opengl/shader/shader_data.h
-shader/ShaderFactory.h
-/Users/virgil/Opengl/shader/ShaderFactory.h
 Data/vertex_data.h
 /Users/virgil/Opengl/Data/vertex_data.h
 Tool/PrintTool.h
 /Users/virgil/Opengl/Tool/PrintTool.h
 Log/LogUtil.h
 /Users/virgil/Opengl/Log/LogUtil.h
-
-/Users/virgil/Opengl/shader/ShaderFactory.cc
-ShaderFactory.h
-/Users/virgil/Opengl/shader/ShaderFactory.h
-
-/Users/virgil/Opengl/shader/ShaderFactory.h
-glew.h
--
-glfw3.h
--
-iostream
--
-
-/Users/virgil/Opengl/shader/shader_data.h
-
-/Users/virgil/Opengl/window/Window.cc
-Window.h
-/Users/virgil/Opengl/window/Window.h
 
 /Users/virgil/Opengl/window/Window.h
 glew.h

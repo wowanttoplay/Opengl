@@ -1,10 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
+  "CMakeFiles/Opengl.dir/Shader.cc.o"
   "CMakeFiles/Opengl.dir/Thread/Task.cc.o"
   "CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o"
   "CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o"
   "CMakeFiles/Opengl.dir/main.cpp.o"
-  "CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o"
   "CMakeFiles/Opengl.dir/window/Window.cc.o"
   "Opengl"
   "Opengl.pdb"

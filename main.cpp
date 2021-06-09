@@ -5,8 +5,6 @@
 #include "window/Window.h"
 #include "Thread/ThreadPool.h"
 #include "Thread/Task.h"
-#include "shader/shader_data.h"
-#include "shader/ShaderFactory.h"
 #include "Data/vertex_data.h"
 #include "Tool/PrintTool.h"
 #include "Log/LogUtil.h"
@@ -22,6 +20,7 @@ void CreateRenderVAO(uint32_t &VBO, uint32_t &VAO, uint32_t &EBO);
 using namespace std;
 
 bool InitGlew() {
+
     // init glew
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
@@ -32,8 +31,7 @@ bool InitGlew() {
 }
 
 int main() {
-
-
+    log_level = LogLevel::LogLevel_Error;
     GLFWwindow *window = Window::InitGLFWWindow();
     if (window == nullptr) {
         return -1;

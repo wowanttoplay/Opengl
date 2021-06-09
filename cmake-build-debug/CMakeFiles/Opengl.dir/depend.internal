@@ -23,14 +23,7 @@ CMakeFiles/Opengl.dir/main.cpp.o
  /Users/virgil/Opengl/Thread/ThreadPool.h
  /Users/virgil/Opengl/Tool/PrintTool.h
  /Users/virgil/Opengl/main.cpp
- /Users/virgil/Opengl/shader/ShaderFactory.h
- /Users/virgil/Opengl/shader/shader_data.h
  /Users/virgil/Opengl/window/Window.h
- /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
- /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o
- /Users/virgil/Opengl/shader/ShaderFactory.cc
- /Users/virgil/Opengl/shader/ShaderFactory.h
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
 CMakeFiles/Opengl.dir/window/Window.cc.o

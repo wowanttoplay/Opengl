@@ -22,16 +22,9 @@ CMakeFiles/Opengl.dir/main.cpp.o: ../Thread/Task.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Thread/ThreadPool.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Tool/PrintTool.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../main.cpp
-CMakeFiles/Opengl.dir/main.cpp.o: ../shader/ShaderFactory.h
-CMakeFiles/Opengl.dir/main.cpp.o: ../shader/shader_data.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../window/Window.h
 CMakeFiles/Opengl.dir/main.cpp.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
 CMakeFiles/Opengl.dir/main.cpp.o: /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
-
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o: ../shader/ShaderFactory.cc
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o: ../shader/ShaderFactory.h
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
-CMakeFiles/Opengl.dir/shader/ShaderFactory.cc.o: /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
 
 CMakeFiles/Opengl.dir/window/Window.cc.o: ../window/Window.cc
 CMakeFiles/Opengl.dir/window/Window.cc.o: ../window/Window.h
