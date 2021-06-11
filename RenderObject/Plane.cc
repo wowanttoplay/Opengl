@@ -28,29 +28,27 @@ Plane::Plane() {
     // prepare
 }
 
-void Plane::Render(Shader shader, Texture2D texture, const glm::mat4& view ,const glm::mat4& projection) {
-//    if (!texture.ready_) return;
+void Plane::Render(Shader shader, Texture2D texture,  const glm::mat4& model, const glm::mat4& view ,const glm::mat4& projection) {
     shader.Use();
 
-    shader.SetInteger("texture1", 0);
+    shader.SetInteger("texture0", 0);
     glActiveTexture(GL_TEXTURE0);
     texture.Bind();
 
-    // calculate self matrix
-    glm::mat4 model = glm::mat4(1);
+    ;
+    // set model view and projection
     shader.SetMatrix4("model", model);
-    // set view and projection
     shader.SetMatrix4("view", view);
     shader.SetMatrix4("projection", projection);
-    shader.SetFloat("time", time_);
+
+    glm::vec4 mixColor = glm::vec4(0.7f, 0.5f, 0.5f, 1.0f);
+    shader.SetVector4f("mixColor", mixColor);
     glBindVertexArray(VAO);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawArrays(GL_LINES, 0, 6);
 }
 
 void Plane::Update(float dt) {
-    time_ = glm::radians(dt);
 }
 
 

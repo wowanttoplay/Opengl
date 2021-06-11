@@ -49,7 +49,7 @@ int main() {
         scene.process_key(key, action);
     };
     Window::func = &func;
-//    std::bind(Window::func, &Scene::process_key, scene);
+    glEnable(GL_DEPTH_TEST);
 
     // render
     while (!glfwWindowShouldClose(const_cast<GLFWwindow*>(window))) {

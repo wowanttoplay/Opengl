@@ -1,11 +1,7 @@
 #version 330 core
 in vec2 texCoords;
-uniform sampler2D texture1;
+uniform vec4 mixColor;
+uniform sampler2D texture0;
 out vec4 fragcolor;
 
-uniform float time;
-
-void main() 
-{ 
-    fragcolor = texture(texture1, texCoords); 
-}
+void main() { fragcolor = texture(texture0, texCoords) * mixColor; }

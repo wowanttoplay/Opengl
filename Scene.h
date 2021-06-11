@@ -12,10 +12,13 @@ class Scene {
 public:
     glm::vec3 camera_position;
     glm::vec3 looked_position;
+    glm::vec3 looked_direction;
 
     float scene_width;
     float scene_height;
     float view_angle = 45.0f;
+
+    virtual ~Scene();
 
     void process_key(int key, int action);
 

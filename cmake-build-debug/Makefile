@@ -170,6 +170,33 @@ Log/LogUtil.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Log/LogUtil.cc.s
 .PHONY : Log/LogUtil.cc.s
 
+RenderObject/Box.o: RenderObject/Box.cc.o
+
+.PHONY : RenderObject/Box.o
+
+# target to build an object file
+RenderObject/Box.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Box.cc.o
+.PHONY : RenderObject/Box.cc.o
+
+RenderObject/Box.i: RenderObject/Box.cc.i
+
+.PHONY : RenderObject/Box.i
+
+# target to preprocess a source file
+RenderObject/Box.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Box.cc.i
+.PHONY : RenderObject/Box.cc.i
+
+RenderObject/Box.s: RenderObject/Box.cc.s
+
+.PHONY : RenderObject/Box.s
+
+# target to generate assembly for a file
+RenderObject/Box.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Box.cc.s
+.PHONY : RenderObject/Box.cc.s
+
 RenderObject/Plane.o: RenderObject/Plane.cc.o
 
 .PHONY : RenderObject/Plane.o
@@ -452,6 +479,9 @@ help:
 	@echo "... Log/LogUtil.o"
 	@echo "... Log/LogUtil.i"
 	@echo "... Log/LogUtil.s"
+	@echo "... RenderObject/Box.o"
+	@echo "... RenderObject/Box.i"
+	@echo "... RenderObject/Box.s"
 	@echo "... RenderObject/Plane.o"
 	@echo "... RenderObject/Plane.i"
 	@echo "... RenderObject/Plane.s"

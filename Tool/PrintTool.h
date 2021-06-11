@@ -8,6 +8,9 @@
 #include <glfw3.h>
 #include <vector>
 #include <iomanip>
+#include <glm/glm.hpp>
+
+#include "../Log/LogUtil.h"
 
 namespace tool {
     /**
@@ -54,6 +57,9 @@ namespace tool {
         }
     }
 
+    static void Print(const glm::vec3& data) {
+        logE("(x:%f, y:%f, z:%f)\n", data.x, data.y, data.z);
+    }
 
 }
 
