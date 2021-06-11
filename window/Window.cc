@@ -9,6 +9,7 @@ using namespace std;
 const GLuint window_width = 800;
 const GLuint window_height = 600;
 const std::string window_title = "LearnOpenGL";
+function<void(int, int)>* Window::func = nullptr;
 
 GLFWwindow *Window::InitGLFWWindow() {
     glfwInit();
@@ -33,6 +34,9 @@ void Window::Key_CallBack(GLFWwindow *window, int key, int scancode, int action,
     cout << " key call back, key = " << key << endl;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+    if (func != nullptr) {
+        (*func)(key, action);
     }
 }
 

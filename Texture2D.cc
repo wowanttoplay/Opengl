@@ -24,6 +24,7 @@ void Texture2D::Generate(GLuint width, GLuint height, unsigned char* data)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->Filter_Max);
 
     glBindTexture(GL_TEXTURE_2D, 0);
+    ready_ = true;
 }
 
 void Texture2D::Bind() const

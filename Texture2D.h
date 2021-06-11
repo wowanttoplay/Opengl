@@ -20,6 +20,8 @@ public:
     GLuint Filter_Min;
     GLuint Filter_Max;
 
+    bool ready_ = false;
+
     Texture2D();
 
     void Generate(GLuint width, GLuint height, unsigned char* data);

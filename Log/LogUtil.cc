@@ -5,4 +5,4 @@
 #include "LogUtil.h"
 
 
-extern LogLevel log_level = LogLevel::LogLevel_Info;
+LogLevel log_level = LogLevel::LogLevel_Info;

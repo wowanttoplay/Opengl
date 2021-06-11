@@ -6,10 +6,9 @@
 
 #include "Log/LogUtil.h"
 
-Shader &Shader::Use()
+void Shader::Use() const
 {
     glUseProgram(this->ID);
-    return *this;
 }
 
 void Shader::Compile(const GLchar* vertexSource, const GLchar* fragmentSource, const GLchar* geometrySource)
@@ -41,11 +40,13 @@ void Shader::Compile(const GLchar* vertexSource, const GLchar* fragmentSource, c
         glAttachShader(this->ID, gShader);
     glLinkProgram(this->ID);
     checkCompileErrors(this->ID, "PROGRAM");
-    // Delete the shaders as they're linked into our program now and no longer necessery
+
     glDeleteShader(sVertex);
     glDeleteShader(sFragment);
     if (geometrySource != nullptr)
         glDeleteShader(gShader);
+
+    ready_ = true;
 }
 
 void Shader::SetFloat(const GLchar *name, GLfloat value, GLboolean useShader)

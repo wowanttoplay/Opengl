@@ -170,6 +170,33 @@ Log/LogUtil.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Log/LogUtil.cc.s
 .PHONY : Log/LogUtil.cc.s
 
+RenderObject/Plane.o: RenderObject/Plane.cc.o
+
+.PHONY : RenderObject/Plane.o
+
+# target to build an object file
+RenderObject/Plane.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o
+.PHONY : RenderObject/Plane.cc.o
+
+RenderObject/Plane.i: RenderObject/Plane.cc.i
+
+.PHONY : RenderObject/Plane.i
+
+# target to preprocess a source file
+RenderObject/Plane.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Plane.cc.i
+.PHONY : RenderObject/Plane.cc.i
+
+RenderObject/Plane.s: RenderObject/Plane.cc.s
+
+.PHONY : RenderObject/Plane.s
+
+# target to generate assembly for a file
+RenderObject/Plane.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Plane.cc.s
+.PHONY : RenderObject/Plane.cc.s
+
 ResourceManager.o: ResourceManager.cc.o
 
 .PHONY : ResourceManager.o
@@ -196,6 +223,33 @@ ResourceManager.s: ResourceManager.cc.s
 ResourceManager.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/ResourceManager.cc.s
 .PHONY : ResourceManager.cc.s
+
+Scene.o: Scene.cc.o
+
+.PHONY : Scene.o
+
+# target to build an object file
+Scene.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Scene.cc.o
+.PHONY : Scene.cc.o
+
+Scene.i: Scene.cc.i
+
+.PHONY : Scene.i
+
+# target to preprocess a source file
+Scene.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Scene.cc.i
+.PHONY : Scene.cc.i
+
+Scene.s: Scene.cc.s
+
+.PHONY : Scene.s
+
+# target to generate assembly for a file
+Scene.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Scene.cc.s
+.PHONY : Scene.cc.s
 
 Shader.o: Shader.cc.o
 
@@ -398,9 +452,15 @@ help:
 	@echo "... Log/LogUtil.o"
 	@echo "... Log/LogUtil.i"
 	@echo "... Log/LogUtil.s"
+	@echo "... RenderObject/Plane.o"
+	@echo "... RenderObject/Plane.i"
+	@echo "... RenderObject/Plane.s"
 	@echo "... ResourceManager.o"
 	@echo "... ResourceManager.i"
 	@echo "... ResourceManager.s"
+	@echo "... Scene.o"
+	@echo "... Scene.i"
+	@echo "... Scene.s"
 	@echo "... Shader.o"
 	@echo "... Shader.i"
 	@echo "... Shader.s"

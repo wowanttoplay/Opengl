@@ -97,10 +97,22 @@
 		<Unit filename="/Users/virgil/Opengl/Log/LogUtil.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Plane.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Plane.h">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/ResourceManager.cc">
 			<Option target="Opengl"/>
 		</Unit>
 		<Unit filename="/Users/virgil/Opengl/ResourceManager.h">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/Scene.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/Scene.h">
 			<Option target="Opengl"/>
 		</Unit>
 		<Unit filename="/Users/virgil/Opengl/Shader.cc">

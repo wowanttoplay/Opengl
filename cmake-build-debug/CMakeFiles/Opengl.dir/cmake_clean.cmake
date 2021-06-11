@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
+  "CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"
   "CMakeFiles/Opengl.dir/ResourceManager.cc.o"
+  "CMakeFiles/Opengl.dir/Scene.cc.o"
   "CMakeFiles/Opengl.dir/Shader.cc.o"
   "CMakeFiles/Opengl.dir/Texture2D.cc.o"
   "CMakeFiles/Opengl.dir/Thread/Task.cc.o"

@@ -13,9 +13,11 @@ class Shader {
 public:
     GLuint ID;
     Shader()  = default;
-    Shader& Use();
+    void Use() const;
 
     void    Compile(const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr);
+
+    bool    ready_ = false;
 
     void    SetFloat    (const GLchar *name, GLfloat value, GLboolean useShader = false);
     void    SetInteger  (const GLchar *name, GLint value, GLboolean useShader = false);

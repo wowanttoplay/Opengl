@@ -5,9 +5,9 @@
 #include "window/Window.h"
 #include "Thread/ThreadPool.h"
 #include "Thread/Task.h"
-#include "Data/vertex_data.h"
 #include "Tool/PrintTool.h"
 #include "Log/LogUtil.h"
+#include "Scene.h"
 
 bool InitGlew();
 
@@ -42,12 +42,25 @@ int main() {
     auto[width, height] = Window::GetWindowSize(const_cast<GLFWwindow*>(window));
     glViewport(0, 0, width, height);
 
+    Scene scene;
+    scene.Init();
+    scene.SetView(width, height);
+    function<void(int,int)>func = [&scene](int key, int action)->void{
+        scene.process_key(key, action);
+    };
+    Window::func = &func;
+//    std::bind(Window::func, &Scene::process_key, scene);
 
     // render
     while (!glfwWindowShouldClose(const_cast<GLFWwindow*>(window))) {
-        glfwPollEvents();
+
+        glClearColor(0.2, 0.2 ,0.2 ,1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        scene.Update((float)glfwGetTime());
+        scene.Render();
 
         glfwSwapBuffers(const_cast<GLFWwindow*>(window));
+        glfwPollEvents();
     }
     //exist
     glfwTerminate();

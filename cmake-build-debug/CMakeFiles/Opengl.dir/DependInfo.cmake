@@ -5,7 +5,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/virgil/Opengl/Log/LogUtil.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
+  "/Users/virgil/Opengl/RenderObject/Plane.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"
   "/Users/virgil/Opengl/ResourceManager.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/ResourceManager.cc.o"
+  "/Users/virgil/Opengl/Scene.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Scene.cc.o"
   "/Users/virgil/Opengl/Shader.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Shader.cc.o"
   "/Users/virgil/Opengl/Texture2D.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Texture2D.cc.o"
   "/Users/virgil/Opengl/Thread/Task.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Thread/Task.cc.o"
