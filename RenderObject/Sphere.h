@@ -28,12 +28,14 @@ struct TriangleIndices{
 class Sphere {
 public:
     virtual ~Sphere();
-    uint32_t VAO,VBO,EBO;
-    std::vector<float>vertices_data;
-    std::vector<uint32_t> indices_data;
+    inline void SetColor(const glm::vec4 color){this->color = color;};
     explicit Sphere(int x_num, int y_num);
     void Render(Shader shader, Texture2D texture, const glm::mat4 &model, const glm::mat4 &view,
                 const glm::mat4 &projection);
-
+private:
+    uint32_t VAO,VBO,EBO;
+    glm::vec4 color;
+    std::vector<float>vertices_data;
+    std::vector<uint32_t> indices_data;
 };
 

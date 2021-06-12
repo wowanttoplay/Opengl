@@ -41,7 +41,7 @@ void Plane::Render(Shader shader, Texture2D texture,  const glm::mat4& model, co
     shader.SetMatrix4("view", view);
     shader.SetMatrix4("projection", projection);
 
-    glm::vec4 mixColor = glm::vec4(0.7f, 0.5f, 0.5f, 1.0f);
+    glm::vec4 mixColor = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
     shader.SetVector4f("mixColor", mixColor);
     glBindVertexArray(VAO);
 
