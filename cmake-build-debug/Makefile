@@ -224,6 +224,33 @@ RenderObject/Plane.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Plane.cc.s
 .PHONY : RenderObject/Plane.cc.s
 
+RenderObject/Sphere.o: RenderObject/Sphere.cc.o
+
+.PHONY : RenderObject/Sphere.o
+
+# target to build an object file
+RenderObject/Sphere.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o
+.PHONY : RenderObject/Sphere.cc.o
+
+RenderObject/Sphere.i: RenderObject/Sphere.cc.i
+
+.PHONY : RenderObject/Sphere.i
+
+# target to preprocess a source file
+RenderObject/Sphere.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.i
+.PHONY : RenderObject/Sphere.cc.i
+
+RenderObject/Sphere.s: RenderObject/Sphere.cc.s
+
+.PHONY : RenderObject/Sphere.s
+
+# target to generate assembly for a file
+RenderObject/Sphere.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.s
+.PHONY : RenderObject/Sphere.cc.s
+
 ResourceManager.o: ResourceManager.cc.o
 
 .PHONY : ResourceManager.o
@@ -485,6 +512,9 @@ help:
 	@echo "... RenderObject/Plane.o"
 	@echo "... RenderObject/Plane.i"
 	@echo "... RenderObject/Plane.s"
+	@echo "... RenderObject/Sphere.o"
+	@echo "... RenderObject/Sphere.i"
+	@echo "... RenderObject/Sphere.s"
 	@echo "... ResourceManager.o"
 	@echo "... ResourceManager.i"
 	@echo "... ResourceManager.s"

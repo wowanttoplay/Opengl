@@ -109,6 +109,12 @@
 		<Unit filename="/Users/virgil/Opengl/RenderObject/Plane.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Sphere.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Sphere.h">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/ResourceManager.cc">
 			<Option target="Opengl"/>
 		</Unit>

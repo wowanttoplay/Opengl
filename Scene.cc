@@ -6,17 +6,21 @@
 #include "ResourceManager.h"
 #include "RenderObject/Plane.h"
 #include "RenderObject/Box.h"
+#include "RenderObject/Sphere.h"
 
 #include "Log/LogUtil.h"
 #include "Tool/PrintTool.h"
 
 Plane* plane = nullptr;
 Box* box = nullptr;
+Sphere* light = nullptr;
 
 
 const std::string kFloorName = "floor";
 const std::string kBoxName = "Wall";
+const std::string kSphereName = "Sphere";
 glm::vec3 box_position = glm::vec3(-5.0f, 0.0f, 0.0f);
+glm::vec3 light_position = glm::vec3(5.0f, 5.0f, 0.0f);
 
 
 Scene::~Scene() {
@@ -39,9 +43,12 @@ void Scene::Init() {
     // init box resource
     ResourceManager::LoadTexture("../Data/floor.jpg", kBoxName);
     ResourceManager::LoadShader("../Data/box.vs", "../Data/box.fs", nullptr, kBoxName);
+    // init light resource
+    ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/Sphere.fs", nullptr, kSphereName);
 
     plane = new Plane();
     box = new Box();
+    light = new Sphere(30,30);
 }
 
 void Scene::Render() {
@@ -57,7 +64,11 @@ void Scene::Render() {
     box_model = glm::translate(box_model, box_position);
     box_model = glm::scale(box_model, glm::vec3(7.0f));
     box->Render(ResourceManager::GetShader(kBoxName), ResourceManager::GetTexture(kBoxName), model, view, projection);
-    // render fire
+    // render light
+    glm::mat4 light_model = glm::mat4(1.0);
+    light_model = glm::translate(light_model, light_position);
+    light_model = glm::scale(light_model, glm::vec3(0.1f));
+    light->Render(ResourceManager::GetShader(kSphereName), ResourceManager::GetTexture(kSphereName), light_model, view, projection);
 
 }
 
