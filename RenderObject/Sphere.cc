@@ -66,7 +66,6 @@ void Sphere::Render(Shader shader, Texture2D texture, const glm::mat4 &model, co
     shader.SetMatrix4("model", model);
     shader.SetMatrix4("view", view);
     shader.SetMatrix4("projection", projection);
-    shader.SetVector4f("color", this->color);
 
     glBindVertexArray(this->VAO);
 //    glDrawArrays(GL_LINES, 0, vertices_num);

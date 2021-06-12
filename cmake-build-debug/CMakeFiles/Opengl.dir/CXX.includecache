@@ -75,6 +75,10 @@ glm/glm.hpp
 -
 glm/gtc/type_ptr.hpp
 -
+memory
+-
+vector
+-
 
 /Users/virgil/Opengl/Shader.h
 string

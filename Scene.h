@@ -7,6 +7,12 @@
 #include <glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <memory>
+#include <vector>
+
+class Plane;
+class Box;
+class Sphere;
 
 class Scene {
 public:
@@ -26,6 +32,10 @@ public:
     void Render();
     void Init();
     void Update(float dt);
+private:
+    std::shared_ptr<Plane> plane = nullptr;
+    std::vector<std::shared_ptr<Box>> box_vec;
+    std::shared_ptr<Sphere>light = nullptr;
 
 };
 

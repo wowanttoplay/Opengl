@@ -22,7 +22,7 @@ uniform sampler2D texture0;
 out vec4 fragcolor;
 
 void main() {
-  vec4 color = texture(texture0, fs_in.texCoords);
+  vec3 color = texture(texture0, fs_in.texCoords).rgb;
   // vector(from light、camera to fragment)
   vec3 lightDir = normalize(vec3(light.position - fs_in.FragPos));
   vec3 cameraDir = normalize(vec3(cameraPosition - fs_in.FragPos));
@@ -33,7 +33,7 @@ void main() {
   float diff = max(dot(lightDir, normal), 0.0);
   vec3 diffuse = diff * color * light.color;
   // blinn specular
-  vec3 reflectDir = reflect(-lightDir, fs_in.Normal);
+  vec3 reflectDir = normalize(reflect(-lightDir, fs_in.Normal));
   vec3 halfDir = normalize(reflectDir + cameraDir);
   float spec = pow(max(dot(halfDir, fs_in.Normal), 0.0), 32.0);
   vec3 specular = spec * color * light.color;
