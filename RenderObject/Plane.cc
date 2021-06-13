@@ -28,23 +28,9 @@ Plane::Plane() {
     // prepare
 }
 
-void Plane::Render(Shader shader, Texture2D texture,  const glm::mat4& model, const glm::mat4& view ,const glm::mat4& projection) {
+void Plane::Render(Shader shader) {
     shader.Use();
-
-    shader.SetInteger("texture0", 0);
-    glActiveTexture(GL_TEXTURE0);
-    texture.Bind();
-
-    ;
-    // set model view and projection
-    shader.SetMatrix4("model", model);
-    shader.SetMatrix4("view", view);
-    shader.SetMatrix4("projection", projection);
-
-    glm::vec4 mixColor = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-    shader.SetVector4f("mixColor", mixColor);
     glBindVertexArray(VAO);
-
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 

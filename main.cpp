@@ -43,8 +43,9 @@ int main() {
     glViewport(0, 0, width, height);
 
     Scene scene;
-    scene.Init();
     scene.SetView(width, height);
+    scene.Init();
+
     function<void(int,int)>func = [&scene](int key, int action)->void{
         scene.process_key(key, action);
     };

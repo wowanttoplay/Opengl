@@ -10,12 +10,10 @@ using namespace std;
 
 Sphere::Sphere(int x_num, int y_num) {
     // 生成球面顶点数据
-    for (int y=0;y<=y_num;y++)
-    {
-        for (int x=0;x<=x_num;x++)
-        {
-            float xSegment = (float)x / (float)x_num;
-            float ySegment = (float)y / (float)x_num;
+    for (int y = 0; y <= y_num; y++) {
+        for (int x = 0; x <= x_num; x++) {
+            float xSegment = (float) x / (float) x_num;
+            float ySegment = (float) y / (float) x_num;
             float xPos = std::cos(xSegment * 2.0f * M_PI) * std::sin(ySegment * M_PI);
             float yPos = std::cos(ySegment * M_PI);
             float zPos = std::sin(xSegment * 2.0f * M_PI) * std::sin(ySegment * M_PI);
@@ -26,14 +24,12 @@ Sphere::Sphere(int x_num, int y_num) {
     }
 
     //生成球的Indices
-    for (int i=0;i<y_num;i++)
-    {
-        for (int j=0;j<x_num;j++)
-        {
+    for (int i = 0; i < y_num; i++) {
+        for (int j = 0; j < x_num; j++) {
             indices_data.push_back(i * (x_num + 1) + j);
             indices_data.push_back((i + 1) * (x_num + 1) + j);
-            indices_data.push_back((i + 1) * (x_num + 1) + j+1);
-            indices_data.push_back(i* (x_num + 1) + j);
+            indices_data.push_back((i + 1) * (x_num + 1) + j + 1);
+            indices_data.push_back(i * (x_num + 1) + j);
             indices_data.push_back((i + 1) * (x_num + 1) + j + 1);
             indices_data.push_back(i * (x_num + 1) + j + 1);
         }
@@ -57,20 +53,10 @@ Sphere::Sphere(int x_num, int y_num) {
     glBindVertexArray(0);
 }
 
-void Sphere::Render(Shader shader, Texture2D texture, const glm::mat4 &model, const glm::mat4 &view,
-                    const glm::mat4 &projection) {
-
+void Sphere::Render(Shader shader) {
     shader.Use();
-//    texture.Bind();
-
-    shader.SetMatrix4("model", model);
-    shader.SetMatrix4("view", view);
-    shader.SetMatrix4("projection", projection);
-
     glBindVertexArray(this->VAO);
-//    glDrawArrays(GL_LINES, 0, vertices_num);
     glDrawElements(GL_TRIANGLES, indices_data.size(), GL_UNSIGNED_INT, 0);
-//    glDrawElements(GL_LINES, indices_data.size(), GL_UNSIGNED_INT, 0);
 }
 
 Sphere::~Sphere() {

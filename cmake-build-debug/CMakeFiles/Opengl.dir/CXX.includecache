@@ -38,6 +38,16 @@ vector
 ../Shader.h
 /Users/virgil/Opengl/Shader.h
 
+/Users/virgil/Opengl/RenderPass/ShadowProcess.h
+glew.h
+-
+glfw3.h
+-
+glm/glm.hpp
+-
+../Shader.h
+/Users/virgil/Opengl/Shader.h
+
 /Users/virgil/Opengl/ResourceManager.h
 map
 -
@@ -65,6 +75,8 @@ Log/LogUtil.h
 /Users/virgil/Opengl/Log/LogUtil.h
 Tool/PrintTool.h
 /Users/virgil/Opengl/Tool/PrintTool.h
+RenderPass/ShadowProcess.h
+/Users/virgil/Opengl/RenderPass/ShadowProcess.h
 
 /Users/virgil/Opengl/Scene.h
 glew.h
@@ -79,6 +91,8 @@ memory
 -
 vector
 -
+Shader.h
+/Users/virgil/Opengl/Shader.h
 
 /Users/virgil/Opengl/Shader.h
 string

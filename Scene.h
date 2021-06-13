@@ -9,10 +9,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
 #include <vector>
+#include "Shader.h"
 
 class Plane;
 class Box;
 class Sphere;
+class ShadowProcess;
 
 class Scene {
 public:
@@ -37,5 +39,10 @@ private:
     std::vector<std::shared_ptr<Box>> box_vec;
     std::shared_ptr<Sphere>light = nullptr;
 
+    std::shared_ptr<ShadowProcess> shadow_pass_; // 阴影渲染
+
+    void RenderPlane(Shader &shadow_texture_light);
+
+    void RenderBox(Shader &shadow_texture_light);
 };
 

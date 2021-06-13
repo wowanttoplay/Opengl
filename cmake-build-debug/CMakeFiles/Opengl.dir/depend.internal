@@ -1057,6 +1057,7 @@ CMakeFiles/Opengl.dir/Scene.cc.o
  /Users/virgil/Opengl/RenderObject/Box.h
  /Users/virgil/Opengl/RenderObject/Plane.h
  /Users/virgil/Opengl/RenderObject/Sphere.h
+ /Users/virgil/Opengl/RenderPass/ShadowProcess.h
  /Users/virgil/Opengl/ResourceManager.h
  /Users/virgil/Opengl/Scene.cc
  /Users/virgil/Opengl/Scene.h
@@ -1643,6 +1644,7 @@ CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o
 CMakeFiles/Opengl.dir/main.cpp.o
  /Users/virgil/Opengl/Log/LogUtil.h
  /Users/virgil/Opengl/Scene.h
+ /Users/virgil/Opengl/Shader.h
  /Users/virgil/Opengl/Thread/Task.h
  /Users/virgil/Opengl/Thread/ThreadPool.h
  /Users/virgil/Opengl/Tool/PrintTool.h

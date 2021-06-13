@@ -24,20 +24,9 @@ Box::Box() {
     glBindVertexArray(0);
 }
 
-void Box::Render(Shader shader, Texture2D texture, const glm::mat4 &model, const glm::mat4 &view,
-                 const glm::mat4 &projection) {
+void Box::Render(Shader shader) {
 
     shader.Use();
-    shader.SetMatrix4("model", model);
-    shader.SetMatrix4("view",view);
-    shader.SetMatrix4("projection", projection);
-
-    glActiveTexture(GL_TEXTURE0);
-    shader.SetInteger("texture0", 0);
-    glm::vec4 mixColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    shader.SetVector4f("mixColor", mixColor);
-    texture.Bind();
-
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }

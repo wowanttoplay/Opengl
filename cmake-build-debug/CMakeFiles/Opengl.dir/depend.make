@@ -1056,6 +1056,7 @@ CMakeFiles/Opengl.dir/Scene.cc.o: ../Log/LogUtil.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Box.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Plane.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Sphere.h
+CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderPass/ShadowProcess.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../ResourceManager.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Scene.cc
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Scene.h
@@ -1642,6 +1643,7 @@ CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o: /usr/local/Cellar/glm/glm/vector_rela
 
 CMakeFiles/Opengl.dir/main.cpp.o: ../Log/LogUtil.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Scene.h
+CMakeFiles/Opengl.dir/main.cpp.o: ../Shader.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Thread/Task.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Thread/ThreadPool.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Tool/PrintTool.h

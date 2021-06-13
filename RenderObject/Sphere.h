@@ -29,8 +29,7 @@ class Sphere {
 public:
     virtual ~Sphere();
     explicit Sphere(int x_num, int y_num);
-    void Render(Shader shader, Texture2D texture, const glm::mat4 &model, const glm::mat4 &view,
-                const glm::mat4 &projection);
+    void Render(Shader shader);
 private:
     uint32_t VAO,VBO,EBO;
     std::vector<float>vertices_data;

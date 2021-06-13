@@ -12,7 +12,7 @@ class Plane {
 public:
     Plane();
     uint32_t VAO,VBO;
-    void Render(Shader shader, Texture2D texture,  const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection);
+    void Render(Shader shader);
     void Update(float dt);
 };
 
