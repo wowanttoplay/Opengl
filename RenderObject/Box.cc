@@ -34,6 +34,8 @@ void Box::Render(Shader shader, Texture2D texture, const glm::mat4 &model, const
 
     glActiveTexture(GL_TEXTURE0);
     shader.SetInteger("texture0", 0);
+    glm::vec4 mixColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    shader.SetVector4f("mixColor", mixColor);
     texture.Bind();
 
     glBindVertexArray(this->VAO);

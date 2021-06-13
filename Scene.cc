@@ -15,6 +15,7 @@ using namespace std;
 
 const uint32_t box_num = 5;
 const std::string kFloorName = "floor";
+const std::string kTextureLightShaderName= "texture_light"; //考虑了纹理与光照的shader
 const std::string kBoxName = "Wall";
 const std::string kLight = "Sphere";
 glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -38,10 +39,9 @@ void Scene::Init() {
 
     // init plane resource
     ResourceManager::LoadTexture("../Data/Wall.jpeg", kFloorName);
-    ResourceManager::LoadShader("../Data/plane.vs", "../Data/plane.fs", nullptr, kFloorName);
+    ResourceManager::LoadShader("../Data/texture_light.vs", "../Data/texture_light.fs", nullptr, kTextureLightShaderName);
     // init box resource
     ResourceManager::LoadTexture("../Data/floor.jpg", kBoxName);
-    ResourceManager::LoadShader("../Data/box.vs", "../Data/box.fs", nullptr, kBoxName);
     // init light resource
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/Sphere.fs", nullptr, kLight);
 
@@ -58,14 +58,14 @@ void Scene::Render() {
     glm::mat4 projection = glm::perspective(view_angle, scene_width / scene_height, 0.1f, 100.f);
 //
 //    // render plane
-    plane->Render(ResourceManager::GetShader(kFloorName), ResourceManager::GetTexture(kFloorName), model, view,
+    plane->Render(ResourceManager::GetShader(kTextureLightShaderName), ResourceManager::GetTexture(kFloorName), model, view,
                   projection);
 //    // render box
     for (int i = 0; i < box_num; ++i) {
         glm::mat4 box_model = glm::mat4(1.0f);
         box_model = glm::translate(box_model, box_position + glm::vec3(0, 0, -i*2));
         box_model = glm::scale(box_model, glm::vec3(1.0f));
-        box_vec.at(i)->Render(ResourceManager::GetShader(kBoxName), ResourceManager::GetTexture(kBoxName), box_model, view, projection);
+        box_vec.at(i)->Render(ResourceManager::GetShader(kTextureLightShaderName), ResourceManager::GetTexture(kBoxName), box_model, view, projection);
     }
 //    // render light
     glm::mat4 light_model = glm::mat4(1.0);
@@ -90,9 +90,9 @@ void Scene::Update(float dt) {
     light_shader.Use();
     light_shader.SetVector3f("color", light_color);
 
-    // 更新地板的相关属性
+    // 更新渲染的相关属性
     plane->Update(dt);
-    Shader floor_shader = ResourceManager::GetShader(kFloorName);
+    Shader floor_shader = ResourceManager::GetShader(kTextureLightShaderName);
     floor_shader.Use();
     floor_shader.SetVector3f("light.position", light_position);
     floor_shader.SetVector3f("light.color", light_color);
@@ -100,17 +100,6 @@ void Scene::Update(float dt) {
     floor_shader.SetFloat("light.linear", light_linear);
     floor_shader.SetFloat("light.quadratic", light_quadratic);
     floor_shader.SetVector3f("cameraPosition", camera_position);
-    // 更新box的相关属性
-    Shader box_shader = ResourceManager::GetShader(kBoxName);
-    box_shader.Use();
-    box_shader.SetVector3f("light.position", light_position);
-    box_shader.SetVector3f("light.color", light_color);
-    box_shader.SetFloat("light.constant", light_constant);
-    box_shader.SetFloat("light.linear", light_linear);
-    box_shader.SetFloat("light.quadratic", light_quadratic);
-    box_shader.SetVector3f("cameraPosition", camera_position);
-
-
 }
 
 void Scene::process_key(int key, int action) {
