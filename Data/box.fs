@@ -3,7 +3,7 @@
 struct Light {
   vec3 position;  //位置
   vec3 color;     //光源颜色
-  // 光照衰减参数
+  // 光照衰减参数 
   float constant;
   float linear;
   float quadratic;

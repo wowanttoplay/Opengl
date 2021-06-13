@@ -251,6 +251,33 @@ RenderObject/Sphere.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.s
 .PHONY : RenderObject/Sphere.cc.s
 
+RenderPass/ShadowProcess.o: RenderPass/ShadowProcess.cc.o
+
+.PHONY : RenderPass/ShadowProcess.o
+
+# target to build an object file
+RenderPass/ShadowProcess.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o
+.PHONY : RenderPass/ShadowProcess.cc.o
+
+RenderPass/ShadowProcess.i: RenderPass/ShadowProcess.cc.i
+
+.PHONY : RenderPass/ShadowProcess.i
+
+# target to preprocess a source file
+RenderPass/ShadowProcess.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.i
+.PHONY : RenderPass/ShadowProcess.cc.i
+
+RenderPass/ShadowProcess.s: RenderPass/ShadowProcess.cc.s
+
+.PHONY : RenderPass/ShadowProcess.s
+
+# target to generate assembly for a file
+RenderPass/ShadowProcess.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.s
+.PHONY : RenderPass/ShadowProcess.cc.s
+
 ResourceManager.o: ResourceManager.cc.o
 
 .PHONY : ResourceManager.o
@@ -515,6 +542,9 @@ help:
 	@echo "... RenderObject/Sphere.o"
 	@echo "... RenderObject/Sphere.i"
 	@echo "... RenderObject/Sphere.s"
+	@echo "... RenderPass/ShadowProcess.o"
+	@echo "... RenderPass/ShadowProcess.i"
+	@echo "... RenderPass/ShadowProcess.s"
 	@echo "... ResourceManager.o"
 	@echo "... ResourceManager.i"
 	@echo "... ResourceManager.s"

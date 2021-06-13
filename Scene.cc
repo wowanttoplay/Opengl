@@ -23,7 +23,7 @@ const glm::vec3 light_center = glm::vec3(0.0f, 3.0f, 0.0f);;
 glm::vec3 light_position = light_center;
 const glm::vec3 light_base_color = glm::vec3(1.0f, 0.8f, 0.8f);
 glm::vec3 light_color = light_base_color;
-float light_constant = 1.0f, light_linear = 0.09f, light_quadratic = 0.032f;
+float light_constant = 1.0f, light_linear = 0.045f, light_quadratic = 0.0075f;
 const float light_move_radius = 3.0f;
 
 
