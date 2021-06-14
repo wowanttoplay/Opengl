@@ -14,7 +14,7 @@
 
 using namespace std;
 
-const uint32_t box_num = 5;
+const uint32_t box_num = 2;
 const std::string kFloorName = "floor";
 
 const std::string kBoxName = "Wall";
@@ -28,14 +28,14 @@ const float near_plane = 0.1f, far_plane = 100.f;
 //box
 glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 // light
-const glm::vec3 light_center = glm::vec3(0.0f, 3.0f, 0.0f);;
+const glm::vec3 light_center = glm::vec3(0.0f, 8.0f, 0.0f);;
 glm::vec3 light_position = light_center;
-const glm::vec3 light_base_color = glm::vec3(1.0f, 0.8f, 0.8f);
+const glm::vec3 light_base_color = glm::vec3(1.0f, 1.0f, 1.0f);
 glm::vec3 light_color = light_base_color;
 float light_constant = 1.0f, light_linear = 0.045f, light_quadratic = 0.0075f;
-const float light_move_radius = 3.0f;
+const float light_move_radius = 5.0f;
 //shadow
-const float kShadowFarPlane = 25.0f;
+const float kShadowFarPlane = 100.0f;
 
 Scene::~Scene() {
 }
@@ -91,18 +91,21 @@ void Scene::Render() {
 
     // 正常渲染
     this->shadow_pass_->SecondRender();
-    glm::mat4 view = glm::lookAt(camera_position, looked_position, glm::vec3(0, 1, 0));
-    glm::mat4 projection = glm::perspective(view_angle, scene_width / scene_height, 0.1f, 100.0f);
     Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
     shadow_texture_light.Use();
-    shadow_texture_light.SetMatrix4("projection", projection);
-    shadow_texture_light.SetMatrix4("view", view);
+    InitMatrix(shadow_texture_light);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_texture_);
 
     RenderPlane(shadow_texture_light);
     RenderBox(shadow_texture_light);
     // light
+    RenderLight();
+}
+
+void Scene::RenderLight() {
+    glm::mat4 view= glm::lookAt(camera_position, looked_position, glm::vec3(0, 1, 0));
+    glm::mat4 projection= glm::perspective(view_angle, scene_width / scene_height, 0.1f, 100.0f);
     Shader light_shader = ResourceManager::GetShader(kLight);
     light_shader.Use();
     glm::mat4 light_model = glm::mat4(1.0);
@@ -114,13 +117,20 @@ void Scene::Render() {
     light->Render(light_shader);
 }
 
+void Scene::InitMatrix(Shader &shadow_texture_light) const {
+    glm::mat4 view= glm::lookAt(camera_position, looked_position, glm::vec3(0, 1, 0));
+    glm::mat4 projection= glm::perspective(view_angle, scene_width / scene_height, 0.1f, 100.0f);
+    shadow_texture_light.SetMatrix4("projection", projection);
+    shadow_texture_light.SetMatrix4("view", view);
+}
+
 void Scene::RenderBox(Shader &shadow_texture_light) {// box
     glActiveTexture(GL_TEXTURE0);
     ResourceManager::GetTexture(kBoxName).Bind();
     for (int i = 0; i < box_num; ++i) {
         glm::mat4 box_model = glm::mat4(1.0f);
-        box_model = glm::translate(box_model, box_position + glm::vec3(i * 2, 0, -i * 2));
-        box_model = glm::scale(box_model, glm::vec3(1.0f));
+        box_model = glm::translate(box_model, box_position + glm::vec3(i * 1.1, 0, -i * 1.3));
+        box_model = glm::scale(box_model, glm::vec3(1.0f,1.5f,1.0f));
         shadow_texture_light.SetMatrix4("model", box_model);
         box_vec.at(i)->Render(shadow_texture_light);
     }
@@ -144,7 +154,7 @@ void Scene::Update(float dt) {
     // 更新相机
     looked_position = camera_position + looked_direction;
     // 更新light的相关属性
-    light_position = light_center + glm::vec3(sin(dt) * light_move_radius, 0, cos(dt) * light_move_radius);
+    light_position = light_center + glm::vec3(sin(dt/3) * light_move_radius, 0, cos(dt/3) * light_move_radius);
 //    light_color = light_base_color + glm::vec3(0, -sin(dt)*0.8, -cos(dt)*0.8);
     Shader light_shader = ResourceManager::GetShader(kLight);
     light_shader.Use();

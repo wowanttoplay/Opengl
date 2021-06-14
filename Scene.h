@@ -44,5 +44,9 @@ private:
     void RenderPlane(Shader &shadow_texture_light);
 
     void RenderBox(Shader &shadow_texture_light);
+
+    void InitMatrix(Shader &shadow_texture_light) const;
+
+    void RenderLight();
 };
 
