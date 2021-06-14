@@ -10,7 +10,7 @@
 
 class ShadowProcess {
 public:
-    GLuint depth_cube_texture_; // 生成的深度cube图
+    GLuint depth_cube_map_; // 生成的深度cube图
     GLuint depth_map_FBO_;
     ShadowProcess();
     void FirstRender(Shader shader);

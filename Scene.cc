@@ -19,6 +19,7 @@ const std::string kFloorName = "floor";
 
 const std::string kBoxName = "Wall";
 const std::string kLight = "Sphere";
+const std::string kGlassTextureName = "glass";
 const std::string kTextureLightShaderName = "texture_light"; //考虑了纹理与光照的shader
 const std::string kShadowShaderName = "shadow";
 const std::string kShadowTextureLightShaderName = "shadow_texture_light"; // 考虑了阴影、 纹理、光照的shader
@@ -27,6 +28,10 @@ const std::string kShadowTextureLightShaderName = "shadow_texture_light"; // 考
 const float near_plane = 0.1f, far_plane = 100.f;
 //box
 glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
+// refract sphere
+glm::vec3 refract_sphere_position = glm::vec3(-2.0f, 0.0f, 0.0f);
+// reflect sphere
+glm::vec3 reflect_sphere_position = glm::vec3(2.0f, 0.0f, 0.0f);
 // light
 const glm::vec3 light_center = glm::vec3(0.0f, 8.0f, 0.0f);;
 glm::vec3 light_position = light_center;
@@ -35,7 +40,7 @@ glm::vec3 light_color = light_base_color;
 float light_constant = 1.0f, light_linear = 0.045f, light_quadratic = 0.0075f;
 const float light_move_radius = 5.0f;
 //shadow
-const float kShadowFarPlane = 100.0f;
+const float kShadowFarPlane = 120.0f;
 
 Scene::~Scene() {
 }
@@ -48,11 +53,7 @@ void Scene::Init() {
 
     // init plane resource
     ResourceManager::LoadTexture("../Data/Wall.jpeg", kFloorName);
-    Shader texture_light_shader = ResourceManager::LoadShader("../Data/texture_light.vs", "../Data/texture_light.fs",
-                                                              nullptr,
-                                                              kTextureLightShaderName);
-    texture_light_shader.Use();
-    texture_light_shader.SetInteger("texture0", 0);
+    ResourceManager::LoadTexture("../Data/glass.jpeg", kGlassTextureName);
     // init box resource
     ResourceManager::LoadTexture("../Data/floor.jpg", kBoxName);
     // init light resource
@@ -74,7 +75,9 @@ void Scene::Init() {
     for (int i = 0; i < box_num; ++i) {
         box_vec.emplace_back(make_shared<Box>());
     }
-    light = make_shared<Sphere>(30, 30);
+    light = make_shared<Sphere>(20, 20);
+    refract_sphere = make_shared<Sphere>(30,  30);
+    reflect_sphere = make_shared<Sphere>(30, 30);
 
     // 渲染pass
     this->shadow_pass_ = make_shared<ShadowProcess>();
@@ -88,6 +91,8 @@ void Scene::Render() {
     this->shadow_pass_->FirstRender(shadow_map_shader);
     RenderPlane(shadow_map_shader);
     RenderBox(shadow_map_shader);
+    RenderRefractSphere(shadow_map_shader);
+    RenderReflectSphere(shadow_map_shader);
 
     // 正常渲染
     this->shadow_pass_->SecondRender();
@@ -95,12 +100,34 @@ void Scene::Render() {
     shadow_texture_light.Use();
     InitMatrix(shadow_texture_light);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_texture_);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
 
     RenderPlane(shadow_texture_light);
     RenderBox(shadow_texture_light);
+
+    // render sphere
+    RenderRefractSphere(shadow_texture_light);
+    RenderReflectSphere(shadow_texture_light);
     // light
     RenderLight();
+}
+
+void Scene::RenderReflectSphere(Shader &shadow_texture_light) {
+    glActiveTexture(GL_TEXTURE0);
+    ResourceManager::GetTexture(kGlassTextureName).Bind();
+    glm::mat4 refract_sphere_model = glm::mat4(1.0f);
+    refract_sphere_model = glm::translate(refract_sphere_model, reflect_sphere_position);
+    shadow_texture_light.SetMatrix4("model", refract_sphere_model);
+    refract_sphere->Render(shadow_texture_light);
+}
+
+void Scene::RenderRefractSphere(Shader &shadow_texture_light) {
+    glActiveTexture(GL_TEXTURE0);
+    ResourceManager::GetTexture(kGlassTextureName).Bind();
+    glm::mat4 refract_sphere_model = glm::mat4(1.0f);
+    refract_sphere_model = glm::translate(refract_sphere_model, refract_sphere_position);
+    shadow_texture_light.SetMatrix4("model", refract_sphere_model);
+    refract_sphere->Render(shadow_texture_light);
 }
 
 void Scene::RenderLight() {
@@ -162,16 +189,6 @@ void Scene::Update(float dt) {
 
     // 更新渲染的相关属性
     plane->Update(dt);
-    Shader texture_light = ResourceManager::GetShader(kTextureLightShaderName);
-    texture_light.Use();
-    texture_light.SetVector3f("light.position", light_position);
-    texture_light.SetVector3f("light.color", light_color);
-    texture_light.SetFloat("light.constant", light_constant);
-    texture_light.SetFloat("light.linear", light_linear);
-    texture_light.SetFloat("light.quadratic", light_quadratic);
-    texture_light.SetVector3f("cameraPosition", camera_position);
-
-
     // 更新render pass中光源的位置，实时更改shadow map
     this->shadow_pass_->SetLightPosition(light_position);
     // 设置阴影、纹理、光照的着色器
@@ -183,7 +200,6 @@ void Scene::Update(float dt) {
     shadow_texture_light.SetFloat("light.linear", light_linear);
     shadow_texture_light.SetFloat("light.quadratic", light_quadratic);
     shadow_texture_light.SetVector3f("cameraPosition", camera_position);
-
 }
 
 void Scene::process_key(int key, int action) {

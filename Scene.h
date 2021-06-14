@@ -38,6 +38,8 @@ private:
     std::shared_ptr<Plane> plane = nullptr;
     std::vector<std::shared_ptr<Box>> box_vec;
     std::shared_ptr<Sphere>light = nullptr;
+    std::shared_ptr<Sphere>refract_sphere = nullptr; //表现折射的球
+    std::shared_ptr<Sphere> reflect_sphere = nullptr; //表现反射的球
 
     std::shared_ptr<ShadowProcess> shadow_pass_; // 阴影渲染
 
@@ -48,5 +50,9 @@ private:
     void InitMatrix(Shader &shadow_texture_light) const;
 
     void RenderLight();
+
+    void RenderRefractSphere(Shader &shadow_texture_light);
+
+    void RenderReflectSphere(Shader &shadow_texture_light);
 };
 

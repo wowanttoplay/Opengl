@@ -17,9 +17,17 @@ Sphere::Sphere(int x_num, int y_num) {
             float xPos = std::cos(xSegment * 2.0f * M_PI) * std::sin(ySegment * M_PI);
             float yPos = std::cos(ySegment * M_PI);
             float zPos = std::sin(xSegment * 2.0f * M_PI) * std::sin(ySegment * M_PI);
+             // 坐标
             vertices_data.push_back(xPos);
             vertices_data.push_back(yPos);
             vertices_data.push_back(zPos);
+            // 法线
+            vertices_data.push_back(xPos);
+            vertices_data.push_back(yPos);
+            vertices_data.push_back(zPos);
+            // 纹理
+            vertices_data.push_back(xSegment);
+            vertices_data.push_back(y%2);
         }
     }
 
@@ -43,7 +51,11 @@ Sphere::Sphere(int x_num, int y_num) {
     glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices_data.size() * sizeof(float), &vertices_data[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(GL_FLOAT)));
     // EBO;
     glGenBuffers(1, &this->EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);

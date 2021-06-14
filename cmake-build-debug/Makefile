@@ -251,6 +251,33 @@ RenderObject/Sphere.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.s
 .PHONY : RenderObject/Sphere.cc.s
 
+RenderPass/MirrorProcess.o: RenderPass/MirrorProcess.cc.o
+
+.PHONY : RenderPass/MirrorProcess.o
+
+# target to build an object file
+RenderPass/MirrorProcess.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o
+.PHONY : RenderPass/MirrorProcess.cc.o
+
+RenderPass/MirrorProcess.i: RenderPass/MirrorProcess.cc.i
+
+.PHONY : RenderPass/MirrorProcess.i
+
+# target to preprocess a source file
+RenderPass/MirrorProcess.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.i
+.PHONY : RenderPass/MirrorProcess.cc.i
+
+RenderPass/MirrorProcess.s: RenderPass/MirrorProcess.cc.s
+
+.PHONY : RenderPass/MirrorProcess.s
+
+# target to generate assembly for a file
+RenderPass/MirrorProcess.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.s
+.PHONY : RenderPass/MirrorProcess.cc.s
+
 RenderPass/ShadowProcess.o: RenderPass/ShadowProcess.cc.o
 
 .PHONY : RenderPass/ShadowProcess.o
@@ -542,6 +569,9 @@ help:
 	@echo "... RenderObject/Sphere.o"
 	@echo "... RenderObject/Sphere.i"
 	@echo "... RenderObject/Sphere.s"
+	@echo "... RenderPass/MirrorProcess.o"
+	@echo "... RenderPass/MirrorProcess.i"
+	@echo "... RenderPass/MirrorProcess.s"
 	@echo "... RenderPass/ShadowProcess.o"
 	@echo "... RenderPass/ShadowProcess.i"
 	@echo "... RenderPass/ShadowProcess.s"

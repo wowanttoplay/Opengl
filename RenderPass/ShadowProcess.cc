@@ -15,7 +15,7 @@ const uint32_t kShadowWidth = 1024, kShadowHeight = 1024;
 
 
 ShadowProcess::ShadowProcess() {
-    PrePareResource(this->depth_map_FBO_, this->depth_cube_texture_);
+    PrePareResource(this->depth_map_FBO_, this->depth_cube_map_);
 }
 
 // 准备好渲染阴影贴图的shader和相关设置

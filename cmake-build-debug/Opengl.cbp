@@ -118,6 +118,12 @@
 		<Unit filename="/Users/virgil/Opengl/RenderPass/HDRProcess.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderPass/MirrorProcess.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderPass/MirrorProcess.h">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/RenderPass/ShadowProcess.cc">
 			<Option target="Opengl"/>
 		</Unit>
