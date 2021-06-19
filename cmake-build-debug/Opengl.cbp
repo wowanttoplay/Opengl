@@ -115,13 +115,13 @@
 		<Unit filename="/Users/virgil/Opengl/RenderObject/Sphere.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderPass/ColorCubeProcess.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderPass/ColorCubeProcess.h">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/RenderPass/HDRProcess.h">
-			<Option target="Opengl"/>
-		</Unit>
-		<Unit filename="/Users/virgil/Opengl/RenderPass/MirrorProcess.cc">
-			<Option target="Opengl"/>
-		</Unit>
-		<Unit filename="/Users/virgil/Opengl/RenderPass/MirrorProcess.h">
 			<Option target="Opengl"/>
 		</Unit>
 		<Unit filename="/Users/virgil/Opengl/RenderPass/ShadowProcess.cc">

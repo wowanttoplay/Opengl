@@ -634,10 +634,10 @@ CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o
  /usr/local/Cellar/glm/glm/vec3.hpp
  /usr/local/Cellar/glm/glm/vec4.hpp
  /usr/local/Cellar/glm/glm/vector_relational.hpp
-CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o
+CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o
  /Users/virgil/Opengl/Log/LogUtil.h
- /Users/virgil/Opengl/RenderPass/MirrorProcess.cc
- /Users/virgil/Opengl/RenderPass/MirrorProcess.h
+ /Users/virgil/Opengl/RenderPass/ColorCubeProcess.cc
+ /Users/virgil/Opengl/RenderPass/ColorCubeProcess.h
  /Users/virgil/Opengl/Shader.h
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
@@ -843,6 +843,7 @@ CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o
  /usr/local/Cellar/glm/glm/vec4.hpp
  /usr/local/Cellar/glm/glm/vector_relational.hpp
 CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o
+ /Users/virgil/Opengl/Log/LogUtil.h
  /Users/virgil/Opengl/RenderPass/ShadowProcess.cc
  /Users/virgil/Opengl/RenderPass/ShadowProcess.h
  /Users/virgil/Opengl/ResourceManager.h
@@ -1265,6 +1266,7 @@ CMakeFiles/Opengl.dir/Scene.cc.o
  /Users/virgil/Opengl/RenderObject/Box.h
  /Users/virgil/Opengl/RenderObject/Plane.h
  /Users/virgil/Opengl/RenderObject/Sphere.h
+ /Users/virgil/Opengl/RenderPass/ColorCubeProcess.h
  /Users/virgil/Opengl/RenderPass/ShadowProcess.h
  /Users/virgil/Opengl/ResourceManager.h
  /Users/virgil/Opengl/Scene.cc

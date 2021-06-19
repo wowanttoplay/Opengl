@@ -38,7 +38,21 @@ vector
 ../Shader.h
 /Users/virgil/Opengl/Shader.h
 
+/Users/virgil/Opengl/RenderPass/ColorCubeProcess.h
+glew.h
+-
+glfw3.h
+-
+glm/glm.hpp
+-
+functional
+-
+../Shader.h
+/Users/virgil/Opengl/Shader.h
+
 /Users/virgil/Opengl/RenderPass/ShadowProcess.h
+functional
+-
 glew.h
 -
 glfw3.h
@@ -77,6 +91,8 @@ Tool/PrintTool.h
 /Users/virgil/Opengl/Tool/PrintTool.h
 RenderPass/ShadowProcess.h
 /Users/virgil/Opengl/RenderPass/ShadowProcess.h
+RenderPass/ColorCubeProcess.h
+/Users/virgil/Opengl/RenderPass/ColorCubeProcess.h
 
 /Users/virgil/Opengl/Scene.h
 glew.h

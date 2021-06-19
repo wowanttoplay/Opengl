@@ -259,18 +259,18 @@ CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/RenderPass/ShadowProcess.cc -o CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.s
 
-CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o: CMakeFiles/Opengl.dir/flags.make
-CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o: ../RenderPass/MirrorProcess.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o -c /Users/virgil/Opengl/RenderPass/MirrorProcess.cc
+CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o: CMakeFiles/Opengl.dir/flags.make
+CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o: ../RenderPass/ColorCubeProcess.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o -c /Users/virgil/Opengl/RenderPass/ColorCubeProcess.cc
 
-CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/RenderPass/MirrorProcess.cc > CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.i
+CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/RenderPass/ColorCubeProcess.cc > CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.i
 
-CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/RenderPass/MirrorProcess.cc -o CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.s
+CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/RenderPass/ColorCubeProcess.cc -o CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.s
 
 # Object files for target Opengl
 Opengl_OBJECTS = \
@@ -288,7 +288,7 @@ Opengl_OBJECTS = \
 "CMakeFiles/Opengl.dir/RenderObject/Box.cc.o" \
 "CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o" \
 "CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o" \
-"CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o"
+"CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o"
 
 # External object files for target Opengl
 Opengl_EXTERNAL_OBJECTS =
@@ -307,7 +307,7 @@ Opengl: CMakeFiles/Opengl.dir/Scene.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderObject/Box.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o
-Opengl: CMakeFiles/Opengl.dir/RenderPass/MirrorProcess.cc.o
+Opengl: CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o
 Opengl: CMakeFiles/Opengl.dir/build.make
 Opengl: /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib
 Opengl: /usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.dylib

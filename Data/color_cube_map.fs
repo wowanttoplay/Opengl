@@ -1,11 +1,5 @@
 #version 330 core
 
-vec3 gridSamplingDisk[20] =
-    vec3[](vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1), vec3(1, 1, -1),
-           vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1), vec3(1, 1, 0), vec3(1, -1, 0),
-           vec3(-1, -1, 0), vec3(-1, 1, 0), vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1),
-           vec3(-1, 0, -1), vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1));
-
 struct Light {
   vec3 position;  //位置
   vec3 color;     //光源颜色
@@ -15,17 +9,12 @@ struct Light {
   float quadratic;
 };
 
-in VS_OUT {
-  vec3 FragPos;
-  vec3 Normal;
-  vec2 TexCoords;
-}
-fs_in;
+in vec3 FragPos;
+in vec3 Normal;
+in vec2 TexCoords;
 
-uniform sampler2D texture0;          // 纹理贴图
-uniform samplerCube depth_texture;   // 深度贴图
-uniform samplerCube color_cube_map;  // 周围的颜色盒
-uniform bool b_reflected;         //控制是否进行反射，即是否使用color cube
+uniform sampler2D texture0;         // 纹理贴图
+uniform samplerCube depth_texture;  // 深度贴图
 
 uniform float
     far_plane;  // 远平面位置，因为我们在阴影texture中的深度值是用far_plane算的，显示阴影的时候也需要far_plane来做对比
@@ -36,44 +25,40 @@ uniform Light light;          // 光照相关参数
 float ShadowCalculate(vec3 fraPosition);
 
 void main() {
-  vec3 color = vec3(texture(texture0, fs_in.TexCoords));  // 地板本来的颜色
-    // vector(from light、camera to fragment)
-  vec3 lightDir = normalize(vec3(light.position - fs_in.FragPos));
-  vec3 cameraDir = normalize(vec3(cameraPosition - fs_in.FragPos));
-  vec3 normal = normalize(fs_in.Normal);
-  // 从color cube 中采样
-  if (b_reflected) {
-    vec3 reflect_dir = reflect(-cameraDir, fs_in.Normal);
-    color = mix(vec3(texture(color_cube_map, reflect_dir)), color, 0.2);
-    // fragcolor = vec4(color, 1.0);
-    // return;
-  }
-
+  vec3 color = vec3(texture(texture0, TexCoords));  // 地板本来的颜色
+  // vector(from light、camera to fragment)
+  vec3 lightDir = normalize(vec3(light.position - FragPos));
+  vec3 cameraDir = normalize(vec3(cameraPosition - FragPos));
+  vec3 normal = normalize(Normal);
   // ambient
   vec3 ambient = 0.05 * color * light.color;
   // diffuse
   float diff = max(dot(lightDir, normal), 0.0);
   vec3 diffuse = diff * color * light.color;
   // blinn specular
-  vec3 reflectDir = reflect(-lightDir, fs_in.Normal);
+  vec3 reflectDir = reflect(-lightDir, Normal);
   vec3 halfDir = normalize(reflectDir + cameraDir);
-  float spec = pow(max(dot(halfDir, fs_in.Normal), 0.0), 32.0);
+  float spec = pow(max(dot(halfDir, Normal), 0.0), 32.0);
   vec3 specular = spec * color * light.color;
   // shadow calculate
-  float shadow = ShadowCalculate(fs_in.FragPos);
+  float shadow = ShadowCalculate(FragPos);
   // 光照衰减
-  float distance = length(light.position - fs_in.FragPos);
+  float distance = length(light.position - FragPos);
   float attenuation =
       1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
   // frag color,考虑光衰减和阴影
   fragcolor = vec4(vec3(ambient + (diffuse + specular) * (1 - shadow)) * attenuation, 1.0);
 }
 
+vec3 gridSamplingDisk[20] =
+    vec3[](vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1), vec3(1, 1, -1),
+           vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1), vec3(1, 1, 0), vec3(1, -1, 0),
+           vec3(-1, -1, 0), vec3(-1, 1, 0), vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1),
+           vec3(-1, 0, -1), vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1));
+
 // 深度使用的是之前自己定义的深度，表示距离光源的距离
 float ShadowCalculate(vec3 fragPosition) {
   vec3 light_to_frag = fragPosition - light.position;
-  // float close_depth = texture(depth_texture, light_to_frag).r;
-  // close_depth *= far_plane;  //    当初的深度值就是length/far_plane，所以这里要还原
   float current_depth = length(light_to_frag);  // 当前的片段的深度
   float shadow = 0.0;
   float bias = 0.15;

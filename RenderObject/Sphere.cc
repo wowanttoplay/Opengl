@@ -27,7 +27,7 @@ Sphere::Sphere(int x_num, int y_num) {
             vertices_data.push_back(zPos);
             // 纹理
             vertices_data.push_back(xSegment);
-            vertices_data.push_back(y%2);
+            vertices_data.push_back(ySegment);
         }
     }
 

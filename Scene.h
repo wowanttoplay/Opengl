@@ -15,6 +15,7 @@ class Plane;
 class Box;
 class Sphere;
 class ShadowProcess;
+class ColorCubeProcess;
 
 class Scene {
 public:
@@ -43,16 +44,16 @@ private:
 
     std::shared_ptr<ShadowProcess> shadow_pass_; // 阴影渲染
 
-    void RenderPlane(Shader &shadow_texture_light);
+    std::shared_ptr<ColorCubeProcess> color_cube_pass_; // 镜像渲染
 
-    void RenderBox(Shader &shadow_texture_light);
+    void RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
-    void InitMatrix(Shader &shadow_texture_light) const;
+    void RenderBox(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
-    void RenderLight();
+    void RenderLight(const glm::mat4 &view, const glm::mat4 &projection);
 
-    void RenderRefractSphere(Shader &shadow_texture_light);
+    void RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
-    void RenderReflectSphere(Shader &shadow_texture_light);
+    void RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 };
 
