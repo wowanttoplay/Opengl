@@ -1,3 +1,4 @@
+// 已经废弃
 #version 330 core
 
 struct Light {

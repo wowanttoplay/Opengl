@@ -44,7 +44,9 @@ private:
 
     std::shared_ptr<ShadowProcess> shadow_pass_; // 阴影渲染
 
-    std::shared_ptr<ColorCubeProcess> color_cube_pass_; // 镜像渲染
+    // TODO：将两个pass改为用两个texture就可以了，不然比较浪费
+    std::shared_ptr<ColorCubeProcess> reflect_cube_pass_; // 镜像渲染
+    std::shared_ptr<ColorCubeProcess> refract_cube_pass_; // 折射渲染
 
     void RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 

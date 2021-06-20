@@ -31,9 +31,9 @@ const float near_plane = 0.1f, far_plane = 100.f;
 //box
 glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 // refract sphere
-glm::vec3 refract_sphere_position = glm::vec3(-2.0f, 0.0f, 0.0f);
+glm::vec3 refract_sphere_position = glm::vec3(2.0f, 2.0f, -1.0f);
 // reflect sphere
-glm::vec3 reflect_sphere_position = glm::vec3(-1.5f, 0.0f, -1.5f);
+glm::vec3 reflect_sphere_position = glm::vec3(-2.0f, 1.0f, -2.5f);
 // light
 const glm::vec3 light_center = glm::vec3(0.0f, 7.0f, 0.0f);;
 glm::vec3 light_position = light_center;
@@ -71,9 +71,11 @@ void Scene::Init() {
     shadow_texture_light.Use();
     shadow_texture_light.SetInteger("texture0", 0);
     shadow_texture_light.SetInteger("depth_texture", 1);
-    shadow_texture_light.SetInteger("color_cube_map", 2);
+    shadow_texture_light.SetInteger("reflect_cube_map", 2);
+    shadow_texture_light.SetInteger("refract_cube_map", 3);
     shadow_texture_light.SetFloat("far_plane", kShadowFarPlane);
     shadow_texture_light.SetInteger("b_reflected", false);
+    shadow_texture_light.SetInteger("b_refracted", false);
 
     // init color cube render,用与渲染带有阴影的cube颜色缓冲
     Shader color_cube_render = ResourceManager::LoadShader("../Data/color_cube_map.vs",
@@ -98,9 +100,13 @@ void Scene::Init() {
     this->shadow_pass_ = make_shared<ShadowProcess>();
     this->shadow_pass_->SetNearAndFar(0.1f, kShadowFarPlane);
 
-    this->color_cube_pass_ = make_shared<ColorCubeProcess>();
-    this->color_cube_pass_->SetNearAndFar(0.1f, 100.f);
-    this->color_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
+    this->reflect_cube_pass_ = make_shared<ColorCubeProcess>();
+    this->reflect_cube_pass_->SetNearAndFar(0.1f, 100.f);
+    this->reflect_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
+
+    this->refract_cube_pass_ = make_shared<ColorCubeProcess>();
+    this->refract_cube_pass_->SetNearAndFar(0.1f, 100.f);
+    this->refract_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
 }
 
 void Scene::Render() {
@@ -117,15 +123,35 @@ void Scene::Render() {
     });
 
 //    //反射所需的cube纹理
-    this->color_cube_pass_->SetCenter(reflect_sphere_position);
-    this->color_cube_pass_->Render([=](glm::mat4 view, glm::mat4 projection)->void {
+    this->reflect_cube_pass_->SetCenter(reflect_sphere_position);
+    this->reflect_cube_pass_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
         Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
         shadow_texture_light.Use();
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
         RenderPlane(shadow_texture_light, view, projection);
         RenderBox(shadow_texture_light, view, projection);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
+        shadow_texture_light.SetInteger("b_refracted", true);
         RenderRefractSphere(shadow_texture_light, view, projection);
+        shadow_texture_light.SetInteger("b_refracted", false);
+        RenderLight(view, projection);
+    });
+    // 折射所需要的纹理
+    this->refract_cube_pass_->SetCenter(refract_sphere_position);
+    this->refract_cube_pass_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
+        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
+        shadow_texture_light.Use();
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
+        RenderPlane(shadow_texture_light, view, projection);
+        RenderBox(shadow_texture_light, view, projection);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
+        shadow_texture_light.SetInteger("b_reflected", true);
+        RenderReflectSphere(shadow_texture_light, view, projection);
+        shadow_texture_light.SetInteger("b_reflected", false);
         RenderLight(view, projection);
     });
 
@@ -148,12 +174,16 @@ void Scene::Render() {
         //render box
         RenderBox(shadow_texture_light, view, projection);
         // render sphere
-        RenderRefractSphere(shadow_texture_light, view, projection);
         glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, this->color_cube_pass_->color_cube_map_);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_reflected", true);
         RenderReflectSphere(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_reflected", false);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
+        shadow_texture_light.SetInteger("b_refracted", true);
+        RenderRefractSphere(shadow_texture_light, view, projection);
+        shadow_texture_light.SetInteger("b_refracted", false);
         // render light
         RenderLight(view, projection);
     }

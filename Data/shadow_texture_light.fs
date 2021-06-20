@@ -24,8 +24,10 @@ fs_in;
 
 uniform sampler2D texture0;          // 纹理贴图
 uniform samplerCube depth_texture;   // 深度贴图
-uniform samplerCube color_cube_map;  // 周围的颜色盒
+uniform samplerCube reflect_cube_map;  // 周围的颜色盒
+uniform samplerCube refract_cube_map; // 周围的cube map
 uniform bool b_reflected;         //控制是否进行反射，即是否使用color cube
+uniform bool b_refracted;         //控制是否进行折射，即是否使用
 
 uniform float
     far_plane;  // 远平面位置，因为我们在阴影texture中的深度值是用far_plane算的，显示阴影的时候也需要far_plane来做对比
@@ -43,10 +45,13 @@ void main() {
   vec3 normal = normalize(fs_in.Normal);
   // 从color cube 中采样
   if (b_reflected) {
-    vec3 reflect_dir = reflect(-cameraDir, fs_in.Normal);
-    color = mix(vec3(texture(color_cube_map, reflect_dir)), color, 0.2);
-    // fragcolor = vec4(color, 1.0);
-    // return;
+    vec3 reflect_dir = reflect(-cameraDir, normal);
+    color = mix(vec3(texture(reflect_cube_map, reflect_dir)), color, 0.1);
+  }
+  if (b_refracted) {
+    float ratio = 1.00/1.52;// 模拟空气与玻璃的折射
+    vec3 refract_dir = refract(-cameraDir, normal, ratio);
+    color = mix(vec3(texture(refract_cube_map, refract_dir)), color, 0.03);
   }
 
   // ambient
