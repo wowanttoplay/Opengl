@@ -50,6 +50,16 @@ functional
 ../Shader.h
 /Users/virgil/Opengl/Shader.h
 
+/Users/virgil/Opengl/RenderPass/HDRProcess.h
+glew.h
+-
+glfw3.h
+-
+glm/glm.hpp
+-
+functional
+-
+
 /Users/virgil/Opengl/RenderPass/ShadowProcess.h
 functional
 -
@@ -93,6 +103,8 @@ RenderPass/ShadowProcess.h
 /Users/virgil/Opengl/RenderPass/ShadowProcess.h
 RenderPass/ColorCubeProcess.h
 /Users/virgil/Opengl/RenderPass/ColorCubeProcess.h
+RenderPass/HDRProcess.h
+/Users/virgil/Opengl/RenderPass/HDRProcess.h
 
 /Users/virgil/Opengl/Scene.h
 glew.h

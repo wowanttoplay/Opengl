@@ -9,9 +9,10 @@
 
 #include "../Shader.h"
 
-using FuncOfShadow = std::function<void(glm::mat4, glm::mat4)>;
+
 
 class ShadowProcess {
+    using FuncOfShadow = std::function<void(glm::mat4, glm::mat4)>;
 public:
     GLuint depth_cube_map_; // 生成的深度cube图
     GLuint depth_map_FBO_;

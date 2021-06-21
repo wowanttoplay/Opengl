@@ -278,6 +278,33 @@ RenderPass/ColorCubeProcess.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.s
 .PHONY : RenderPass/ColorCubeProcess.cc.s
 
+RenderPass/HDRProcess.o: RenderPass/HDRProcess.cc.o
+
+.PHONY : RenderPass/HDRProcess.o
+
+# target to build an object file
+RenderPass/HDRProcess.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/HDRProcess.cc.o
+.PHONY : RenderPass/HDRProcess.cc.o
+
+RenderPass/HDRProcess.i: RenderPass/HDRProcess.cc.i
+
+.PHONY : RenderPass/HDRProcess.i
+
+# target to preprocess a source file
+RenderPass/HDRProcess.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/HDRProcess.cc.i
+.PHONY : RenderPass/HDRProcess.cc.i
+
+RenderPass/HDRProcess.s: RenderPass/HDRProcess.cc.s
+
+.PHONY : RenderPass/HDRProcess.s
+
+# target to generate assembly for a file
+RenderPass/HDRProcess.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/HDRProcess.cc.s
+.PHONY : RenderPass/HDRProcess.cc.s
+
 RenderPass/ShadowProcess.o: RenderPass/ShadowProcess.cc.o
 
 .PHONY : RenderPass/ShadowProcess.o
@@ -572,6 +599,9 @@ help:
 	@echo "... RenderPass/ColorCubeProcess.o"
 	@echo "... RenderPass/ColorCubeProcess.i"
 	@echo "... RenderPass/ColorCubeProcess.s"
+	@echo "... RenderPass/HDRProcess.o"
+	@echo "... RenderPass/HDRProcess.i"
+	@echo "... RenderPass/HDRProcess.s"
 	@echo "... RenderPass/ShadowProcess.o"
 	@echo "... RenderPass/ShadowProcess.i"
 	@echo "... RenderPass/ShadowProcess.s"

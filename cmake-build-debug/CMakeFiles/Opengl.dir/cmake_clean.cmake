@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o"
   "CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o"
+  "CMakeFiles/Opengl.dir/RenderPass/HDRProcess.cc.o"
   "CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o"
   "CMakeFiles/Opengl.dir/ResourceManager.cc.o"
   "CMakeFiles/Opengl.dir/Scene.cc.o"

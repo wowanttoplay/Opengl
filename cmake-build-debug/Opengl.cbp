@@ -121,6 +121,9 @@
 		<Unit filename="/Users/virgil/Opengl/RenderPass/ColorCubeProcess.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderPass/HDRProcess.cc">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/RenderPass/HDRProcess.h">
 			<Option target="Opengl"/>
 		</Unit>

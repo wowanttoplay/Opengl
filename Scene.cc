@@ -12,6 +12,7 @@
 #include "Tool/PrintTool.h"
 #include "RenderPass/ShadowProcess.h"
 #include "RenderPass/ColorCubeProcess.h"
+#include "RenderPass/HDRProcess.h"
 
 using namespace std;
 
@@ -31,13 +32,13 @@ const float near_plane = 0.1f, far_plane = 100.f;
 //box
 glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 // refract sphere
-glm::vec3 refract_sphere_position = glm::vec3(2.0f, 2.0f, -1.0f);
+glm::vec3 refract_sphere_position = glm::vec3(0.0f, 1.0f, 5.0f);
 // reflect sphere
-glm::vec3 reflect_sphere_position = glm::vec3(-2.0f, 1.0f, -2.5f);
+glm::vec3 reflect_sphere_position = glm::vec3(0.0f, 1.0f, -3.0f);
 // light
 const glm::vec3 light_center = glm::vec3(0.0f, 7.0f, 0.0f);;
 glm::vec3 light_position = light_center;
-const glm::vec3 light_base_color = glm::vec3(1.0f, 1.0f, 1.0f);
+const glm::vec3 light_base_color = glm::vec3(20.0f, 20.0f, 20.0f);
 glm::vec3 light_color = light_base_color;
 float light_constant = 1.0f, light_linear = 0.045f, light_quadratic = 0.0075f;
 const float light_move_radius = 5.0f;
@@ -49,8 +50,8 @@ Scene::~Scene() {
 
 
 void Scene::Init() {
-    camera_position = glm::vec3(2.0f, 5.0f, 5.0f);
-    looked_direction = glm::vec3(0, -5, -3);
+    camera_position = glm::vec3(3.0f, 2.0f, 9.0f);
+    looked_direction = glm::vec3(0, 0, -3);
     looked_position = camera_position + looked_direction;
 
     // init plane resource
@@ -89,6 +90,7 @@ void Scene::Init() {
 
 
     plane = std::make_shared<Plane>();
+    reflect_plane = std::make_shared<Plane>();
     for (int i = 0; i < box_num; ++i) {
         box_vec.emplace_back(make_shared<Box>());
     }
@@ -107,6 +109,8 @@ void Scene::Init() {
     this->refract_cube_pass_ = make_shared<ColorCubeProcess>();
     this->refract_cube_pass_->SetNearAndFar(0.1f, 100.f);
     this->refract_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
+
+    this->hdr_pass_ = make_shared<HDRProcess>();
 }
 
 void Scene::Render() {
@@ -118,8 +122,8 @@ void Scene::Render() {
         shadow_map_shader.SetFloat("far_plane", kShadowFarPlane);
         this->RenderPlane(shadow_map_shader, view, projection);
         this->RenderBox(shadow_map_shader, view, projection);
-//        this->RenderRefractSphere(shadow_map_shader, view, projection);
         this->RenderReflectSphere(shadow_map_shader, view, projection);
+//        this->RenderReflectPlane(shadow_map_shader, view, projection);
     });
 
 //    //反射所需的cube纹理
@@ -135,6 +139,7 @@ void Scene::Render() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_refracted", true);
         RenderRefractSphere(shadow_texture_light, view, projection);
+//        RenderReflectPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
         RenderLight(view, projection);
     });
@@ -151,13 +156,13 @@ void Scene::Render() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_reflected", true);
         RenderReflectSphere(shadow_texture_light, view, projection);
+//        RenderReflectPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_reflected", false);
         RenderLight(view, projection);
     });
 
     //正常渲染
-    if (true) {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    this->hdr_pass_->PreRender([=]()->void{
         glViewport(0, 0, scene_width, scene_height);
         glClearColor(0.1, 0.1, 0.1, 0.1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -178,15 +183,27 @@ void Scene::Render() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_reflected", true);
         RenderReflectSphere(shadow_texture_light, view, projection);
+//        RenderReflectPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_reflected", false);
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_refracted", true);
         RenderRefractSphere(shadow_texture_light, view, projection);
+//        RenderReflectPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
         // render light
         RenderLight(view, projection);
-    }
+    });
+
+    this->hdr_pass_->SecondRender();
+
+//    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+
+
+
 
 }
 
@@ -242,6 +259,20 @@ void Scene::RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &
     glActiveTexture(GL_TEXTURE0);
     ResourceManager::GetTexture(kFloorName).Bind();
     glm::mat4 plane_model = glm::mat4(1.0f);
+    shader.SetMatrix4("model", plane_model);
+    plane->Render(shader);
+}
+
+void Scene::RenderReflectPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
+    shader.Use();
+    shader.SetMatrix4("projection", projection);
+    shader.SetMatrix4("view", view);
+    glActiveTexture(GL_TEXTURE0);
+    ResourceManager::GetTexture(kGlassTextureName).Bind();
+    glm::mat4 plane_model = glm::mat4(1.0f);
+    plane_model = glm::translate(plane_model, refract_sphere_position);
+    plane_model = glm::rotate(plane_model, glm::radians(90.f), glm::vec3(1.0, 0.0, 0.0));
+    plane_model = glm::scale(plane_model, glm::vec3(0.06, 0.06, 0.06));
     shader.SetMatrix4("model", plane_model);
     plane->Render(shader);
 }
@@ -308,9 +339,15 @@ void Scene::process_key(int key, int action) {
         looked_direction += glm::vec3(0, 1, 0);
     } else if (key == GLFW_KEY_V && action == GLFW_PRESS) {
         looked_direction += glm::vec3(0, -1, 0);
+    } else if (key == GLFW_KEY_G && action == GLFW_PRESS) {
+        this->hdr_pass_->SetGamma(this->hdr_pass_->Getgamma() * 1.2);
+    } else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+        this->hdr_pass_->SetExposure(this->hdr_pass_->GetExposure() * 0.5);
     }
 
     logE("printf camara info");
     tool::Print(camera_position);
     tool::Print(looked_direction);
 }
+
+

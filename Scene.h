@@ -16,6 +16,7 @@ class Box;
 class Sphere;
 class ShadowProcess;
 class ColorCubeProcess;
+class HDRProcess;
 
 class Scene {
 public:
@@ -37,6 +38,7 @@ public:
     void Update(float dt);
 private:
     std::shared_ptr<Plane> plane = nullptr;
+    std::shared_ptr<Plane> reflect_plane = nullptr;
     std::vector<std::shared_ptr<Box>> box_vec;
     std::shared_ptr<Sphere>light = nullptr;
     std::shared_ptr<Sphere>refract_sphere = nullptr; //表现折射的球
@@ -47,8 +49,10 @@ private:
     // TODO：将两个pass改为用两个texture就可以了，不然比较浪费
     std::shared_ptr<ColorCubeProcess> reflect_cube_pass_; // 镜像渲染
     std::shared_ptr<ColorCubeProcess> refract_cube_pass_; // 折射渲染
+    std::shared_ptr<HDRProcess> hdr_pass_; // hd处理
 
     void RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
+    void RenderReflectPlane(Shader& shader, const glm::mat4& view, const glm::mat4 &projection);
 
     void RenderBox(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 

@@ -9,9 +9,10 @@
 
 #include "../Shader.h"
 
-using RenderFunc = std::function<void(glm::mat4 , glm::mat4)>;
+
 
 class ColorCubeProcess {
+    using RenderFunc = std::function<void(glm::mat4 , glm::mat4)>;
 public:
     GLuint color_cube_map_; //生成颜色cube
     GLuint color_FBO;   //  颜色帧缓冲

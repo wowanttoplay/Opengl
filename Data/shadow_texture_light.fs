@@ -47,11 +47,15 @@ void main() {
   if (b_reflected) {
     vec3 reflect_dir = reflect(-cameraDir, normal);
     color = mix(vec3(texture(reflect_cube_map, reflect_dir)), color, 0.1);
+    // fragcolor = vec4(vec3(color), 1.0);
+    // return;
   }
   if (b_refracted) {
-    float ratio = 1.00/1.52;// 模拟空气与玻璃的折射
+    float ratio = 1.2/1.0;// 模拟空气与玻璃的折射
     vec3 refract_dir = refract(-cameraDir, normal, ratio);
     color = mix(vec3(texture(refract_cube_map, refract_dir)), color, 0.03);
+    fragcolor = vec4(color, 1.0);
+    return;
   }
 
   // ambient
