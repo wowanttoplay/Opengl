@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/Users/virgil/Opengl/Data/vertex_data.h
+glew.h
+-
+glfw3.h
+-
+
 /Users/virgil/Opengl/Log/LogUtil.h
 
 /Users/virgil/Opengl/RenderObject/Box.h
@@ -49,6 +55,16 @@ functional
 -
 ../Shader.h
 /Users/virgil/Opengl/Shader.h
+
+/Users/virgil/Opengl/RenderPass/HDRProcess.cc
+HDRProcess.h
+/Users/virgil/Opengl/RenderPass/HDRProcess.h
+../Log/LogUtil.h
+/Users/virgil/Opengl/Log/LogUtil.h
+../Data/vertex_data.h
+/Users/virgil/Opengl/Data/vertex_data.h
+../ResourceManager.h
+/Users/virgil/Opengl/ResourceManager.h
 
 /Users/virgil/Opengl/RenderPass/HDRProcess.h
 glew.h

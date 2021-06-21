@@ -85,18 +85,18 @@ void ColorCubeProcess::PrePareResource(GLuint &FBO, GLuint &texture) {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     // attach color buffer
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0);
-     logE("error : %d", glGetError());
+//     logE("error : %d", glGetError());
 //     bind depth and stencil buffer
     unsigned int rboDepth;
     glGenRenderbuffers(1, &rboDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, kColor_texture_size,kColor_texture_size);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-    logE("error : %d", glGetError());
+//    logE("error : %d", glGetError());
 
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        logE("frame buffer not complete");
-    }
+//    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+//        logE("frame buffer not complete");
+//    }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

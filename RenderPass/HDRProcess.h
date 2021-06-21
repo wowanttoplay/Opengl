@@ -12,18 +12,37 @@
 class HDRProcess {
 public:
     using RenderFunc = std::function<void()>;
-    GLuint FBO_, texture_;
-    GLuint VAO_, VBO_;
 
     HDRProcess();
 
     void PreRender(RenderFunc render_func);
 
-    void SecondRender();
+    /**
+     * 用来进行HDR绘制
+     */
+    void HDRRender();
 
-    void InitFBO();
+    /*
+     * 用来初始化亮色纹理
+     * */
+    void BrightColorRender();
+    /**
+     * 用来显示亮色纹理，便于调试
+     */
+    void BrightColorDebugRender();
+    /**
+     * 高斯模糊处理亮色区域，得到模糊处理后的纹理
+     */
+    void BlurProcess();
+    /**
+     * 高斯模糊的结果查看
+     */
+     void BlurDebugRender();
+    /**
+     * 泛光渲染,需要准备好hdr和blur纹理
+     */
+     void FloodLightRender();
 
-    void InitVAO();
     // 设置gamma值
     void SetGamma(float gamma);
     inline float Getgamma() {return gamma_;}
@@ -33,7 +52,21 @@ public:
     inline float GetExposure() {return exposure_;}
 
 private:
-    float gamma_ = 2.2f;
-    float exposure_ = 0.05f;
+    GLuint FBO_, float_color_texture_;  //HDR本身
+    GLuint bright_FBO_, bright_color_texture_;  //亮色区域相关
+    GLuint blurFBO_[2], blur_color_texture_[2]; // 高斯模糊相关
+    GLuint VAO_, VBO_;
+    float gamma_ = 1.0f;
+    float exposure_ = 0.5f;
+
+    void InitHDRFBO();
+    void InitVAO();
+    void InitShader();
+
+    void InitFloatTexture(GLuint &texture) ;
+
+    void InitBrightFBO() ;
+
+    void InitBlurFBO() ;
 };
 

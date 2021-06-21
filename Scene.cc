@@ -38,7 +38,7 @@ glm::vec3 reflect_sphere_position = glm::vec3(0.0f, 1.0f, -3.0f);
 // light
 const glm::vec3 light_center = glm::vec3(0.0f, 7.0f, 0.0f);;
 glm::vec3 light_position = light_center;
-const glm::vec3 light_base_color = glm::vec3(20.0f, 20.0f, 20.0f);
+const glm::vec3 light_base_color = glm::vec3(5.0f, 5.0f, 5.0f);
 glm::vec3 light_color = light_base_color;
 float light_constant = 1.0f, light_linear = 0.045f, light_quadratic = 0.0075f;
 const float light_move_radius = 5.0f;
@@ -138,8 +138,8 @@ void Scene::Render() {
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_refracted", true);
-        RenderRefractSphere(shadow_texture_light, view, projection);
-//        RenderReflectPlane(shadow_texture_light, view, projection);
+//        RenderRefractSphere(shadow_texture_light, view, projection);
+        RenderReflectPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
         RenderLight(view, projection);
     });
@@ -162,7 +162,7 @@ void Scene::Render() {
     });
 
     //正常渲染
-    this->hdr_pass_->PreRender([=]()->void{
+    this->hdr_pass_->PreRender([=]() -> void {
         glViewport(0, 0, scene_width, scene_height);
         glClearColor(0.1, 0.1, 0.1, 0.1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -188,23 +188,19 @@ void Scene::Render() {
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_refracted", true);
-        RenderRefractSphere(shadow_texture_light, view, projection);
-//        RenderReflectPlane(shadow_texture_light, view, projection);
+//        RenderRefractSphere(shadow_texture_light, view, projection);
+        RenderReflectPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
         // render light
         RenderLight(view, projection);
     });
 
-    this->hdr_pass_->SecondRender();
-
-//    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-
-
-
-
-
+//    this->hdr_pass_->HDRRender();
+    this->hdr_pass_->BrightColorRender();
+//    this->hdr_pass_->BrightColorDebugRender();
+    this->hdr_pass_->BlurProcess();
+//    this->hdr_pass_->BlurDebugRender();
+    this->hdr_pass_->FloodLightRender();
 }
 
 void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {

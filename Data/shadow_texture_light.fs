@@ -22,12 +22,12 @@ in VS_OUT {
 }
 fs_in;
 
-uniform sampler2D texture0;          // 纹理贴图
-uniform samplerCube depth_texture;   // 深度贴图
+uniform sampler2D texture0;            // 纹理贴图
+uniform samplerCube depth_texture;     // 深度贴图
 uniform samplerCube reflect_cube_map;  // 周围的颜色盒
-uniform samplerCube refract_cube_map; // 周围的cube map
-uniform bool b_reflected;         //控制是否进行反射，即是否使用color cube
-uniform bool b_refracted;         //控制是否进行折射，即是否使用
+uniform samplerCube refract_cube_map;  // 周围的cube map
+uniform bool b_reflected;              //控制是否进行反射，即是否使用color cube
+uniform bool b_refracted;              //控制是否进行折射，即是否使用
 
 uniform float
     far_plane;  // 远平面位置，因为我们在阴影texture中的深度值是用far_plane算的，显示阴影的时候也需要far_plane来做对比
@@ -39,7 +39,7 @@ float ShadowCalculate(vec3 fraPosition);
 
 void main() {
   vec3 color = vec3(texture(texture0, fs_in.TexCoords));  // 地板本来的颜色
-    // vector(from light、camera to fragment)
+                                                          // vector(from light、camera to fragment)
   vec3 lightDir = normalize(vec3(light.position - fs_in.FragPos));
   vec3 cameraDir = normalize(vec3(cameraPosition - fs_in.FragPos));
   vec3 normal = normalize(fs_in.Normal);
@@ -51,7 +51,7 @@ void main() {
     // return;
   }
   if (b_refracted) {
-    float ratio = 1.2/1.0;// 模拟空气与玻璃的折射
+    float ratio = 1.2 / 1.0;  // 模拟空气与玻璃的折射
     vec3 refract_dir = refract(-cameraDir, normal, ratio);
     color = mix(vec3(texture(refract_cube_map, refract_dir)), color, 0.03);
     fragcolor = vec4(color, 1.0);
@@ -66,7 +66,7 @@ void main() {
   // blinn specular
   vec3 reflectDir = reflect(-lightDir, fs_in.Normal);
   vec3 halfDir = normalize(reflectDir + cameraDir);
-  float spec = pow(max(dot(halfDir, fs_in.Normal), 0.0), 32.0);
+  float spec = pow(max(dot(halfDir, fs_in.Normal), 0.0), 64.0);
   vec3 specular = spec * color * light.color;
   // shadow calculate
   float shadow = ShadowCalculate(fs_in.FragPos);
