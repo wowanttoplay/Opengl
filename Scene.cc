@@ -34,16 +34,16 @@ glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 // refract sphere
 glm::vec3 refract_sphere_position = glm::vec3(0.0f, 1.0f, 5.0f);
 // reflect sphere
-glm::vec3 reflect_sphere_position = glm::vec3(0.0f, 1.0f, -3.0f);
+glm::vec3 reflect_sphere_position = glm::vec3(-1.0f, 1.0f, -2.0f);
 // light
 const glm::vec3 light_center = glm::vec3(0.0f, 7.0f, 0.0f);;
 glm::vec3 light_position = light_center;
-const glm::vec3 light_base_color = glm::vec3(5.0f, 5.0f, 5.0f);
+const glm::vec3 light_base_color = glm::vec3(30.0f, 30.0f, 30.0f);
 glm::vec3 light_color = light_base_color;
-float light_constant = 1.0f, light_linear = 0.045f, light_quadratic = 0.0075f;
+float light_constant = 1.0f, light_linear = 0.22f, light_quadratic = 0.20f;
 const float light_move_radius = 5.0f;
 //shadow
-const float kShadowFarPlane = 120.0f;
+const float kShadowFarPlane = 100.0f;
 
 Scene::~Scene() {
 }
@@ -51,7 +51,10 @@ Scene::~Scene() {
 
 void Scene::Init() {
     camera_position = glm::vec3(3.0f, 2.0f, 9.0f);
-    looked_direction = glm::vec3(0, 0, -3);
+    looked_direction.x = cos(glm::radians(pitch_angle_)) * cos(glm::radians(yaw_angle_));
+    looked_direction.y = sin(glm::radians(pitch_angle_));
+    looked_direction.z = cos(glm::radians(pitch_angle_)) * sin(glm::radians(yaw_angle_));
+//    looked_direction = glm::vec3(0, 0, -3);
     looked_position = camera_position + looked_direction;
 
     // init plane resource
@@ -77,6 +80,9 @@ void Scene::Init() {
     shadow_texture_light.SetFloat("far_plane", kShadowFarPlane);
     shadow_texture_light.SetInteger("b_reflected", false);
     shadow_texture_light.SetInteger("b_refracted", false);
+    shadow_texture_light.SetFloat("material.ambient_ratio", 0.05);
+    shadow_texture_light.SetFloat("material.diffuse_ratio", 1.0);
+    shadow_texture_light.SetFloat("material.specular_ratio", 32.0);
 
     // init color cube render,用与渲染带有阴影的cube颜色缓冲
     Shader color_cube_render = ResourceManager::LoadShader("../Data/color_cube_map.vs",
@@ -108,9 +114,11 @@ void Scene::Init() {
 
     this->refract_cube_pass_ = make_shared<ColorCubeProcess>();
     this->refract_cube_pass_->SetNearAndFar(0.1f, 100.f);
+    logE("refract pass, set view size : (%f, %f)", this->scene_width, this->scene_height);
     this->refract_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
 
-    this->hdr_pass_ = make_shared<HDRProcess>();
+    this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
+
 }
 
 void Scene::Render() {
@@ -123,7 +131,6 @@ void Scene::Render() {
         this->RenderPlane(shadow_map_shader, view, projection);
         this->RenderBox(shadow_map_shader, view, projection);
         this->RenderReflectSphere(shadow_map_shader, view, projection);
-//        this->RenderReflectPlane(shadow_map_shader, view, projection);
     });
 
 //    //反射所需的cube纹理
@@ -139,7 +146,7 @@ void Scene::Render() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_refracted", true);
 //        RenderRefractSphere(shadow_texture_light, view, projection);
-        RenderReflectPlane(shadow_texture_light, view, projection);
+        RenderRefractPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
         RenderLight(view, projection);
     });
@@ -156,7 +163,7 @@ void Scene::Render() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_reflected", true);
         RenderReflectSphere(shadow_texture_light, view, projection);
-//        RenderReflectPlane(shadow_texture_light, view, projection);
+//        RenderRefractPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_reflected", false);
         RenderLight(view, projection);
     });
@@ -183,27 +190,37 @@ void Scene::Render() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_reflected", true);
         RenderReflectSphere(shadow_texture_light, view, projection);
-//        RenderReflectPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_reflected", false);
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
         shadow_texture_light.SetInteger("b_refracted", true);
 //        RenderRefractSphere(shadow_texture_light, view, projection);
-        RenderReflectPlane(shadow_texture_light, view, projection);
+        RenderRefractPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
         // render light
         RenderLight(view, projection);
     });
 
-//    this->hdr_pass_->HDRRender();
-    this->hdr_pass_->BrightColorRender();
-//    this->hdr_pass_->BrightColorDebugRender();
-    this->hdr_pass_->BlurProcess();
-//    this->hdr_pass_->BlurDebugRender();
-    this->hdr_pass_->FloodLightRender();
+//    return;
+    if (b_open_blur_) {
+        this->hdr_pass_->BrightColorRender();
+        this->hdr_pass_->BlurProcess();
+//        this->hdr_pass_->BrightColorDebugRender();
+//        this->hdr_pass_->BlurDebugRender();
+        this->hdr_pass_->FloodLightRender();
+    }else {
+        this->hdr_pass_->HDRRender();
+    }
+
+//
+
+//
 }
 
 void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
+    shader.SetFloat("material.ambient_ratio", 0.02);
+    shader.SetFloat("material.diffuse_ratio", 1.0);
+    shader.SetFloat("material.specular_ratio", 64.0);
     glActiveTexture(GL_TEXTURE0);
     ResourceManager::GetTexture(kGlassTextureName).Bind();
     glm::mat4 refract_sphere_model = glm::mat4(1.0f);
@@ -237,6 +254,9 @@ void Scene::RenderBox(Shader &shader, const glm::mat4 &view, const glm::mat4 &pr
     shader.Use();
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
+    shader.SetFloat("material.ambient_ratio", 0.02);
+    shader.SetFloat("material.diffuse_ratio", 0.5);
+    shader.SetFloat("material.specular_ratio", 32.0);
     glActiveTexture(GL_TEXTURE0);
     ResourceManager::GetTexture(kBoxName).Bind();
     for (int i = 0; i < box_num; ++i) {
@@ -252,6 +272,9 @@ void Scene::RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &
     shader.Use();
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
+    shader.SetFloat("material.ambient_ratio", 0.02);
+    shader.SetFloat("material.diffuse_ratio", 0.1);
+    shader.SetFloat("material.specular_ratio", 16.0);
     glActiveTexture(GL_TEXTURE0);
     ResourceManager::GetTexture(kFloorName).Bind();
     glm::mat4 plane_model = glm::mat4(1.0f);
@@ -259,10 +282,13 @@ void Scene::RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &
     plane->Render(shader);
 }
 
-void Scene::RenderReflectPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
+void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.Use();
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
+    shader.SetFloat("material.ambient_ratio", 0.05);
+    shader.SetFloat("material.diffuse_ratio", 1.0);
+    shader.SetFloat("material.specular_ratio", 64.0);
     glActiveTexture(GL_TEXTURE0);
     ResourceManager::GetTexture(kGlassTextureName).Bind();
     glm::mat4 plane_model = glm::mat4(1.0f);
@@ -276,11 +302,14 @@ void Scene::RenderReflectPlane(Shader &shader, const glm::mat4 &view, const glm:
 void Scene::SetView(float width, float height) {
     this->scene_width = width;
     this->scene_height = height;
-    logI("scene width: %f, height :%f", width, height);
+    logE("scene width: %f, height :%f", width, height);
 }
 
 void Scene::Update(float dt) {
     // 更新相机
+    looked_direction.x = cos(glm::radians(pitch_angle_)) * cos(glm::radians(yaw_angle_));
+    looked_direction.y = sin(glm::radians(pitch_angle_));
+    looked_direction.z = cos(glm::radians(pitch_angle_)) * sin(glm::radians(yaw_angle_));
     looked_position = camera_position + looked_direction;
     // 更新light的相关属性
     light_position = light_center + glm::vec3(sin(dt / 3) * light_move_radius, 0, cos(dt / 3) * light_move_radius);
@@ -316,34 +345,37 @@ void Scene::Update(float dt) {
 void Scene::process_key(int key, int action) {
     logE("scene, press key : %d", key);
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-        camera_position += glm::vec3(0.0, 0.0, -1.0);
+        camera_position += looked_direction;
     } else if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-        camera_position += glm::vec3(0.0, 0.0, 1.0);
+        camera_position -= looked_direction;
     } else if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-        camera_position += glm::vec3(-1.0, 0.0, 0.0);
+        camera_position -= glm::normalize(glm::cross(looked_direction, glm::vec3(0, 1, 0)));
     } else if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-        camera_position += glm::vec3(1.0, 0.0, 0.0);
+        camera_position += glm::normalize(glm::cross(looked_direction, glm::vec3(0, 1, 0)));
     } else if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-        looked_direction += glm::vec3(-1.0, 0.0, 0.0);
+        yaw_angle_ -= 10;
     } else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-        looked_direction += glm::vec3(1.0, 0.0, 0.0);
+        yaw_angle_ += 10;
     } else if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
         camera_position += glm::vec3(0, 1, 0);
     } else if (key == GLFW_KEY_X && action == GLFW_PRESS) {
         camera_position += glm::vec3(0, -1, 0);
     } else if (key == GLFW_KEY_C && action == GLFW_PRESS) {
-        looked_direction += glm::vec3(0, 1, 0);
+        pitch_angle_ += 10;
     } else if (key == GLFW_KEY_V && action == GLFW_PRESS) {
-        looked_direction += glm::vec3(0, -1, 0);
-    } else if (key == GLFW_KEY_G && action == GLFW_PRESS) {
-        this->hdr_pass_->SetGamma(this->hdr_pass_->Getgamma() * 1.2);
+        pitch_angle_ -= 10;
+    } else if (key == GLFW_KEY_O && action == GLFW_PRESS) {
+        this->hdr_pass_->SetExposure(this->hdr_pass_->GetExposure() - 0.1);
     } else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-        this->hdr_pass_->SetExposure(this->hdr_pass_->GetExposure() * 0.5);
+        this->hdr_pass_->SetExposure(this->hdr_pass_->GetExposure() + 0.1);
+    } else if (key == GLFW_KEY_K && action == GLFW_PRESS) {
+        this->b_open_blur_ = !this->b_open_blur_;
     }
 
     logE("printf camara info");
-    tool::Print(camera_position);
-    tool::Print(looked_direction);
+    logE("camera info : yaw:%f, pitch:%f", yaw_angle_, pitch_angle_);
+//    tool::Print(camera_position);
+//    tool::Print(looked_direction);
 }
 
 

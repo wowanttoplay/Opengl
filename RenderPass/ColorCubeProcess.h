@@ -32,7 +32,7 @@ public:
     void Render(RenderFunc render_func);
 
 private:
-    GLuint screen_width_, screen_height_; // 屏幕大小
+    float screen_width_, screen_height_; // 屏幕大小
     float near_, far_;
     glm::vec3 center_; // cube map 生成时的中心位置
 

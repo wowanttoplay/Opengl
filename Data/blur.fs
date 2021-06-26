@@ -11,15 +11,15 @@ void main() {
   vec3 result = texture(texture0, TexCoords).rgb * weight[0];  //原本的颜色
   if (b_horizontal) {
     //水平模糊
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 1; i < 5; ++i) {
       result += texture(texture0, TexCoords + vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
-      result += texture(texture0, TexCoords + vec2(-tex_offset.x * i, 0.0)).rgb * weight[i];
+      result += texture(texture0, TexCoords - vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
     }
   } else {
     //竖直模糊
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 1; i < 5; ++i) {
       result += texture(texture0, TexCoords + vec2(0.0, tex_offset.y * i)).rgb * weight[i];
-      result += texture(texture0, TexCoords + vec2(0.0, -tex_offset.y * i)).rgb * weight[i];
+      result += texture(texture0, TexCoords - vec2(0.0, tex_offset.y * i)).rgb * weight[i];
     }
   }
   FragColor = vec4(result, 1.0);

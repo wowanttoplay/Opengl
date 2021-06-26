@@ -18,6 +18,13 @@ namespace RenderData {
             1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
     };
+//    static float basic_quad[] = {
+//            // positions        // texture Coords
+//            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+//            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+//            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+//            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+//    };
 
     static float planeVertices[] = {
             // positions            // normals         // texcoords

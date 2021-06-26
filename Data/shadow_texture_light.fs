@@ -15,6 +15,13 @@ struct Light {
   float quadratic;
 };
 
+// 因为没有贴图，使用粗浅的系数来区分各个材料
+struct Material {
+  float ambient_ratio;   // 环境光系数
+  float diffuse_ratio;   // 漫反射系数
+  float specular_ratio;  // 镜反射系数
+};
+
 in VS_OUT {
   vec3 FragPos;
   vec3 Normal;
@@ -34,6 +41,7 @@ uniform float
 uniform vec3 cameraPosition;  // 相机位置
 out vec4 fragcolor;           // 输出的颜色
 uniform Light light;          // 光照相关参数
+uniform Material material;    // 物体材料系数
 
 float ShadowCalculate(vec3 fraPosition);
 
@@ -47,6 +55,8 @@ void main() {
   if (b_reflected) {
     vec3 reflect_dir = reflect(-cameraDir, normal);
     color = mix(vec3(texture(reflect_cube_map, reflect_dir)), color, 0.1);
+    fragcolor = vec4(color, 1.0);
+    return;
     // fragcolor = vec4(vec3(color), 1.0);
     // return;
   }
@@ -59,14 +69,14 @@ void main() {
   }
 
   // ambient
-  vec3 ambient = 0.05 * color * light.color;
+  vec3 ambient = material.ambient_ratio * color * light.color;
   // diffuse
   float diff = max(dot(lightDir, normal), 0.0);
-  vec3 diffuse = diff * color * light.color;
+  vec3 diffuse = diff * color * light.color * material.diffuse_ratio;
   // blinn specular
   vec3 reflectDir = reflect(-lightDir, fs_in.Normal);
   vec3 halfDir = normalize(reflectDir + cameraDir);
-  float spec = pow(max(dot(halfDir, fs_in.Normal), 0.0), 64.0);
+  float spec = pow(max(dot(halfDir, fs_in.Normal), 0.0), material.specular_ratio);
   vec3 specular = spec * color * light.color;
   // shadow calculate
   float shadow = ShadowCalculate(fs_in.FragPos);

@@ -13,7 +13,7 @@ class HDRProcess {
 public:
     using RenderFunc = std::function<void()>;
 
-    HDRProcess();
+    HDRProcess(float width, float height);
 
     void PreRender(RenderFunc render_func);
 
@@ -50,14 +50,16 @@ public:
     // 设置曝光值
     void SetExposure(float exposure);
     inline float GetExposure() {return exposure_;}
+    void SetViewSize(uint32_t width, uint32_t height);
 
 private:
     GLuint FBO_, float_color_texture_;  //HDR本身
     GLuint bright_FBO_, bright_color_texture_;  //亮色区域相关
     GLuint blurFBO_[2], blur_color_texture_[2]; // 高斯模糊相关
     GLuint VAO_, VBO_;
-    float gamma_ = 1.0f;
-    float exposure_ = 0.5f;
+    float gamma_ =1.0f;
+    float exposure_ = 1.0f;
+    float width_ = 1024, height_ = 1024;
 
     void InitHDRFBO();
     void InitVAO();

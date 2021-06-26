@@ -23,6 +23,8 @@ public:
     glm::vec3 camera_position;
     glm::vec3 looked_position;
     glm::vec3 looked_direction;
+    float yaw_angle_ = -90;
+    float pitch_angle_ = 0;
 
     float scene_width;
     float scene_height;
@@ -52,7 +54,7 @@ private:
     std::shared_ptr<HDRProcess> hdr_pass_; // hd处理
 
     void RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
-    void RenderReflectPlane(Shader& shader, const glm::mat4& view, const glm::mat4 &projection);
+    void RenderRefractPlane(Shader& shader, const glm::mat4& view, const glm::mat4 &projection);
 
     void RenderBox(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
@@ -61,5 +63,8 @@ private:
     void RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
+
+private:
+    bool b_open_blur_ = false; //是否开启混合效果（按k键）
 };
 
