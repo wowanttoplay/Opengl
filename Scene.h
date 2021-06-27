@@ -45,6 +45,7 @@ private:
     std::shared_ptr<Sphere>light = nullptr;
     std::shared_ptr<Sphere>refract_sphere = nullptr; //表现折射的球
     std::shared_ptr<Sphere> reflect_sphere = nullptr; //表现反射的球
+    std::shared_ptr<Sphere> PBR_sphere = nullptr; //表现PBR效果的球
 
     std::shared_ptr<ShadowProcess> shadow_pass_; // 阴影渲染
 
@@ -63,6 +64,8 @@ private:
     void RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
+
+    void RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
 private:
     bool b_open_blur_ = false; //是否开启混合效果（按k键）

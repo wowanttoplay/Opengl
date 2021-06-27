@@ -168,7 +168,7 @@ void HDRProcess::BlurProcess() {
     Shader shader = ResourceManager::GetShader("blur");
     shader.Use();
 
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < 10; ++i) {
         glBindFramebuffer(GL_FRAMEBUFFER, this->blurFBO_[horizontal]);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shader.SetInteger("b_horizontal", horizontal);

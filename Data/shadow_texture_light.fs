@@ -55,9 +55,7 @@ void main() {
   if (b_reflected) {
     vec3 reflect_dir = reflect(-cameraDir, normal);
     color = mix(vec3(texture(reflect_cube_map, reflect_dir)), color, 0.1);
-    fragcolor = vec4(color, 1.0);
-    return;
-    // fragcolor = vec4(vec3(color), 1.0);
+    // fragcolor = vec4(color, 1.0);
     // return;
   }
   if (b_refracted) {

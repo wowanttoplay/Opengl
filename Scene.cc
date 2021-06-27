@@ -19,6 +19,7 @@ using namespace std;
 const uint32_t box_num = 2;
 const std::string kFloorName = "floor";
 
+const std::string kPBR = "pbr";
 const std::string kBoxName = "Wall";
 const std::string kLight = "Sphere";
 const std::string kGlassTextureName = "glass";
@@ -35,6 +36,8 @@ glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 refract_sphere_position = glm::vec3(0.0f, 1.0f, 5.0f);
 // reflect sphere
 glm::vec3 reflect_sphere_position = glm::vec3(-1.0f, 1.0f, -2.0f);
+// PBR sphere
+glm::vec3 PBR_position = glm::vec3(3.0f, 1.0f, -2.0f);
 // light
 const glm::vec3 light_center = glm::vec3(0.0f, 7.0f, 0.0f);;
 glm::vec3 light_position = light_center;
@@ -72,6 +75,7 @@ void Scene::Init() {
     Shader shadow_texture_light = ResourceManager::LoadShader("../Data/shadow_texture_light.vs",
                                                               "../Data/shadow_texture_light.fs", nullptr,
                                                               kShadowTextureLightShaderName);
+
     shadow_texture_light.Use();
     shadow_texture_light.SetInteger("texture0", 0);
     shadow_texture_light.SetInteger("depth_texture", 1);
@@ -94,6 +98,14 @@ void Scene::Init() {
 //    color_cube_render.SetInteger("color_cube_map", 2);
     color_cube_render.SetFloat("far_plane", kShadowFarPlane);
 
+    // init PBR shader
+    Shader PBR_shader = ResourceManager::LoadShader("../Data/PBR.vs", "../Data/PBR.fs", nullptr, kPBR);
+    PBR_shader.Use();
+//    PBR_shader.SetInteger("albedoTexture", 0);
+    PBR_shader.SetFloat("ao", 1.0);
+    PBR_shader.SetFloat("roughness", 0.2);
+    PBR_shader.SetFloat("metallic", 0.7);
+    PBR_shader.SetVector3f("albedo", glm::vec3(0.5, 0, 0));
 
     plane = std::make_shared<Plane>();
     reflect_plane = std::make_shared<Plane>();
@@ -103,6 +115,7 @@ void Scene::Init() {
     light = make_shared<Sphere>(20, 20);
     refract_sphere = make_shared<Sphere>(30, 30);
     reflect_sphere = make_shared<Sphere>(30, 30);
+    PBR_sphere = make_shared<Sphere>(30, 30);
 
     // 渲染pass
     this->shadow_pass_ = make_shared<ShadowProcess>();
@@ -131,6 +144,7 @@ void Scene::Render() {
         this->RenderPlane(shadow_map_shader, view, projection);
         this->RenderBox(shadow_map_shader, view, projection);
         this->RenderReflectSphere(shadow_map_shader, view, projection);
+        this->RenderPBRSphere(shadow_map_shader, view, projection);
     });
 
 //    //反射所需的cube纹理
@@ -148,6 +162,9 @@ void Scene::Render() {
 //        RenderRefractSphere(shadow_texture_light, view, projection);
         RenderRefractPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
+        // PBR
+        Shader PBR_shader = ResourceManager::GetShader(kPBR);
+        RenderPBRSphere(PBR_shader, view, projection);
         RenderLight(view, projection);
     });
     // 折射所需要的纹理
@@ -165,6 +182,8 @@ void Scene::Render() {
         RenderReflectSphere(shadow_texture_light, view, projection);
 //        RenderRefractPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_reflected", false);
+        Shader PBR_shader = ResourceManager::GetShader(kPBR);
+        RenderPBRSphere(PBR_shader, view, projection);
         RenderLight(view, projection);
     });
 
@@ -197,6 +216,9 @@ void Scene::Render() {
 //        RenderRefractSphere(shadow_texture_light, view, projection);
         RenderRefractPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_refracted", false);
+        // PBR
+        Shader PBR_shader = ResourceManager::GetShader(kPBR);
+        RenderPBRSphere(PBR_shader, view, projection);
         // render light
         RenderLight(view, projection);
     });
@@ -208,7 +230,7 @@ void Scene::Render() {
 //        this->hdr_pass_->BrightColorDebugRender();
 //        this->hdr_pass_->BlurDebugRender();
         this->hdr_pass_->FloodLightRender();
-    }else {
+    } else {
         this->hdr_pass_->HDRRender();
     }
 
@@ -299,6 +321,18 @@ void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm:
     plane->Render(shader);
 }
 
+void Scene::RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
+    shader.Use();
+    shader.SetMatrix4("projection", projection);
+    shader.SetMatrix4("view", view);
+    glm::mat4 plane_model = glm::mat4(1.0f);
+    plane_model = glm::translate(plane_model, PBR_position);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, ResourceManager::GetTexture(kGlassTextureName).ID);
+    shader.SetMatrix4("model", plane_model);
+    PBR_sphere->Render(shader);
+}
+
 void Scene::SetView(float width, float height) {
     this->scene_width = width;
     this->scene_height = height;
@@ -340,6 +374,12 @@ void Scene::Update(float dt) {
     color_cube_shader.SetFloat("light.linear", light_linear);
     color_cube_shader.SetFloat("light.quadratic", light_quadratic);
     color_cube_shader.SetVector3f("cameraPosition", camera_position);
+    // 设置PBR着色器
+    Shader PBR_shader = ResourceManager::GetShader(kPBR);
+    PBR_shader.Use();
+    PBR_shader.SetVector3f("light_color", light_color);
+    PBR_shader.SetVector3f("lightPosition", light_position);
+    PBR_shader.SetVector3f("cameraPosition", camera_position);
 }
 
 void Scene::process_key(int key, int action) {
@@ -377,5 +417,7 @@ void Scene::process_key(int key, int action) {
 //    tool::Print(camera_position);
 //    tool::Print(looked_direction);
 }
+
+
 
 
