@@ -143,7 +143,7 @@ void Scene::Render() {
         this->RenderPlane(shadow_map_shader, view, projection);
         this->RenderBox(shadow_map_shader, view, projection);
         this->RenderReflectSphere(shadow_map_shader, view, projection);
-        this->RenderPBRSphere(shadow_map_shader, view, projection);
+//        this->RenderPBRSphere(shadow_map_shader, view, projection);
     });
 
 //    //反射所需的cube纹理
@@ -163,7 +163,7 @@ void Scene::Render() {
         shadow_texture_light.SetInteger("b_refracted", false);
         // PBR
         Shader PBR_shader = ResourceManager::GetShader(kPBR);
-        RenderPBRSphere(PBR_shader, view, projection);
+//        RenderPBRSphere(PBR_shader, view, projection);
         RenderLight(view, projection);
     });
     // 折射所需要的纹理
@@ -182,7 +182,7 @@ void Scene::Render() {
 //        RenderRefractPlane(shadow_texture_light, view, projection);
         shadow_texture_light.SetInteger("b_reflected", false);
         Shader PBR_shader = ResourceManager::GetShader(kPBR);
-        RenderPBRSphere(PBR_shader, view, projection);
+//        RenderPBRSphere(PBR_shader, view, projection);
         RenderLight(view, projection);
     });
 
@@ -217,12 +217,11 @@ void Scene::Render() {
         shadow_texture_light.SetInteger("b_refracted", false);
         // PBR
         Shader PBR_shader = ResourceManager::GetShader(kPBR);
-        RenderPBRSphere(PBR_shader, view, projection);
+//        RenderPBRSphere(PBR_shader, view, projection);
         // render light
         RenderLight(view, projection);
     });
-
-//    return;
+    
     if (b_open_blur_) {
         this->hdr_pass_->BrightColorRender();
         this->hdr_pass_->BlurProcess();
@@ -233,9 +232,6 @@ void Scene::Render() {
         this->hdr_pass_->HDRRender();
     }
 
-//
-
-//
 }
 
 void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
