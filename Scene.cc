@@ -101,11 +101,10 @@ void Scene::Init() {
     // init PBR shader
     Shader PBR_shader = ResourceManager::LoadShader("../Data/PBR.vs", "../Data/PBR.fs", nullptr, kPBR);
     PBR_shader.Use();
-//    PBR_shader.SetInteger("albedoTexture", 0);
+    PBR_shader.SetInteger("albedoTexture", 0);
     PBR_shader.SetFloat("ao", 1.0);
-    PBR_shader.SetFloat("roughness", 0.2);
-    PBR_shader.SetFloat("metallic", 0.7);
-    PBR_shader.SetVector3f("albedo", glm::vec3(0.5, 0, 0));
+    PBR_shader.SetFloat("roughness", 0.4);
+    PBR_shader.SetFloat("metallic", 0.01);
 
     plane = std::make_shared<Plane>();
     reflect_plane = std::make_shared<Plane>();
@@ -323,13 +322,13 @@ void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm:
 
 void Scene::RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.Use();
+    glActiveTexture(GL_TEXTURE0);
+    ResourceManager::GetTexture(kGlassTextureName).Bind();
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
-    glm::mat4 plane_model = glm::mat4(1.0f);
-    plane_model = glm::translate(plane_model, PBR_position);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::GetTexture(kGlassTextureName).ID);
-    shader.SetMatrix4("model", plane_model);
+    glm::mat4 sphere_model = glm::mat4(1.0f);
+    sphere_model = glm::translate(sphere_model, PBR_position);
+    shader.SetMatrix4("model", sphere_model);
     PBR_sphere->Render(shader);
 }
 
