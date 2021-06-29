@@ -8,6 +8,8 @@
 #include "RenderObject/Box.h"
 #include "RenderObject/Sphere.h"
 
+#include "Thread/ThreadPool.h"
+#include "Thread/Task.h"
 #include "Log/LogUtil.h"
 #include "Tool/PrintTool.h"
 #include "RenderPass/ShadowProcess.h"
@@ -18,8 +20,13 @@ using namespace std;
 
 const uint32_t box_num = 2;
 const std::string kFloorName = "floor";
+const std::string kMetalname = "metal";
+const std::string kShingles1 = "shingles1";
+const std::string kRockyShoreLine = "rocky-shoreline1";
+const std::string kAngledTiledFloor = "angled-tiled-floor";
 
 const std::string kPBR = "pbr";
+const std::string kPBRTexture = "PBR_texture";
 const std::string kBoxName = "Wall";
 const std::string kLight = "Sphere";
 const std::string kGlassTextureName = "glass";
@@ -41,12 +48,17 @@ glm::vec3 PBR_position = glm::vec3(3.0f, 1.0f, -2.0f);
 // light
 const glm::vec3 light_center = glm::vec3(0.0f, 7.0f, 0.0f);;
 glm::vec3 light_position = light_center;
-const glm::vec3 light_base_color = glm::vec3(200.0f, 200.0f, 200.0f);
+const glm::vec3 light_base_color = glm::vec3(300.0f, 300.0f, 300.0f);
 glm::vec3 light_color = light_base_color;
 float light_constant = 1.0f, light_linear = 0.22f, light_quadratic = 0.20f;
 const float light_move_radius = 5.0f;
 //shadow
 const float kShadowFarPlane = 100.0f;
+
+Scene::Scene() {
+    thread_pool_ = make_shared<ThreadPool>(3, "scene_pool");
+}
+
 
 Scene::~Scene() {
 }
@@ -60,11 +72,14 @@ void Scene::Init() {
 //    looked_direction = glm::vec3(0, 0, -3);
     looked_position = camera_position + looked_direction;
 
-    // init plane resource
-    ResourceManager::LoadTexture("../Data/Wall.jpeg", kFloorName);
-    ResourceManager::LoadTexture("../Data/glass.jpeg", kGlassTextureName);
-    // init box resource
-    ResourceManager::LoadTexture("../Data/floor.jpg", kBoxName);
+    // init png resource
+
+
+    LoadPBRTexture(kMetalname);
+//    LoadPBRTexture("floor");
+    LoadPBRTexture(kFloorName);
+
+
     // init light resource
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/Sphere.fs", nullptr, kLight);
     // init shadow resource
@@ -108,6 +123,18 @@ void Scene::Init() {
     PBR_shader.SetFloat("ao", 1.0);
     PBR_shader.SetFloat("roughness", 0.1);
     PBR_shader.SetFloat("metallic", 0.6);
+    // init PBR with texture shader
+    Shader PBR_texture_shader = ResourceManager::LoadShader("../Data/PBR.vs", "../Data/PBR_texture.fs", nullptr,
+                                                            kPBRTexture);
+    PBR_texture_shader.Use();
+    PBR_texture_shader.SetInteger("albedoMap", 0);
+    PBR_texture_shader.SetInteger("normalMap", 1);
+    PBR_texture_shader.SetInteger("metallicMap", 2);
+    PBR_texture_shader.SetInteger("roughnessMap", 3);
+    PBR_texture_shader.SetInteger("aoMap", 4);
+    PBR_texture_shader.SetInteger("heightMap", 5);
+    PBR_texture_shader.SetInteger("depthMap", 6);
+    PBR_texture_shader.SetFloat("farPlane", kShadowFarPlane);
 
     plane = std::make_shared<Plane>();
     reflect_plane = std::make_shared<Plane>();
@@ -133,7 +160,23 @@ void Scene::Init() {
     this->refract_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
 
     this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
+}
 
+void Scene::LoadPBRTexture(const string &texture_name) const {
+    vector<string>str_vec{"albedo", "ao", "height", "metallic", "normal", "roughness"};
+    for (int i = 0; i < str_vec.size(); ++i) {
+        string str = str_vec.at(i);
+//        thread_pool_->Commit(make_shared<Task>([=]()->void{
+            ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_" + str + ".png", texture_name + "_" + str);
+//        }));
+    }
+
+//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_albedo.png", texture_name + "_albedo");
+//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_ao.png", texture_name + "_ao");
+//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_height.png", texture_name + "_height");
+//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_metallic.png", texture_name + "_metallic");
+//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_normal.png", texture_name + "_normal");
+//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_roughness.png", texture_name + "_roughness");
 }
 
 void Scene::Render() {
@@ -145,7 +188,7 @@ void Scene::Render() {
         shadow_map_shader.SetFloat("far_plane", kShadowFarPlane);
 
         this->RenderPlane(shadow_map_shader, view, projection);
-        this->RenderBox(shadow_map_shader, view, projection);
+//        this->RenderBox(shadow_map_shader, view, projection);
 //        this->RenderReflectSphere(shadow_map_shader, view, projection);
         this->RenderPBRSphere(shadow_map_shader, view, projection);
     });
@@ -206,17 +249,14 @@ void Scene::Render() {
         glm::mat4 view = glm::lookAt(camera_position, looked_position, glm::vec3(0, 1, 0));
         glm::mat4 projection = glm::perspective(view_angle, scene_width / scene_height, 0.1f, 100.0f);
 
-        Shader PBR_shader = ResourceManager::GetShader(kPBR);
-        PBR_shader.Use();
-        PBR_shader.SetFloat("ao", 1.0);
-        PBR_shader.SetFloat("roughness", 0.2);
-        PBR_shader.SetFloat("metallic", 0.02);
+        Shader PBR_texture_shader = ResourceManager::GetShader(kPBRTexture);
+        PBR_texture_shader.Use();
 
-        glActiveTexture(GL_TEXTURE1);
+        glActiveTexture(GL_TEXTURE6);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-        RenderPlane(PBR_shader, view, projection);
-        RenderBox(PBR_shader, view, projection);
-        RenderPBRSphere(PBR_shader, view, projection);
+        RenderPlane(PBR_texture_shader, view, projection);
+//        RenderBox(PBR_texture_shader, view, projection);
+        RenderPBRSphere(PBR_texture_shader, view, projection);
         // render sphere
 //        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
 //        shadow_texture_light.Use();
@@ -304,14 +344,26 @@ void Scene::RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &
     shader.Use();
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
-    shader.SetFloat("roughness", 1.0);
-    shader.SetFloat("metallic", 0.01);
+    BindPBRTexture(kFloorName);
 
-    glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kFloorName).Bind();
     glm::mat4 plane_model = glm::mat4(1.0f);
     shader.SetMatrix4("model", plane_model);
     plane->Render(shader);
+}
+
+void Scene::BindPBRTexture(const string &texture_name) const {
+    glActiveTexture(GL_TEXTURE0);
+    ResourceManager::GetTexture(texture_name + "_albedo").Bind();
+    glActiveTexture(GL_TEXTURE1);
+    ResourceManager::GetTexture(texture_name + "_normal").Bind();
+    glActiveTexture(GL_TEXTURE2);
+    ResourceManager::GetTexture(texture_name + "_metallic").Bind();
+    glActiveTexture(GL_TEXTURE3);
+    ResourceManager::GetTexture(texture_name + "_roughness").Bind();
+    glActiveTexture(GL_TEXTURE4);
+    ResourceManager::GetTexture(texture_name + "_ao").Bind();
+    glActiveTexture(GL_TEXTURE5);
+    ResourceManager::GetTexture(texture_name + "_height").Bind();
 }
 
 void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
@@ -330,12 +382,10 @@ void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm:
 
 void Scene::RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.Use();
-    glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kGlassTextureName).Bind();
+    BindPBRTexture(kMetalname);
+
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
-    shader.SetFloat("roughness", 0.2);
-    shader.SetFloat("metallic", 0.3);
     glm::mat4 sphere_model = glm::mat4(1.0f);
     sphere_model = glm::translate(sphere_model, PBR_position);
     shader.SetMatrix4("model", sphere_model);
@@ -389,6 +439,12 @@ void Scene::Update(float dt) {
     PBR_shader.SetVector3f("light_color", light_color);
     PBR_shader.SetVector3f("lightPosition", light_position);
     PBR_shader.SetVector3f("cameraPosition", camera_position);
+    // 设置PBR texture着色器
+    Shader PBR_texture_shader = ResourceManager::GetShader(kPBRTexture);
+    PBR_texture_shader.Use();
+    PBR_texture_shader.SetVector3f("cameraPosition", camera_position);
+    PBR_texture_shader.SetVector3f("lightPosition", light_position);
+    PBR_texture_shader.SetVector3f("light_color", light_color);
 }
 
 void Scene::process_key(int key, int action) {
@@ -426,6 +482,7 @@ void Scene::process_key(int key, int action) {
 //    tool::Print(camera_position);
 //    tool::Print(looked_direction);
 }
+
 
 
 

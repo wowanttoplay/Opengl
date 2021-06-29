@@ -57,7 +57,7 @@ private:
     GLuint bright_FBO_, bright_color_texture_;  //亮色区域相关
     GLuint blurFBO_[2], blur_color_texture_[2]; // 高斯模糊相关
     GLuint VAO_, VBO_;
-    float gamma_ =1.0f;
+    float gamma_ =2.2f;
     float exposure_ = 1.0f;
     float width_ = 1024, height_ = 1024;
 

@@ -17,6 +17,7 @@ class Sphere;
 class ShadowProcess;
 class ColorCubeProcess;
 class HDRProcess;
+class ThreadPool;
 
 class Scene {
 public:
@@ -30,6 +31,7 @@ public:
     float scene_height;
     float view_angle = 45.0f;
 
+    Scene();
     virtual ~Scene();
 
     void process_key(int key, int action);
@@ -39,6 +41,8 @@ public:
     void Init();
     void Update(float dt);
 private:
+    std::shared_ptr<ThreadPool> thread_pool_;
+
     std::shared_ptr<Plane> plane = nullptr;
     std::shared_ptr<Plane> reflect_plane = nullptr;
     std::vector<std::shared_ptr<Box>> box_vec;
@@ -68,6 +72,9 @@ private:
     void RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
 private:
-    bool b_open_blur_ = false; //是否开启混合效果（按k键）
+    bool b_open_blur_ = true; //是否开启混合效果（按k键）
+    void BindPBRTexture(const std::string &texture_name) const;
+
+    void LoadPBRTexture(const std::string &texture_name) const;
 };
 

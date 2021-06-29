@@ -6,33 +6,41 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <memory>
 #define STB_IMAGE_IMPLEMENTATION
 #include "third/stb_image.h"
 
 #include "Log/LogUtil.h"
+using namespace std;
 
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
+std::mutex                          ResourceManager::mu_;
 
 Shader ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile, std::string name)
 {
+    unique_lock<mutex> lc(mu_);
     Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
     return Shaders[name];
 }
 
 Shader ResourceManager::GetShader(std::string name)
 {
+    unique_lock<mutex> lc(mu_);
     return Shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const GLchar *file, std::string name)
+Texture2D ResourceManager::LoadTexture(const string &file, std::string name)
 {
-    Textures[name] = loadTextureFromFile(file);
+    unique_lock<mutex> lc(mu_);
+    Textures[name] = loadTextureFromFile(file.c_str());
     return Textures[name];
 }
 
 Texture2D ResourceManager::GetTexture(std::string name)
 {
+    unique_lock<mutex> lc(mu_);
     return Textures[name];
 }
 
@@ -96,6 +104,9 @@ Texture2D ResourceManager::loadTextureFromFile(const GLchar *file)
     // Load image
     int width, height, nrChannels;
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
+    if (!data) {
+        logE("the %s file is not found", file);
+    }
     if (nrChannels == 4)
     {
         texture.Internal_Format = GL_RGBA;

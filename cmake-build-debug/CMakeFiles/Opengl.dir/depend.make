@@ -1484,6 +1484,8 @@ CMakeFiles/Opengl.dir/Scene.cc.o: ../Scene.cc
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Scene.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Shader.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Texture2D.h
+CMakeFiles/Opengl.dir/Scene.cc.o: ../Thread/Task.h
+CMakeFiles/Opengl.dir/Scene.cc.o: ../Thread/ThreadPool.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Tool/PrintTool.h
 CMakeFiles/Opengl.dir/Scene.cc.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
 CMakeFiles/Opengl.dir/Scene.cc.o: /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h

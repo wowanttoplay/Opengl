@@ -1485,6 +1485,8 @@ CMakeFiles/Opengl.dir/Scene.cc.o
  /Users/virgil/Opengl/Scene.h
  /Users/virgil/Opengl/Shader.h
  /Users/virgil/Opengl/Texture2D.h
+ /Users/virgil/Opengl/Thread/Task.h
+ /Users/virgil/Opengl/Thread/ThreadPool.h
  /Users/virgil/Opengl/Tool/PrintTool.h
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h

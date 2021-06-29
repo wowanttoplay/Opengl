@@ -18,7 +18,7 @@ public:
     inline uint32_t GetPriority() const { return priority_; }
     inline uint32_t GetId() {return task_id_; }
 private:
-    uint32_t task_id_;
+    uint32_t task_id_ = 0;
     uint32_t priority_ = 0;
     NormalFunc func_;
 };
