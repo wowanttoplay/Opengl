@@ -15,15 +15,19 @@
 #include "RenderPass/ShadowProcess.h"
 #include "RenderPass/ColorCubeProcess.h"
 #include "RenderPass/HDRProcess.h"
+#include <mutex>
+#include <thread>
 
 using namespace std;
 
+once_flag sky_init;
 const uint32_t box_num = 2;
 const std::string kFloorName = "floor";
 const std::string kMetalname = "metal";
 const std::string kShingles1 = "shingles1";
 const std::string kRockyShoreLine = "rocky-shoreline1";
 const std::string kAngledTiledFloor = "angled-tiled-floor";
+const std::string kSkyBoxHdr = "sky_hdr";
 
 const std::string kPBR = "pbr";
 const std::string kPBRTexture = "PBR_texture";
@@ -33,7 +37,8 @@ const std::string kGlassTextureName = "glass";
 const std::string kTextureLightShaderName = "texture_light"; //考虑了纹理与光照的shader
 const std::string kShadowShaderName = "shadow";
 const std::string kShadowTextureLightShaderName = "shadow_texture_light"; // 考虑了阴影、 纹理、光照的shader
-const std::string kColorCubeRenderName = "fbo_cube_color"; // 一个用于生成cube color 的着色器
+const std::string kSkyBoxGenerateShader = "sky_generate";
+const std::string kSkyBoxRender = "sky_render";
 
 // projection
 const float near_plane = 0.1f, far_plane = 100.f;
@@ -74,11 +79,11 @@ void Scene::Init() {
 
     // init png resource
 
-
     LoadPBRTexture(kMetalname);
-//    LoadPBRTexture("floor");
-    LoadPBRTexture(kFloorName);
-
+//    LoadPBRTexture(kAngledTiledFloor);
+//    LoadPBRTexture(kFloorName);
+    ResourceManager::LoadTexture("../Data/Png/Sky.hdr", kSkyBoxHdr);
+    ResourceManager::LoadShader("../Data/sky.vs", "../Data/sky.fs", nullptr, kSkyBoxGenerateShader);
 
     // init light resource
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/Sphere.fs", nullptr, kLight);
@@ -86,7 +91,39 @@ void Scene::Init() {
     ResourceManager::LoadShader("../Data/shadow_cube_map.vs", "../Data/shadow_cube_map.fs",
                                 nullptr,
                                 kShadowShaderName);
+    ResourceManager::LoadShader("../Data/sky_box.vs", "../Data/sky_box.fs", nullptr, kSkyBoxRender);
+
     // init shadow render
+    InitNormalLightShader();
+
+    // init PBR shader
+    InitNormalPBRShader();
+
+    // init PBR with texture shader
+    InitPBRTextureShader();
+
+    plane = std::make_shared<Plane>();
+    reflect_plane = std::make_shared<Plane>();
+    for (int i = 0; i < box_num; ++i) {
+        box_vec.emplace_back(make_shared<Box>());
+    }
+    sky_box_ = std::make_shared<Box>();
+    light = make_shared<Sphere>(20, 20);
+    refract_sphere = make_shared<Sphere>(30, 30);
+    reflect_sphere = make_shared<Sphere>(30, 30);
+    PBR_sphere = make_shared<Sphere>(30, 30);
+
+    // 渲染pass
+    InitShadowpass();
+
+    this->reflect_cube_pass_ = GenerateCubepass();
+    this->refract_cube_pass_ = GenerateCubepass();
+    this->sky_process_ = GenerateCubepass();
+
+    this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
+}
+
+void Scene::InitNormalLightShader() const {
     Shader shadow_texture_light = ResourceManager::LoadShader("../Data/shadow_texture_light.vs",
                                                               "../Data/shadow_texture_light.fs", nullptr,
                                                               kShadowTextureLightShaderName);
@@ -102,28 +139,21 @@ void Scene::Init() {
     shadow_texture_light.SetFloat("material.ambient_ratio", 0.05);
     shadow_texture_light.SetFloat("material.diffuse_ratio", 1.0);
     shadow_texture_light.SetFloat("material.specular_ratio", 32.0);
+}
 
-    // init color cube render,用与渲染带有阴影的cube颜色缓冲
-    Shader color_cube_render = ResourceManager::LoadShader("../Data/color_cube_map.vs",
-                                                           "../Data/color_cube_map.fs", "../Data/color_cube_map.gs",
-                                                           kColorCubeRenderName);
-    color_cube_render.Use();
-    color_cube_render.SetInteger("texture0", 0);
-    color_cube_render.SetInteger("depth_texture", 1);
-//    color_cube_render.SetInteger("color_cube_map", 2);
-    color_cube_render.SetFloat("far_plane", kShadowFarPlane);
+shared_ptr<ColorCubeProcess> Scene::GenerateCubepass() {
+    shared_ptr<ColorCubeProcess> rst = make_shared<ColorCubeProcess>();
+    rst->SetNearAndFar(0.1f, 100.f);
+    rst->SetScreenSize(1024, 1024);
+    return rst;
+}
 
-    // init PBR shader
-    Shader PBR_shader = ResourceManager::LoadShader("../Data/PBR.vs", "../Data/PBR.fs", nullptr, kPBR);
-    PBR_shader.Use();
-    PBR_shader.SetInteger("albedoTexture", 0);
-    PBR_shader.SetInteger("depthMap", 1);
-    PBR_shader.SetFloat("farPlane", kShadowFarPlane);
+void Scene::InitShadowpass() {
+    shadow_pass_ = make_shared<ShadowProcess>();
+    shadow_pass_->SetNearAndFar(0.1f, kShadowFarPlane);
+}
 
-    PBR_shader.SetFloat("ao", 1.0);
-    PBR_shader.SetFloat("roughness", 0.1);
-    PBR_shader.SetFloat("metallic", 0.6);
-    // init PBR with texture shader
+void Scene::InitPBRTextureShader() const {
     Shader PBR_texture_shader = ResourceManager::LoadShader("../Data/PBR.vs", "../Data/PBR_texture.fs", nullptr,
                                                             kPBRTexture);
     PBR_texture_shader.Use();
@@ -135,31 +165,18 @@ void Scene::Init() {
     PBR_texture_shader.SetInteger("heightMap", 5);
     PBR_texture_shader.SetInteger("depthMap", 6);
     PBR_texture_shader.SetFloat("farPlane", kShadowFarPlane);
+}
 
-    plane = std::make_shared<Plane>();
-    reflect_plane = std::make_shared<Plane>();
-    for (int i = 0; i < box_num; ++i) {
-        box_vec.emplace_back(make_shared<Box>());
-    }
-    light = make_shared<Sphere>(20, 20);
-    refract_sphere = make_shared<Sphere>(30, 30);
-    reflect_sphere = make_shared<Sphere>(30, 30);
-    PBR_sphere = make_shared<Sphere>(30, 30);
+void Scene::InitNormalPBRShader() const {
+    Shader PBR_shader = ResourceManager::LoadShader("../Data/PBR.vs", "../Data/PBR.fs", nullptr, kPBR);
+    PBR_shader.Use();
+    PBR_shader.SetInteger("albedoTexture", 0);
+    PBR_shader.SetInteger("depthMap", 1);
+    PBR_shader.SetFloat("farPlane", kShadowFarPlane);
 
-    // 渲染pass
-    this->shadow_pass_ = make_shared<ShadowProcess>();
-    this->shadow_pass_->SetNearAndFar(0.1f, kShadowFarPlane);
-
-    this->reflect_cube_pass_ = make_shared<ColorCubeProcess>();
-    this->reflect_cube_pass_->SetNearAndFar(0.1f, 100.f);
-    this->reflect_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
-
-    this->refract_cube_pass_ = make_shared<ColorCubeProcess>();
-    this->refract_cube_pass_->SetNearAndFar(0.1f, 100.f);
-    logE("refract pass, set view size : (%f, %f)", this->scene_width, this->scene_height);
-    this->refract_cube_pass_->SetScreenSize(this->scene_width, this->scene_height);
-
-    this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
+    PBR_shader.SetFloat("ao", 1.0);
+    PBR_shader.SetFloat("roughness", 0.1);
+    PBR_shader.SetFloat("metallic", 0.6);
 }
 
 void Scene::LoadPBRTexture(const string &texture_name) const {
@@ -180,6 +197,12 @@ void Scene::LoadPBRTexture(const string &texture_name) const {
 }
 
 void Scene::Render() {
+    static bool once = false;
+    if (!once) {
+        InitSky();
+        once = true;
+    }
+
     // 为了统一所有的渲染，cube的绘制不再使用gs，而是绘制6次来完成,否则随着效果与元素的增加，都得加一个gs，不方便写
     // 准备阴影贴图
     this->shadow_pass_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
@@ -187,7 +210,7 @@ void Scene::Render() {
         shadow_map_shader.SetVector3f("light_position", light_position);
         shadow_map_shader.SetFloat("far_plane", kShadowFarPlane);
 
-        this->RenderPlane(shadow_map_shader, view, projection);
+//        this->RenderPlane(shadow_map_shader, view, projection);
 //        this->RenderBox(shadow_map_shader, view, projection);
 //        this->RenderReflectSphere(shadow_map_shader, view, projection);
         this->RenderPBRSphere(shadow_map_shader, view, projection);
@@ -254,18 +277,21 @@ void Scene::Render() {
 
         glActiveTexture(GL_TEXTURE6);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-        RenderPlane(PBR_texture_shader, view, projection);
+//        RenderPlane(PBR_texture_shader, view, projection);
 //        RenderBox(PBR_texture_shader, view, projection);
         RenderPBRSphere(PBR_texture_shader, view, projection);
+        // sky
+        RenderSky(view, projection);
+
         // render sphere
 //        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
 //        shadow_texture_light.Use();
 //        glActiveTexture(GL_TEXTURE1);
 //        glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
 //        glActiveTexture(GL_TEXTURE2);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
+//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
 //        shadow_texture_light.SetInteger("b_reflected", true);
-////        RenderReflectSphere(shadow_texture_light, view, projection);
+//        RenderReflectSphere(shadow_texture_light, view, projection);
 //        shadow_texture_light.SetInteger("b_reflected", false);
 //        glActiveTexture(GL_TEXTURE3);
 //        glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
@@ -286,6 +312,19 @@ void Scene::Render() {
         this->hdr_pass_->HDRRender();
     }
 
+}
+
+void Scene::RenderSky(const glm::mat4 &view, const glm::mat4 &projection) {
+    Shader sky_shader = ResourceManager::GetShader(kSkyBoxRender);
+    sky_shader.Use();
+    sky_shader.SetInteger("skyMap", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
+    sky_shader.SetMatrix4("view", view);
+    sky_shader.SetMatrix4("projection", projection);
+    glDepthFunc(GL_LEQUAL);
+    sky_box_->Render(sky_shader);
+    glDepthFunc(GL_LESS);
 }
 
 void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
@@ -327,10 +366,8 @@ void Scene::RenderBox(Shader &shader, const glm::mat4 &view, const glm::mat4 &pr
     shader.Use();
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
-    shader.SetFloat("roughness", 0.5);
-    shader.SetFloat("metallic", 0.4);
-    glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kBoxName).Bind();
+    BindPBRTexture(kAngledTiledFloor);
+
     for (int i = 0; i < box_num; ++i) {
         glm::mat4 box_model = glm::mat4(1.0f);
         box_model = glm::translate(box_model, box_position + glm::vec3(i * 1.1, 0, -i * 1.3));
@@ -424,15 +461,6 @@ void Scene::Update(float dt) {
     shadow_texture_light.SetFloat("light.linear", light_linear);
     shadow_texture_light.SetFloat("light.quadratic", light_quadratic);
     shadow_texture_light.SetVector3f("cameraPosition", camera_position);
-    // 设置color cube的着色器,因为要一次渲染6个面，所以需要单独写一个着色器
-    Shader color_cube_shader = ResourceManager::GetShader(kColorCubeRenderName);
-    color_cube_shader.Use();
-    color_cube_shader.SetVector3f("light.position", light_position);
-    color_cube_shader.SetVector3f("light.color", light_color);
-    color_cube_shader.SetFloat("light.constant", light_constant);
-    color_cube_shader.SetFloat("light.linear", light_linear);
-    color_cube_shader.SetFloat("light.quadratic", light_quadratic);
-    color_cube_shader.SetVector3f("cameraPosition", camera_position);
     // 设置PBR着色器
     Shader PBR_shader = ResourceManager::GetShader(kPBR);
     PBR_shader.Use();
@@ -481,6 +509,23 @@ void Scene::process_key(int key, int action) {
     logE("camera info : yaw:%f, pitch:%f", yaw_angle_, pitch_angle_);
 //    tool::Print(camera_position);
 //    tool::Print(looked_direction);
+}
+
+void Scene::InitSky() {
+    logI("init sky cube map");
+    Shader sky_shader = ResourceManager::GetShader(kSkyBoxGenerateShader);
+    sky_shader.Use();
+    sky_shader.SetInteger("HDRMap", 0);
+    glActiveTexture(GL_TEXTURE0);
+    ResourceManager::GetTexture(kSkyBoxHdr).Bind();
+    this->sky_process_->SetCenter(glm::vec3(0, 0, 0));
+    this->sky_process_->Render([=](glm::mat4 view, glm::mat4 projection)->void{
+        Shader sky_shader = ResourceManager::GetShader(kSkyBoxGenerateShader);
+        sky_shader.Use();
+        sky_shader.SetMatrix4("view", view);
+        sky_shader.SetMatrix4("projection", projection);
+        sky_box_->Render(sky_shader);
+    });
 }
 
 

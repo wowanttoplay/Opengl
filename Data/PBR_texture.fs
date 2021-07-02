@@ -36,14 +36,21 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir);
 
 void main() {
   mat3 TBN = getTBN();
-  vec3 tangentCameraPos = TBN * cameraPosition;
-  vec3 tangentFragPos = TBN * FragPos;
+  mat3 InverseTBN = inverse(TBN);
+  vec3 tangentCameraPos = InverseTBN * cameraPosition;
+  vec3 tangentFragPos = InverseTBN * FragPos;
   vec3 viewDir = normalize(tangentCameraPos - tangentFragPos);
   vec2 realTexCoords = TexCoords;
-  
+
+  float height = texture(heightMap, realTexCoords).r;
+
   ParallaxMapping(realTexCoords, viewDir);
-//   realTexCoords = ParallaxMapping(realTexCoords, viewDir);
-  
+
+  // realTexCoords = ParallaxMapping(realTexCoords, viewDir);
+  // if (realTexCoords.x > 1.0 || realTexCoords.y > 1.0 || realTexCoords.x < 0.0 ||
+  //     realTexCoords.y < 0.0) {
+  //   discard;
+  // }
 
   vec3 albedo = pow(texture(albedoMap, realTexCoords).rgb, vec3(2.2));
   float metallic = texture(metallicMap, realTexCoords).r;
@@ -175,48 +182,42 @@ mat3 getTBN() {
 }
 
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir) {
-  // // number of depth layers
-  // const float minLayers = 10;
-  // const float maxLayers = 20;
-  // float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
-  // // calculate the size of each layer
-  // float layerDepth = 1.0 / numLayers;
-  // // depth of current layer
-  // float currentLayerDepth = 0.0;
-  // // the amount to shift the texture coordinates per layer (from vector P)
-  // float height_scale = 0.5;
-  // vec2 P = viewDir.xy / viewDir.z * height_scale;
-  // vec2 deltaTexCoords = P / numLayers;
+  // 先根据视线的倾斜角来决定要划分多少层
+  const float minLayers = 100;
+  const float maxLayers = 120;
+  float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+  // calculate the size of each layer
+  float layerDepth = 1.0 / numLayers;
+  // depth of current layer
+  float currentLayerDepth = 0.0;
+  // 计算每层应该偏移多少纹理坐标
+  float height_scale = 0.1;
+  vec2 P = viewDir.xy / viewDir.z * height_scale;
+  vec2 deltaTexCoords = P / numLayers;
 
-  // // get initial values
-  // vec2  currentTexCoords     = texCoords;
-  // float currentDepthMapValue = texture(heightMap, currentTexCoords).r;
+  // 初始化参数，之后开始逐层采样比较
+  vec2 currentTexCoords = texCoords;
+  float currentDepthMapValue = texture(heightMap, currentTexCoords).r;
 
-  // while(currentLayerDepth < currentDepthMapValue)
-  // {
-  //     // shift texture coordinates along direction of P
-  //     currentTexCoords -= deltaTexCoords;
-  //     // get depthmap value at current texture coordinates
-  //     currentDepthMapValue = texture(heightMap, currentTexCoords).r;
-  //     // get depth of next layer
-  //     currentLayerDepth += layerDepth;
-  // }
+  // 只要当前纹理坐标采到的高度比当前层要大，就继续偏移
+  while (currentLayerDepth < currentDepthMapValue) {
+    currentTexCoords += deltaTexCoords;
+    currentDepthMapValue = texture(heightMap, currentTexCoords).r;
+    currentLayerDepth += layerDepth;
+  }
 
-  // // -- parallax occlusion mapping interpolation from here on
-  // // get texture coordinates before collision (reverse operations)
-  // vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+  //线性插值得到一个相对准确的纹理偏移量
+  // -- parallax occlusion mapping interpolation from here on
+  // get texture coordinates before collision (reverse operations)
+  vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
 
-  // // get depth after and before collision for linear interpolation
-  // float afterDepth  = currentDepthMapValue - currentLayerDepth;
-  // float beforeDepth = texture(heightMap, prevTexCoords).r - currentLayerDepth + layerDepth;
+  // get depth after and before collision for linear interpolation
+  float afterDepth = currentDepthMapValue - currentLayerDepth;
+  float beforeDepth = texture(heightMap, prevTexCoords).r - currentLayerDepth + layerDepth;
 
-  // // interpolation of texture coordinates
-  // float weight = afterDepth / (afterDepth - beforeDepth);
-  // vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+  // interpolation of texture coordinates
+  float weight = afterDepth / (afterDepth - beforeDepth);
+  vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
 
-  // return finalTexCoords;
-
-  float height = texture(heightMap, texCoords).r;
-  vec2 p = viewDir.xy / viewDir.z * (height * 0.1);
-  return texCoords - p;
+  return finalTexCoords;
 }

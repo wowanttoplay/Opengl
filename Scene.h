@@ -71,10 +71,28 @@ private:
 
     void RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
+
 private:
     bool b_open_blur_ = true; //是否开启混合效果（按k键）
     void BindPBRTexture(const std::string &texture_name) const;
 
     void LoadPBRTexture(const std::string &texture_name) const;
+
+private:
+    std::shared_ptr<Box> sky_box_;
+    std::shared_ptr<ColorCubeProcess> sky_process_;
+    void InitSky(); //  使用HDR资源来初始化天空盒
+
+    void InitNormalPBRShader() const;
+
+    void InitPBRTextureShader() const;
+
+    void InitShadowpass();
+
+    std::shared_ptr<ColorCubeProcess> GenerateCubepass();
+
+    void InitNormalLightShader() const;
+
+    void RenderSky(const glm::mat4 &view, const glm::mat4 &projection);
 };
 

@@ -25,6 +25,7 @@ public:
     Texture2D();
 
     void Generate(GLuint width, GLuint height, unsigned char* data);
+    void Generate(GLuint width, GLuint height, float* data);
 
     void Bind() const;
 };

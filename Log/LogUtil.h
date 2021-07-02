@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <iostream>
 
 enum class LogLevel{
     LogLevel_None,

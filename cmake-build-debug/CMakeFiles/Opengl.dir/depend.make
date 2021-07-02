@@ -1897,6 +1897,7 @@ CMakeFiles/Opengl.dir/Shader.cc.o: /usr/local/Cellar/glm/glm/vec3.hpp
 CMakeFiles/Opengl.dir/Shader.cc.o: /usr/local/Cellar/glm/glm/vec4.hpp
 CMakeFiles/Opengl.dir/Shader.cc.o: /usr/local/Cellar/glm/glm/vector_relational.hpp
 
+CMakeFiles/Opengl.dir/Texture2D.cc.o: ../Log/LogUtil.h
 CMakeFiles/Opengl.dir/Texture2D.cc.o: ../Texture2D.cc
 CMakeFiles/Opengl.dir/Texture2D.cc.o: ../Texture2D.h
 CMakeFiles/Opengl.dir/Texture2D.cc.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
@@ -1904,6 +1905,7 @@ CMakeFiles/Opengl.dir/Texture2D.cc.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/
 CMakeFiles/Opengl.dir/Thread/Task.cc.o: ../Thread/Task.cc
 CMakeFiles/Opengl.dir/Thread/Task.cc.o: ../Thread/Task.h
 
+CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o: ../Log/LogUtil.h
 CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o: ../Thread/Task.h
 CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o: ../Thread/ThreadPool.cc
 CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o: ../Thread/ThreadPool.h

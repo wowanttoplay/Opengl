@@ -4,6 +4,7 @@
 
 #include "ThreadPool.h"
 #include "Task.h"
+#include "../Log/LogUtil.h"
 using namespace std;
 
 ThreadPool::ThreadPool(uint32_t thread_num, const std::string &pool_name) {
@@ -12,7 +13,7 @@ ThreadPool::ThreadPool(uint32_t thread_num, const std::string &pool_name) {
     name_ = pool_name;
     // create thread
     for (int i = 0; i < thread_num; ++i) {
-        printf("create a new thread\n");
+        logI("create a new thread");
         thread_list_.emplace_back([this]()-> void {
             // thread task
             while (!this->stoped_.load()) {

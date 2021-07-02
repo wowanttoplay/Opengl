@@ -33,6 +33,7 @@ private:
 
     static Shader    loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile = nullptr);
 
+    static Texture2D loadTextureFromHDRFile(const GLchar* file);
     static Texture2D loadTextureFromFile(const GLchar *file);
 };
 
