@@ -33,11 +33,13 @@ const std::string kPBR = "pbr";
 const std::string kPBRTexture = "PBR_texture";
 const std::string kBoxName = "Wall";
 const std::string kLight = "Sphere";
+const std::string kReflectShader = "reflect_sphere";
 const std::string kGlassTextureName = "glass";
 const std::string kTextureLightShaderName = "texture_light"; //考虑了纹理与光照的shader
 const std::string kShadowShaderName = "shadow";
 const std::string kShadowTextureLightShaderName = "shadow_texture_light"; // 考虑了阴影、 纹理、光照的shader
 const std::string kSkyBoxGenerateShader = "sky_generate";
+const std::string kIrradianceGenerateShader = "irradiance_generate";
 const std::string kSkyBoxRender = "sky_render";
 
 // projection
@@ -47,7 +49,8 @@ glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 // refract sphere
 glm::vec3 refract_sphere_position = glm::vec3(0.0f, 1.0f, 5.0f);
 // reflect sphere
-glm::vec3 reflect_sphere_position = glm::vec3(-1.0f, 1.0f, -2.0f);
+glm::vec3 reflect_sphere_position = glm::vec3(2.0f, 3.0f, -2.0f);
+glm::vec3 inrradiance_sphere_position = glm::vec3(4.0,3.0,-2.0);
 // PBR sphere
 glm::vec3 PBR_position = glm::vec3(3.0f, 1.0f, -2.0f);
 // light
@@ -70,7 +73,7 @@ Scene::~Scene() {
 
 
 void Scene::Init() {
-    camera_position = glm::vec3(3.0f, 2.0f, 9.0f);
+    camera_position = glm::vec3(8.96f, 3.8f, 0.03f);
     looked_direction.x = cos(glm::radians(pitch_angle_)) * cos(glm::radians(yaw_angle_));
     looked_direction.y = sin(glm::radians(pitch_angle_));
     looked_direction.z = cos(glm::radians(pitch_angle_)) * sin(glm::radians(yaw_angle_));
@@ -84,7 +87,7 @@ void Scene::Init() {
 //    LoadPBRTexture(kFloorName);
     ResourceManager::LoadTexture("../Data/Png/Sky.hdr", kSkyBoxHdr);
     ResourceManager::LoadShader("../Data/sky.vs", "../Data/sky.fs", nullptr, kSkyBoxGenerateShader);
-
+    ResourceManager::LoadShader("../Data/irradiance.vs", "../Data/irradiance.fs", nullptr, kIrradianceGenerateShader);
     // init light resource
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/Sphere.fs", nullptr, kLight);
     // init shadow resource
@@ -92,7 +95,7 @@ void Scene::Init() {
                                 nullptr,
                                 kShadowShaderName);
     ResourceManager::LoadShader("../Data/sky_box.vs", "../Data/sky_box.fs", nullptr, kSkyBoxRender);
-
+    ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/sphere_reflect.fs", nullptr, kReflectShader);
     // init shadow render
     InitNormalLightShader();
 
@@ -116,11 +119,14 @@ void Scene::Init() {
     // 渲染pass
     InitShadowpass();
 
-    this->reflect_cube_pass_ = GenerateCubepass();
-    this->refract_cube_pass_ = GenerateCubepass();
-    this->sky_process_ = GenerateCubepass();
+    this->reflect_cube_pass_ = GenerateCubepass(1024, 1024);
+    this->refract_cube_pass_ = GenerateCubepass(1024, 1024);
+    this->sky_process_ = GenerateCubepass(1024, 1024);
+    this->irradiance_process_ = GenerateCubepass(1024, 1024);
 
     this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
+    InitSky();
+    InitIrradiance();
 }
 
 void Scene::InitNormalLightShader() const {
@@ -141,10 +147,10 @@ void Scene::InitNormalLightShader() const {
     shadow_texture_light.SetFloat("material.specular_ratio", 32.0);
 }
 
-shared_ptr<ColorCubeProcess> Scene::GenerateCubepass() {
+shared_ptr<ColorCubeProcess> Scene::GenerateCubepass(float width, float height) {
     shared_ptr<ColorCubeProcess> rst = make_shared<ColorCubeProcess>();
     rst->SetNearAndFar(0.1f, 100.f);
-    rst->SetScreenSize(1024, 1024);
+    rst->SetScreenSize(width, height);
     return rst;
 }
 
@@ -164,6 +170,7 @@ void Scene::InitPBRTextureShader() const {
     PBR_texture_shader.SetInteger("aoMap", 4);
     PBR_texture_shader.SetInteger("heightMap", 5);
     PBR_texture_shader.SetInteger("depthMap", 6);
+    PBR_texture_shader.SetInteger("irradianceMap", 7);
     PBR_texture_shader.SetFloat("farPlane", kShadowFarPlane);
 }
 
@@ -180,29 +187,14 @@ void Scene::InitNormalPBRShader() const {
 }
 
 void Scene::LoadPBRTexture(const string &texture_name) const {
-    vector<string>str_vec{"albedo", "ao", "height", "metallic", "normal", "roughness"};
+    vector<string> str_vec{"albedo", "ao", "height", "metallic", "normal", "roughness"};
     for (int i = 0; i < str_vec.size(); ++i) {
         string str = str_vec.at(i);
-//        thread_pool_->Commit(make_shared<Task>([=]()->void{
-            ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_" + str + ".png", texture_name + "_" + str);
-//        }));
+        ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_" + str + ".png", texture_name + "_" + str);
     }
-
-//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_albedo.png", texture_name + "_albedo");
-//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_ao.png", texture_name + "_ao");
-//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_height.png", texture_name + "_height");
-//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_metallic.png", texture_name + "_metallic");
-//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_normal.png", texture_name + "_normal");
-//    ResourceManager::LoadTexture("../Data/Png/" + texture_name + "_roughness.png", texture_name + "_roughness");
 }
 
 void Scene::Render() {
-    static bool once = false;
-    if (!once) {
-        InitSky();
-        once = true;
-    }
-
     // 为了统一所有的渲染，cube的绘制不再使用gs，而是绘制6次来完成,否则随着效果与元素的增加，都得加一个gs，不方便写
     // 准备阴影贴图
     this->shadow_pass_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
@@ -215,53 +207,6 @@ void Scene::Render() {
 //        this->RenderReflectSphere(shadow_map_shader, view, projection);
         this->RenderPBRSphere(shadow_map_shader, view, projection);
     });
-//
-////    //反射所需的cube纹理
-//    this->reflect_cube_pass_->SetCenter(reflect_sphere_position);
-//    this->reflect_cube_pass_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
-//        Shader PBR_shader = ResourceManager::GetShader(kPBR);
-//        PBR_shader.Use();
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-//        RenderPlane(PBR_shader, view, projection);
-//        RenderBox(PBR_shader, view, projection);
-//        RenderPBRSphere(PBR_shader, view, projection);
-//        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
-//        shadow_texture_light.Use();
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-//        glActiveTexture(GL_TEXTURE3);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
-//        shadow_texture_light.SetInteger("b_refracted", true);
-////        RenderRefractSphere(shadow_texture_light, view, projection);
-//        RenderRefractPlane(shadow_texture_light, view, projection);
-//        shadow_texture_light.SetInteger("b_refracted", false);
-////        RenderLight(view, projection);
-//    });
-//    // 折射所需要的纹理
-//    this->refract_cube_pass_->SetCenter(refract_sphere_position);
-//    this->refract_cube_pass_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
-//        Shader PBR_shader = ResourceManager::GetShader(kPBR);
-//        PBR_shader.Use();
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-//        RenderPlane(PBR_shader, view, projection);
-//        RenderBox(PBR_shader, view, projection);
-//        RenderPBRSphere(PBR_shader, view, projection);
-//
-//        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
-//        shadow_texture_light.Use();
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-//        glActiveTexture(GL_TEXTURE2);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->reflect_cube_pass_->color_cube_map_);
-//        shadow_texture_light.SetInteger("b_reflected", true);
-//        RenderReflectSphere(shadow_texture_light, view, projection);
-////        RenderRefractPlane(shadow_texture_light, view, projection);
-//        shadow_texture_light.SetInteger("b_reflected", false);
-//
-////        RenderLight(view, projection);
-//    });
 
     //正常渲染
     this->hdr_pass_->PreRender([=]() -> void {
@@ -277,31 +222,15 @@ void Scene::Render() {
 
         glActiveTexture(GL_TEXTURE6);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-//        RenderPlane(PBR_texture_shader, view, projection);
-//        RenderBox(PBR_texture_shader, view, projection);
+        glActiveTexture(GL_TEXTURE7);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, this->irradiance_process_->color_cube_map_);
         RenderPBRSphere(PBR_texture_shader, view, projection);
+
+        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
+        RenderReflectSphere(reflect_shader, view, projection);
+        RenderInrradianceSphere(reflect_shader, view, projection);
         // sky
         RenderSky(view, projection);
-
-        // render sphere
-//        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
-//        shadow_texture_light.Use();
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
-//        glActiveTexture(GL_TEXTURE2);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
-//        shadow_texture_light.SetInteger("b_reflected", true);
-//        RenderReflectSphere(shadow_texture_light, view, projection);
-//        shadow_texture_light.SetInteger("b_reflected", false);
-//        glActiveTexture(GL_TEXTURE3);
-//        glBindTexture(GL_TEXTURE_CUBE_MAP, this->refract_cube_pass_->color_cube_map_);
-//        shadow_texture_light.SetInteger("b_refracted", true);
-////        RenderRefractSphere(shadow_texture_light, view, projection);
-////        RenderRefractPlane(shadow_texture_light, view, projection);
-//        shadow_texture_light.SetInteger("b_refracted", false);
-
-        // render light
-//        RenderLight(view, projection);
     });
 
     if (b_open_blur_) {
@@ -314,30 +243,32 @@ void Scene::Render() {
 
 }
 
-void Scene::RenderSky(const glm::mat4 &view, const glm::mat4 &projection) {
-    Shader sky_shader = ResourceManager::GetShader(kSkyBoxRender);
-    sky_shader.Use();
-    sky_shader.SetInteger("skyMap", 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
-    sky_shader.SetMatrix4("view", view);
-    sky_shader.SetMatrix4("projection", projection);
-    glDepthFunc(GL_LEQUAL);
-    sky_box_->Render(sky_shader);
-    glDepthFunc(GL_LESS);
-}
+
 
 void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.Use();
     shader.SetMatrix4("view", view);
     shader.SetMatrix4("projection", projection);
     glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kGlassTextureName).Bind();
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
     glm::mat4 refract_sphere_model = glm::mat4(1.0f);
     refract_sphere_model = glm::translate(refract_sphere_model, reflect_sphere_position);
     shader.SetMatrix4("model", refract_sphere_model);
     refract_sphere->Render(shader);
 }
+
+void Scene::RenderInrradianceSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
+    shader.Use();
+    shader.SetMatrix4("view", view);
+    shader.SetMatrix4("projection", projection);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->irradiance_process_->color_cube_map_);
+    glm::mat4 refract_sphere_model = glm::mat4(1.0f);
+    refract_sphere_model = glm::translate(refract_sphere_model, inrradiance_sphere_position);
+    shader.SetMatrix4("model", refract_sphere_model);
+    refract_sphere->Render(shader);
+}
+
 
 void Scene::RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.SetMatrix4("view", view);
@@ -507,26 +438,60 @@ void Scene::process_key(int key, int action) {
 
     logE("printf camara info");
     logE("camera info : yaw:%f, pitch:%f", yaw_angle_, pitch_angle_);
+    tool::Print(camera_position);
 //    tool::Print(camera_position);
 //    tool::Print(looked_direction);
 }
 
 void Scene::InitSky() {
     logI("init sky cube map");
-    Shader sky_shader = ResourceManager::GetShader(kSkyBoxGenerateShader);
-    sky_shader.Use();
-    sky_shader.SetInteger("HDRMap", 0);
+    Shader shader = ResourceManager::GetShader(kSkyBoxGenerateShader);
+    shader.Use();
+    shader.SetInteger("HDRMap", 0);
     glActiveTexture(GL_TEXTURE0);
     ResourceManager::GetTexture(kSkyBoxHdr).Bind();
     this->sky_process_->SetCenter(glm::vec3(0, 0, 0));
-    this->sky_process_->Render([=](glm::mat4 view, glm::mat4 projection)->void{
-        Shader sky_shader = ResourceManager::GetShader(kSkyBoxGenerateShader);
-        sky_shader.Use();
-        sky_shader.SetMatrix4("view", view);
-        sky_shader.SetMatrix4("projection", projection);
-        sky_box_->Render(sky_shader);
+    this->sky_process_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
+        Shader shader = ResourceManager::GetShader(kSkyBoxGenerateShader);
+        shader.Use();
+        shader.SetMatrix4("view", view);
+        shader.SetMatrix4("projection", projection);
+        sky_box_->Render(shader);
     });
 }
+
+void Scene::RenderSky(const glm::mat4 &view, const glm::mat4 &projection) {
+    Shader sky_shader = ResourceManager::GetShader(kSkyBoxRender);
+    sky_shader.Use();
+    sky_shader.SetInteger("skyMap", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
+    sky_shader.SetMatrix4("view", view);
+    sky_shader.SetMatrix4("projection", projection);
+    glDepthFunc(GL_LEQUAL);
+    sky_box_->Render(sky_shader);
+    glDepthFunc(GL_LESS);
+}
+
+void Scene::InitIrradiance() {
+    logI("init irradiance map");
+    Shader shader = ResourceManager::GetShader(kIrradianceGenerateShader);
+    shader.Use();
+    shader.SetInteger("curbMap0", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
+    this->irradiance_process_->SetCenter(glm::vec3(0,0,0));
+    this->irradiance_process_->Render([=](glm::mat4 view, glm::mat4 projection)->void{
+        Shader shader = ResourceManager::GetShader(kIrradianceGenerateShader);
+        shader.Use();
+        shader.SetMatrix4("view", view);
+        shader.SetMatrix4("projection", projection);
+        sky_box_->Render(shader);
+    });
+}
+
+
+
 
 
 

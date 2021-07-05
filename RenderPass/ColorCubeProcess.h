@@ -18,13 +18,8 @@ public:
     GLuint color_FBO;   //  颜色帧缓冲
 
     ColorCubeProcess();
-    void FirstRender(Shader &shader);
-    void SecondRender(Shader &shader);
-
     void SetNearAndFar(float near, float far);
     void SetCenter(const glm::vec3& center);
-    void ConfigShaderAndMatrix(Shader& shader);
-
     void SetScreenSize(int width, int height);
 
     void PrePareResource(GLuint& FBO, GLuint& texture);

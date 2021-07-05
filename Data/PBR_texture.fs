@@ -16,8 +16,9 @@ uniform vec3 cameraPosition;  // 相机位置
 uniform vec3 lightPosition;   //光源位置
 uniform vec3 light_color;
 
-uniform samplerCube depthMap;  // 深度贴图
-uniform float farPlane;        // 计算深度贴图时归一化用的远平面
+uniform samplerCube depthMap;       // 深度贴图
+uniform samplerCube irradianceMap;  // 间接辐照度贴图
+uniform float farPlane;             // 计算深度贴图时归一化用的远平面
 
 const float PI = 3.1415926;
 vec3 gridSamplingDisk[20] =
@@ -26,7 +27,7 @@ vec3 gridSamplingDisk[20] =
            vec3(-1, -1, 0), vec3(-1, 1, 0), vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1),
            vec3(-1, 0, -1), vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1));
 
-vec3 fresnelSchlick(float cosTheta, vec3 F0);
+vec3 fresnelSchlick(float cosTheta, vec3 F0, float roughness);
 float DistributionGGX(vec3 N, vec3 H, float roughness);
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
 float ShadowCalculate(vec3 fragPosition);
@@ -73,7 +74,7 @@ void main() {
   /*首先计算ks*/
   vec3 F0 = vec3(0.04);
   F0 = mix(F0, albedo, metallic);  //对金属的处理，金属的反射会变色
-  vec3 F = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
+  vec3 F = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0, 0.0);
 
   /*计算NDF分布*/
   float NDF = DistributionGGX(N, H, roughness);
@@ -94,19 +95,24 @@ void main() {
   L0 += (kd * albedo / PI + specular) * radiance * NdotL;
 
   vec3 color = vec3(0.0);
-  //加上环境光照
-  vec3 ambient = vec3(0.03) * albedo * ao;
-  color += ambient;
   // 计算阴影影响下的反射光
   float shadow = ShadowCalculate(FragPos);
   color += L0 * (1.0 - shadow);
 
+  //加上环境光照
+  ks = fresnelSchlick(max(dot(N, V), 0.0), F0, roughness);
+  kd = 1.0 - ks;
+  vec3 irradiance = texture(irradianceMap, N).rgb;
+  vec3 diffuse = irradiance * albedo;
+  vec3 ambient = kd * diffuse * ao;
+  color += ambient;
+
   FragColor = vec4(color, 1.0);
 }
 
-// 菲尼尔方程
-vec3 fresnelSchlick(float cosTheta, vec3 F0) {
-  return F0 + (1.0 - F0) * pow(max(1.0 - cosTheta, 0.0), 5.0);
+// 菲尼尔方程，为了IBL计算，加roughness(因为IBL的向量在计算时不会考虑粗超度的影响，所以在这里根据粗超度做一些削弱)
+vec3 fresnelSchlick(float cosTheta, vec3 F0, float roughness) {
+  return F0 + (max(vec3(1.0) - roughness, F0) - F0) * pow(max(1.0 - cosTheta, 0.0), 5.0);
 }
 
 // 正态分布函数

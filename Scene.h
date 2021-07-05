@@ -24,8 +24,8 @@ public:
     glm::vec3 camera_position;
     glm::vec3 looked_position;
     glm::vec3 looked_direction;
-    float yaw_angle_ = -90;
-    float pitch_angle_ = 0;
+    float yaw_angle_ = -150;
+    float pitch_angle_ = -20;
 
     float scene_width;
     float scene_height;
@@ -68,6 +68,7 @@ private:
     void RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
+    void RenderInrradianceSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
@@ -81,7 +82,9 @@ private:
 private:
     std::shared_ptr<Box> sky_box_;
     std::shared_ptr<ColorCubeProcess> sky_process_;
+    std::shared_ptr<ColorCubeProcess> irradiance_process_;  //预计算辐照图
     void InitSky(); //  使用HDR资源来初始化天空盒
+    void InitIrradiance();  //预先计算辐照图
 
     void InitNormalPBRShader() const;
 
@@ -89,7 +92,7 @@ private:
 
     void InitShadowpass();
 
-    std::shared_ptr<ColorCubeProcess> GenerateCubepass();
+    std::shared_ptr<ColorCubeProcess> GenerateCubepass(float width, float height);
 
     void InitNormalLightShader() const;
 
