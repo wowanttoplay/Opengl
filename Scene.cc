@@ -50,7 +50,7 @@ glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 refract_sphere_position = glm::vec3(0.0f, 1.0f, 5.0f);
 // reflect sphere
 glm::vec3 reflect_sphere_position = glm::vec3(2.0f, 3.0f, -2.0f);
-glm::vec3 inrradiance_sphere_position = glm::vec3(4.0,3.0,-2.0);
+glm::vec3 inrradiance_sphere_position = glm::vec3(4.0, 3.0, -2.0);
 // PBR sphere
 glm::vec3 PBR_position = glm::vec3(3.0f, 1.0f, -2.0f);
 // light
@@ -122,7 +122,7 @@ void Scene::Init() {
     this->reflect_cube_pass_ = GenerateCubepass(1024, 1024);
     this->refract_cube_pass_ = GenerateCubepass(1024, 1024);
     this->sky_process_ = GenerateCubepass(1024, 1024);
-    this->irradiance_process_ = GenerateCubepass(1024, 1024);
+    this->irradiance_process_ = GenerateCubepass(32, 32);
 
     this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
     InitSky();
@@ -148,9 +148,8 @@ void Scene::InitNormalLightShader() const {
 }
 
 shared_ptr<ColorCubeProcess> Scene::GenerateCubepass(float width, float height) {
-    shared_ptr<ColorCubeProcess> rst = make_shared<ColorCubeProcess>();
+    shared_ptr<ColorCubeProcess> rst = make_shared<ColorCubeProcess>(width, height);
     rst->SetNearAndFar(0.1f, 100.f);
-    rst->SetScreenSize(width, height);
     return rst;
 }
 
@@ -242,7 +241,6 @@ void Scene::Render() {
     }
 
 }
-
 
 
 void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
@@ -480,8 +478,8 @@ void Scene::InitIrradiance() {
     shader.SetInteger("curbMap0", 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
-    this->irradiance_process_->SetCenter(glm::vec3(0,0,0));
-    this->irradiance_process_->Render([=](glm::mat4 view, glm::mat4 projection)->void{
+    this->irradiance_process_->SetCenter(glm::vec3(0, 0, 0));
+    this->irradiance_process_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
         Shader shader = ResourceManager::GetShader(kIrradianceGenerateShader);
         shader.Use();
         shader.SetMatrix4("view", view);

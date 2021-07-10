@@ -17,10 +17,9 @@ public:
     GLuint color_cube_map_; //生成颜色cube
     GLuint color_FBO;   //  颜色帧缓冲
 
-    ColorCubeProcess();
+    ColorCubeProcess(float width, float height);
     void SetNearAndFar(float near, float far);
     void SetCenter(const glm::vec3& center);
-    void SetScreenSize(int width, int height);
 
     void PrePareResource(GLuint& FBO, GLuint& texture);
 

@@ -10,9 +10,9 @@
 
 using namespace std;
 
-const int kColor_texture_size = 1024;
-
-ColorCubeProcess::ColorCubeProcess() {
+ColorCubeProcess::ColorCubeProcess(float width, float height) {
+    this->screen_width_ = width;
+    this->screen_height_ = height;
     PrePareResource(this->color_FBO, this->color_cube_map_);
 }
 
@@ -35,7 +35,7 @@ void ColorCubeProcess::PrePareResource(GLuint &FBO, GLuint &texture) {
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
     // 绑定浮点缓冲，后面HDR要用
     for (unsigned int i = 0; i < 6; ++i)
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, kColor_texture_size, kColor_texture_size, 0,
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, screen_width_, screen_height_, 0,
                      GL_RGB, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -49,14 +49,9 @@ void ColorCubeProcess::PrePareResource(GLuint &FBO, GLuint &texture) {
     unsigned int rboDepth;
     glGenRenderbuffers(1, &rboDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, kColor_texture_size,kColor_texture_size);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, screen_width_, screen_height_);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void ColorCubeProcess::SetScreenSize(int width, int height) {
-    this->screen_width_ = width;
-    this->screen_height_ = height;
 }
 
 void ColorCubeProcess::Render(RenderFunc render_func) {
@@ -65,23 +60,24 @@ void ColorCubeProcess::Render(RenderFunc render_func) {
     // calculate View * projection
     vector<glm::mat4> view_vec;
     view_vec.push_back(glm::lookAt(center_, center_ + glm::vec3(1.0f, 0.0f, 0.0f),
-                                                  glm::vec3(0.0f, -1.0f, 0.0f)));
+                                   glm::vec3(0.0f, -1.0f, 0.0f)));
     view_vec.push_back(glm::lookAt(center_, center_ + glm::vec3(-1.0f, 0.0f, 0.0f),
-                                                  glm::vec3(0.0f, -1.0f, 0.0f)));
+                                   glm::vec3(0.0f, -1.0f, 0.0f)));
     view_vec.push_back(glm::lookAt(center_, center_ + glm::vec3(0.0f, 1.0f, 0.0f),
-                                                  glm::vec3(0.0f, 0.0f, 1.0f)));
+                                   glm::vec3(0.0f, 0.0f, 1.0f)));
     view_vec.push_back(glm::lookAt(center_, center_ + glm::vec3(0.0f, -1.0f, 0.0f),
-                                                  glm::vec3(0.0f, 0.0f, -1.0f)));
+                                   glm::vec3(0.0f, 0.0f, -1.0f)));
     view_vec.push_back(glm::lookAt(center_, center_ + glm::vec3(0.0f, 0.0f, 1.0f),
-                                                  glm::vec3(0.0f, -1.0f, 0.0f)));
+                                   glm::vec3(0.0f, -1.0f, 0.0f)));
     view_vec.push_back(glm::lookAt(center_, center_ + glm::vec3(0.0f, 0.0f, -1.0f),
-                                                  glm::vec3(0.0f, -1.0f, 0.0f)));
+                                   glm::vec3(0.0f, -1.0f, 0.0f)));
     //set shader
 
     glViewport(0, 0, this->screen_width_, this->screen_height_);
     glBindFramebuffer(GL_FRAMEBUFFER, this->color_FBO);
-    for (int i =0; i < 6; ++i) {
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, this->color_cube_map_, 0);
+    for (int i = 0; i < 6; ++i) {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                               this->color_cube_map_, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         render_func(view_vec.at(i), projection);
     }
