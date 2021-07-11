@@ -51,6 +51,7 @@ int main() {
     };
     Window::func = &func;
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
     // render
     while (!glfwWindowShouldClose(const_cast<GLFWwindow*>(window))) {

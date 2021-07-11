@@ -69,6 +69,7 @@ private:
 
     void RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
     void RenderInrradianceSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
+    void RenderPreflitterSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
@@ -83,8 +84,10 @@ private:
     std::shared_ptr<Box> sky_box_;
     std::shared_ptr<ColorCubeProcess> sky_process_;
     std::shared_ptr<ColorCubeProcess> irradiance_process_;  //预计算辐照图
+    std::shared_ptr<ColorCubeProcess> prefiltter_process_; //重要性采样预处理图
     void InitSky(); //  使用HDR资源来初始化天空盒
     void InitIrradiance();  //预先计算辐照图
+    void InitPreflitter(); // 重要性采样IBL镜反射预处理
 
     void InitNormalPBRShader() const;
 
@@ -92,7 +95,7 @@ private:
 
     void InitShadowpass();
 
-    std::shared_ptr<ColorCubeProcess> GenerateCubepass(float width, float height);
+    std::shared_ptr <ColorCubeProcess> GenerateCubepass(float width, float height, bool b_mipmap);
 
     void InitNormalLightShader() const;
 

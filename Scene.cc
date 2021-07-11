@@ -40,6 +40,7 @@ const std::string kShadowShaderName = "shadow";
 const std::string kShadowTextureLightShaderName = "shadow_texture_light"; // 考虑了阴影、 纹理、光照的shader
 const std::string kSkyBoxGenerateShader = "sky_generate";
 const std::string kIrradianceGenerateShader = "irradiance_generate";
+const std::string kPrefiltterShader = "prefiltter";
 const std::string kSkyBoxRender = "sky_render";
 
 // projection
@@ -51,6 +52,7 @@ glm::vec3 refract_sphere_position = glm::vec3(0.0f, 1.0f, 5.0f);
 // reflect sphere
 glm::vec3 reflect_sphere_position = glm::vec3(2.0f, 3.0f, -2.0f);
 glm::vec3 inrradiance_sphere_position = glm::vec3(4.0, 3.0, -2.0);
+glm::vec3 preflitter_sphere_position = glm::vec3(6.0, 3.0, -2.0);
 // PBR sphere
 glm::vec3 PBR_position = glm::vec3(3.0f, 1.0f, -2.0f);
 // light
@@ -87,7 +89,8 @@ void Scene::Init() {
 //    LoadPBRTexture(kFloorName);
     ResourceManager::LoadTexture("../Data/Png/Sky.hdr", kSkyBoxHdr);
     ResourceManager::LoadShader("../Data/sky.vs", "../Data/sky.fs", nullptr, kSkyBoxGenerateShader);
-    ResourceManager::LoadShader("../Data/irradiance.vs", "../Data/irradiance.fs", nullptr, kIrradianceGenerateShader);
+    ResourceManager::LoadShader("../Data/sky.vs", "../Data/irradiance.fs", nullptr, kIrradianceGenerateShader);
+    ResourceManager::LoadShader("../Data/sky.vs", "../Data/preflitter.fs", nullptr, kPrefiltterShader);
     // init light resource
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/Sphere.fs", nullptr, kLight);
     // init shadow resource
@@ -96,6 +99,7 @@ void Scene::Init() {
                                 kShadowShaderName);
     ResourceManager::LoadShader("../Data/sky_box.vs", "../Data/sky_box.fs", nullptr, kSkyBoxRender);
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/sphere_reflect.fs", nullptr, kReflectShader);
+
     // init shadow render
     InitNormalLightShader();
 
@@ -119,14 +123,16 @@ void Scene::Init() {
     // 渲染pass
     InitShadowpass();
 
-    this->reflect_cube_pass_ = GenerateCubepass(1024, 1024);
-    this->refract_cube_pass_ = GenerateCubepass(1024, 1024);
-    this->sky_process_ = GenerateCubepass(1024, 1024);
-    this->irradiance_process_ = GenerateCubepass(32, 32);
+    this->reflect_cube_pass_ = GenerateCubepass(1024, 1024, false);
+    this->refract_cube_pass_ = GenerateCubepass(1024, 1024, false);
+    this->sky_process_ = GenerateCubepass(1024, 1024, false);
+    this->irradiance_process_ = GenerateCubepass(32, 32, false);
+    this->prefiltter_process_ = GenerateCubepass(512, 512, true);
 
     this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
     InitSky();
     InitIrradiance();
+    InitPreflitter();
 }
 
 void Scene::InitNormalLightShader() const {
@@ -147,8 +153,8 @@ void Scene::InitNormalLightShader() const {
     shadow_texture_light.SetFloat("material.specular_ratio", 32.0);
 }
 
-shared_ptr<ColorCubeProcess> Scene::GenerateCubepass(float width, float height) {
-    shared_ptr<ColorCubeProcess> rst = make_shared<ColorCubeProcess>(width, height);
+shared_ptr<ColorCubeProcess> Scene::GenerateCubepass(float width, float height, bool b_mipmap) {
+    shared_ptr<ColorCubeProcess> rst = make_shared<ColorCubeProcess>(width, height, b_mipmap);
     rst->SetNearAndFar(0.1f, 100.f);
     return rst;
 }
@@ -200,10 +206,6 @@ void Scene::Render() {
         Shader shadow_map_shader = ResourceManager::GetShader(kShadowShaderName);
         shadow_map_shader.SetVector3f("light_position", light_position);
         shadow_map_shader.SetFloat("far_plane", kShadowFarPlane);
-
-//        this->RenderPlane(shadow_map_shader, view, projection);
-//        this->RenderBox(shadow_map_shader, view, projection);
-//        this->RenderReflectSphere(shadow_map_shader, view, projection);
         this->RenderPBRSphere(shadow_map_shader, view, projection);
     });
 
@@ -228,6 +230,7 @@ void Scene::Render() {
         Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
         RenderReflectSphere(reflect_shader, view, projection);
         RenderInrradianceSphere(reflect_shader, view, projection);
+        RenderPreflitterSphere(reflect_shader, view, projection);
         // sky
         RenderSky(view, projection);
     });
@@ -239,7 +242,6 @@ void Scene::Render() {
     } else {
         this->hdr_pass_->HDRRender();
     }
-
 }
 
 
@@ -455,7 +457,7 @@ void Scene::InitSky() {
         shader.SetMatrix4("view", view);
         shader.SetMatrix4("projection", projection);
         sky_box_->Render(shader);
-    });
+    }, 0);
 }
 
 void Scene::RenderSky(const glm::mat4 &view, const glm::mat4 &projection) {
@@ -485,7 +487,43 @@ void Scene::InitIrradiance() {
         shader.SetMatrix4("view", view);
         shader.SetMatrix4("projection", projection);
         sky_box_->Render(shader);
-    });
+    }, 0);
+}
+
+void Scene::InitPreflitter() {
+    logI("init preflitter map");
+    Shader shader = ResourceManager::GetShader(kPrefiltterShader);
+    shader.Use();
+    shader.SetInteger("cubeMap0", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
+    this->prefiltter_process_->SetCenter(glm::vec3(0, 0, 0));
+    auto func = [=](glm::mat4 view, glm::mat4 projection)->void{
+        Shader shader = ResourceManager::GetShader(kPrefiltterShader);
+        shader.Use();
+        shader.SetMatrix4("view", view);
+        shader.SetMatrix4("projection", projection);
+        sky_box_->Render(shader);
+    };
+    // 生成5级渐远纹理
+    const int kMaxMipLevels = 5;
+    for (int i = 0; i < kMaxMipLevels; ++i) {
+        float roughness = float(i)/(float)(kMaxMipLevels - 1);
+        shader.SetFloat("roughness", roughness);
+        this->prefiltter_process_->Render(func, i);
+    }
+}
+
+void Scene::RenderPreflitterSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
+    shader.Use();
+    shader.SetMatrix4("view", view);
+    shader.SetMatrix4("projection", projection);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->prefiltter_process_->color_cube_map_);
+    glm::mat4 preflitter_sphere_model = glm::mat4(1.0f);
+    preflitter_sphere_model = glm::translate(preflitter_sphere_model, preflitter_sphere_position);
+    shader.SetMatrix4("model", preflitter_sphere_model);
+    refract_sphere->Render(shader);
 }
 
 
