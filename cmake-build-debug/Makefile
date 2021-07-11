@@ -251,6 +251,33 @@ RenderObject/Sphere.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.s
 .PHONY : RenderObject/Sphere.cc.s
 
+RenderPass/BasicQuadProcess.o: RenderPass/BasicQuadProcess.cc.o
+
+.PHONY : RenderPass/BasicQuadProcess.o
+
+# target to build an object file
+RenderPass/BasicQuadProcess.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.o
+.PHONY : RenderPass/BasicQuadProcess.cc.o
+
+RenderPass/BasicQuadProcess.i: RenderPass/BasicQuadProcess.cc.i
+
+.PHONY : RenderPass/BasicQuadProcess.i
+
+# target to preprocess a source file
+RenderPass/BasicQuadProcess.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.i
+.PHONY : RenderPass/BasicQuadProcess.cc.i
+
+RenderPass/BasicQuadProcess.s: RenderPass/BasicQuadProcess.cc.s
+
+.PHONY : RenderPass/BasicQuadProcess.s
+
+# target to generate assembly for a file
+RenderPass/BasicQuadProcess.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.s
+.PHONY : RenderPass/BasicQuadProcess.cc.s
+
 RenderPass/ColorCubeProcess.o: RenderPass/ColorCubeProcess.cc.o
 
 .PHONY : RenderPass/ColorCubeProcess.o
@@ -596,6 +623,9 @@ help:
 	@echo "... RenderObject/Sphere.o"
 	@echo "... RenderObject/Sphere.i"
 	@echo "... RenderObject/Sphere.s"
+	@echo "... RenderPass/BasicQuadProcess.o"
+	@echo "... RenderPass/BasicQuadProcess.i"
+	@echo "... RenderPass/BasicQuadProcess.s"
 	@echo "... RenderPass/ColorCubeProcess.o"
 	@echo "... RenderPass/ColorCubeProcess.i"
 	@echo "... RenderPass/ColorCubeProcess.s"

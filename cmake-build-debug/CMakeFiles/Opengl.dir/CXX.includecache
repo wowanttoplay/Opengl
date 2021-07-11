@@ -40,6 +40,18 @@ vector
 ../Shader.h
 /Users/virgil/Opengl/Shader.h
 
+/Users/virgil/Opengl/RenderPass/BasicQuadProcess.h
+glew.h
+-
+glfw3.h
+-
+glm/glm.hpp
+-
+functional
+-
+../Texture2D.h
+/Users/virgil/Opengl/Texture2D.h
+
 /Users/virgil/Opengl/RenderPass/ColorCubeProcess.h
 glew.h
 -
@@ -113,6 +125,8 @@ RenderPass/ColorCubeProcess.h
 /Users/virgil/Opengl/RenderPass/ColorCubeProcess.h
 RenderPass/HDRProcess.h
 /Users/virgil/Opengl/RenderPass/HDRProcess.h
+RenderPass/BasicQuadProcess.h
+/Users/virgil/Opengl/RenderPass/BasicQuadProcess.h
 mutex
 -
 thread

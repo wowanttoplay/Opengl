@@ -15,6 +15,7 @@
 #include "RenderPass/ShadowProcess.h"
 #include "RenderPass/ColorCubeProcess.h"
 #include "RenderPass/HDRProcess.h"
+#include "RenderPass/BasicQuadProcess.h"
 #include <mutex>
 #include <thread>
 
@@ -28,6 +29,8 @@ const std::string kShingles1 = "shingles1";
 const std::string kRockyShoreLine = "rocky-shoreline1";
 const std::string kAngledTiledFloor = "angled-tiled-floor";
 const std::string kSkyBoxHdr = "sky_hdr";
+const std::string kGranite = "gray-granite-flecks";
+const std::string kShinyMetal = "worn-shiny-metal";
 
 const std::string kPBR = "pbr";
 const std::string kPBRTexture = "PBR_texture";
@@ -41,7 +44,9 @@ const std::string kShadowTextureLightShaderName = "shadow_texture_light"; // 考
 const std::string kSkyBoxGenerateShader = "sky_generate";
 const std::string kIrradianceGenerateShader = "irradiance_generate";
 const std::string kPrefiltterShader = "prefiltter";
+const std::string kBrdf = "brdf";
 const std::string kSkyBoxRender = "sky_render";
+const std::string kTextureShaderName = "texture";
 
 // projection
 const float near_plane = 0.1f, far_plane = 100.f;
@@ -85,12 +90,15 @@ void Scene::Init() {
     // init png resource
 
     LoadPBRTexture(kMetalname);
+    LoadPBRTexture(kGranite);
+    LoadPBRTexture(kShinyMetal);
 //    LoadPBRTexture(kAngledTiledFloor);
 //    LoadPBRTexture(kFloorName);
-    ResourceManager::LoadTexture("../Data/Png/Sky.hdr", kSkyBoxHdr);
+    ResourceManager::LoadTexture("../Data/Png/Topanga_Forest_B_3k.hdr", kSkyBoxHdr);
     ResourceManager::LoadShader("../Data/sky.vs", "../Data/sky.fs", nullptr, kSkyBoxGenerateShader);
     ResourceManager::LoadShader("../Data/sky.vs", "../Data/irradiance.fs", nullptr, kIrradianceGenerateShader);
     ResourceManager::LoadShader("../Data/sky.vs", "../Data/preflitter.fs", nullptr, kPrefiltterShader);
+    ResourceManager::LoadShader("../Data/brdf.vs", "../Data/brdf.fs", nullptr, kBrdf);
     // init light resource
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/Sphere.fs", nullptr, kLight);
     // init shadow resource
@@ -99,7 +107,7 @@ void Scene::Init() {
                                 kShadowShaderName);
     ResourceManager::LoadShader("../Data/sky_box.vs", "../Data/sky_box.fs", nullptr, kSkyBoxRender);
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/sphere_reflect.fs", nullptr, kReflectShader);
-
+    ResourceManager::LoadShader("../Data/texture.vs", "../Data/texture.fs", nullptr, kTextureShaderName);
     // init shadow render
     InitNormalLightShader();
 
@@ -109,8 +117,8 @@ void Scene::Init() {
     // init PBR with texture shader
     InitPBRTextureShader();
 
-    plane = std::make_shared<Plane>();
-    reflect_plane = std::make_shared<Plane>();
+    this->plane = std::make_shared<Plane>();
+    this->reflect_plane = std::make_shared<Plane>();
     for (int i = 0; i < box_num; ++i) {
         box_vec.emplace_back(make_shared<Box>());
     }
@@ -128,11 +136,13 @@ void Scene::Init() {
     this->sky_process_ = GenerateCubepass(1024, 1024, false);
     this->irradiance_process_ = GenerateCubepass(32, 32, false);
     this->prefiltter_process_ = GenerateCubepass(512, 512, true);
+    this->brdf_process_ = make_shared<BasicQuadProcess>(512, 512);
 
     this->hdr_pass_ = make_shared<HDRProcess>(this->scene_width, this->scene_height);
     InitSky();
     InitIrradiance();
     InitPreflitter();
+    InitBRDF();
 }
 
 void Scene::InitNormalLightShader() const {
@@ -176,6 +186,8 @@ void Scene::InitPBRTextureShader() const {
     PBR_texture_shader.SetInteger("heightMap", 5);
     PBR_texture_shader.SetInteger("depthMap", 6);
     PBR_texture_shader.SetInteger("irradianceMap", 7);
+    PBR_texture_shader.SetInteger("prefilterMap", 8);
+    PBR_texture_shader.SetInteger("brdfLUT", 9);
     PBR_texture_shader.SetFloat("farPlane", kShadowFarPlane);
 }
 
@@ -225,12 +237,16 @@ void Scene::Render() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
         glActiveTexture(GL_TEXTURE7);
         glBindTexture(GL_TEXTURE_CUBE_MAP, this->irradiance_process_->color_cube_map_);
+        glActiveTexture(GL_TEXTURE8);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, this->prefiltter_process_->color_cube_map_);
+        glActiveTexture(GL_TEXTURE9);
+        this->brdf_process_->texture_.Bind();
         RenderPBRSphere(PBR_texture_shader, view, projection);
 
-        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
-        RenderReflectSphere(reflect_shader, view, projection);
-        RenderInrradianceSphere(reflect_shader, view, projection);
-        RenderPreflitterSphere(reflect_shader, view, projection);
+//        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
+//        RenderReflectSphere(reflect_shader, view, projection);
+//        RenderInrradianceSphere(reflect_shader, view, projection);
+//        RenderPreflitterSphere(reflect_shader, view, projection);
         // sky
         RenderSky(view, projection);
     });
@@ -350,14 +366,16 @@ void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm:
 
 void Scene::RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.Use();
-    BindPBRTexture(kMetalname);
-
-    shader.SetMatrix4("projection", projection);
-    shader.SetMatrix4("view", view);
-    glm::mat4 sphere_model = glm::mat4(1.0f);
-    sphere_model = glm::translate(sphere_model, PBR_position);
-    shader.SetMatrix4("model", sphere_model);
-    PBR_sphere->Render(shader);
+    vector<string> spheres{kMetalname, kGranite, kShinyMetal};
+    for (int i = 0; i < 3; ++i) {
+        BindPBRTexture(spheres.at(i));
+        shader.SetMatrix4("projection", projection);
+        shader.SetMatrix4("view", view);
+        glm::mat4 sphere_model = glm::mat4(1.0f);
+        sphere_model = glm::translate(sphere_model, PBR_position + glm::vec3(2.5 * i, 0.0, 0.0));
+        shader.SetMatrix4("model", sphere_model);
+        PBR_sphere->Render(shader);
+    }
 }
 
 void Scene::SetView(float width, float height) {
@@ -524,6 +542,14 @@ void Scene::RenderPreflitterSphere(Shader &shader, const glm::mat4 &view, const 
     preflitter_sphere_model = glm::translate(preflitter_sphere_model, preflitter_sphere_position);
     shader.SetMatrix4("model", preflitter_sphere_model);
     refract_sphere->Render(shader);
+}
+
+void Scene::InitBRDF() {
+    Shader shader = ResourceManager::GetShader(kBrdf);
+    shader.Use();
+    this->brdf_process_->Render([=]()->void{
+        this->plane->Render(shader);
+    });
 }
 
 

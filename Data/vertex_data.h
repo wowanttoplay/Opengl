@@ -18,23 +18,13 @@ namespace RenderData {
             1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
     };
-//    static float basic_quad[] = {
-//            // positions        // texture Coords
-//            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-//            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-//            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
-//            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-//    };
 
     static float planeVertices[] = {
-            // positions            // normals         // texcoords
-            25.0f, -0.5f, 25.0f, 0.0f, 1.0f, 0.0f, 25.0f, 25.0f,
-            -25.0f, -0.5f, 25.0f, 0.0f, 1.0f, 0.0f, 0.0f, 25.0f,
-            -25.0f, -0.5f, -25.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-
-            25.0f, -0.5f, 25.0f, 0.0f, 1.0f, 0.0f, 25.0f, 25.0f,
-            -25.0f, -0.5f, -25.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-            25.0f, -0.5f, -25.0f, 0.0f, 1.0f, 0.0f, 25.0f, 0.0f
+            // positions       // normal       // texture Coords
+            -1.0f, 1.0f, 0.0f, 0.0, 0.0, 1.0, 0.0f, 1.0f,
+            -1.0f, -1.0f, 0.0f, 0.0, 0.0, 1.0, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f, 0.0, 0.0, 1.0, 1.0f, 1.0f,
+            1.0f, -1.0f, 0.0f, 0.0, 0.0, 1.0, 1.0f, 0.0f,
     };
 
     static float boxVertices[] = {

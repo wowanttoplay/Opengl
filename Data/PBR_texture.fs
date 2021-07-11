@@ -18,6 +18,8 @@ uniform vec3 light_color;
 
 uniform samplerCube depthMap;       // 深度贴图
 uniform samplerCube irradianceMap;  // 间接辐照度贴图
+uniform samplerCube prefilterMap;   // 镜反射预处理cube
+uniform sampler2D brdfLUT;          // brdf预处理纹理图
 uniform float farPlane;             // 计算深度贴图时归一化用的远平面
 
 const float PI = 3.1415926;
@@ -99,12 +101,21 @@ void main() {
   float shadow = ShadowCalculate(FragPos);
   color += L0 * (1.0 - shadow);
 
-  //加上环境光照
+  //加上IBL
+  // IBL产生的折射部分
   ks = fresnelSchlick(max(dot(N, V), 0.0), F0, roughness);
   kd = 1.0 - ks;
+  kd *= (1.0 - metallic);
   vec3 irradiance = texture(irradianceMap, N).rgb;
   vec3 diffuse = irradiance * albedo;
-  vec3 ambient = kd * diffuse * ao;
+  // IBL产生的反射部分
+  const float kMaxMipLevels = 4.0;
+  vec3 R = reflect(-V, N);
+  vec3 prefilter_color = textureLod(prefilterMap, R, roughness * kMaxMipLevels).rgb;
+  vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+  vec3 IBL_specular = prefilter_color * (ks * brdf.x + brdf.y);
+
+  vec3 ambient = (kd * diffuse + IBL_specular) * ao;
   color += ambient;
 
   FragColor = vec4(color, 1.0);

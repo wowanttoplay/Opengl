@@ -18,6 +18,7 @@ class ShadowProcess;
 class ColorCubeProcess;
 class HDRProcess;
 class ThreadPool;
+class BasicQuadProcess;
 
 class Scene {
 public:
@@ -53,7 +54,6 @@ private:
 
     std::shared_ptr<ShadowProcess> shadow_pass_; // 阴影渲染
 
-    // TODO：将两个pass改为用两个texture就可以了，不然比较浪费
     std::shared_ptr<ColorCubeProcess> reflect_cube_pass_; // 镜像渲染
     std::shared_ptr<ColorCubeProcess> refract_cube_pass_; // 折射渲染
     std::shared_ptr<HDRProcess> hdr_pass_; // hd处理
@@ -85,9 +85,11 @@ private:
     std::shared_ptr<ColorCubeProcess> sky_process_;
     std::shared_ptr<ColorCubeProcess> irradiance_process_;  //预计算辐照图
     std::shared_ptr<ColorCubeProcess> prefiltter_process_; //重要性采样预处理图
+    std::shared_ptr<BasicQuadProcess> brdf_process_; // 预计算brdf部分贴图
     void InitSky(); //  使用HDR资源来初始化天空盒
     void InitIrradiance();  //预先计算辐照图
     void InitPreflitter(); // 重要性采样IBL镜反射预处理
+    void InitBRDF(); // 预处理brdf部分
 
     void InitNormalPBRShader() const;
 
