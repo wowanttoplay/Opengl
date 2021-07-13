@@ -19,6 +19,7 @@ class ColorCubeProcess;
 class HDRProcess;
 class ThreadPool;
 class BasicQuadProcess;
+class Model;
 
 class Scene {
 public:
@@ -79,6 +80,10 @@ private:
     void BindPBRTexture(const std::string &texture_name) const;
 
     void LoadPBRTexture(const std::string &texture_name) const;
+
+    // 模型
+private:
+    std::shared_ptr<Model> house_model_;
 
 private:
     std::shared_ptr<Box> sky_box_;

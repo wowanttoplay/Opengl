@@ -16,6 +16,7 @@
 #include "RenderPass/ColorCubeProcess.h"
 #include "RenderPass/HDRProcess.h"
 #include "RenderPass/BasicQuadProcess.h"
+#include "Model/Model.h"
 #include <mutex>
 #include <thread>
 
@@ -127,6 +128,7 @@ void Scene::Init() {
     refract_sphere = make_shared<Sphere>(30, 30);
     reflect_sphere = make_shared<Sphere>(30, 30);
     PBR_sphere = make_shared<Sphere>(30, 30);
+    this->house_model_ = make_shared<Model>("../Data/model/house/mesh/LOD0_concrete_house_004.obj");
 
     // 渲染pass
     InitShadowpass();
@@ -183,7 +185,7 @@ void Scene::InitPBRTextureShader() const {
     PBR_texture_shader.SetInteger("metallicMap", 2);
     PBR_texture_shader.SetInteger("roughnessMap", 3);
     PBR_texture_shader.SetInteger("aoMap", 4);
-    PBR_texture_shader.SetInteger("heightMap", 5);
+//    PBR_texture_shader.SetInteger("heightMap", 5);
     PBR_texture_shader.SetInteger("depthMap", 6);
     PBR_texture_shader.SetInteger("irradianceMap", 7);
     PBR_texture_shader.SetInteger("prefilterMap", 8);
@@ -269,7 +271,7 @@ void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
     glm::mat4 refract_sphere_model = glm::mat4(1.0f);
     refract_sphere_model = glm::translate(refract_sphere_model, reflect_sphere_position);
-    shader.SetMatrix4("model", refract_sphere_model);
+    shader.SetMatrix4("Model", refract_sphere_model);
     refract_sphere->Render(shader);
 }
 
@@ -281,7 +283,7 @@ void Scene::RenderInrradianceSphere(Shader &shader, const glm::mat4 &view, const
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->irradiance_process_->color_cube_map_);
     glm::mat4 refract_sphere_model = glm::mat4(1.0f);
     refract_sphere_model = glm::translate(refract_sphere_model, inrradiance_sphere_position);
-    shader.SetMatrix4("model", refract_sphere_model);
+    shader.SetMatrix4("Model", refract_sphere_model);
     refract_sphere->Render(shader);
 }
 
@@ -290,10 +292,10 @@ void Scene::RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm
     shader.SetMatrix4("view", view);
     shader.SetMatrix4("projection", projection);
     glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kGlassTextureName).Bind();
+    ResourceManager::GetTexture(kGlassTextureName)->Bind();
     glm::mat4 refract_sphere_model = glm::mat4(1.0f);
     refract_sphere_model = glm::translate(refract_sphere_model, refract_sphere_position);
-    shader.SetMatrix4("model", refract_sphere_model);
+    shader.SetMatrix4("Model", refract_sphere_model);
     refract_sphere->Render(shader);
 }
 
@@ -303,7 +305,7 @@ void Scene::RenderLight(const glm::mat4 &view, const glm::mat4 &projection) {
     glm::mat4 light_model = glm::mat4(1.0);
     light_model = glm::translate(light_model, light_position);
     light_model = glm::scale(light_model, glm::vec3(0.5f));
-    light_shader.SetMatrix4("model", light_model);
+    light_shader.SetMatrix4("Model", light_model);
     light_shader.SetMatrix4("view", view);
     light_shader.SetMatrix4("projection", projection);
     light->Render(light_shader);
@@ -319,7 +321,7 @@ void Scene::RenderBox(Shader &shader, const glm::mat4 &view, const glm::mat4 &pr
         glm::mat4 box_model = glm::mat4(1.0f);
         box_model = glm::translate(box_model, box_position + glm::vec3(i * 1.1, 0, -i * 1.3));
         box_model = glm::scale(box_model, glm::vec3(1.0f, 1.5f, 1.0f));
-        shader.SetMatrix4("model", box_model);
+        shader.SetMatrix4("Model", box_model);
         box_vec.at(i)->Render(shader);
     }
 }
@@ -331,23 +333,35 @@ void Scene::RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &
     BindPBRTexture(kFloorName);
 
     glm::mat4 plane_model = glm::mat4(1.0f);
-    shader.SetMatrix4("model", plane_model);
+    shader.SetMatrix4("Model", plane_model);
     plane->Render(shader);
 }
 
 void Scene::BindPBRTexture(const string &texture_name) const {
     glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(texture_name + "_albedo").Bind();
+    if (ResourceManager::GetTexture(texture_name + "_albedo")) {
+        ResourceManager::GetTexture(texture_name + "_albedo")->Bind();
+    }
     glActiveTexture(GL_TEXTURE1);
-    ResourceManager::GetTexture(texture_name + "_normal").Bind();
+    if (ResourceManager::GetTexture(texture_name + "_normal")) {
+        ResourceManager::GetTexture(texture_name + "_normal")->Bind();
+    }
     glActiveTexture(GL_TEXTURE2);
-    ResourceManager::GetTexture(texture_name + "_metallic").Bind();
+    if (ResourceManager::GetTexture(texture_name + "_metallic")) {
+        ResourceManager::GetTexture(texture_name + "_metallic")->Bind();
+    }
     glActiveTexture(GL_TEXTURE3);
-    ResourceManager::GetTexture(texture_name + "_roughness").Bind();
+    if (ResourceManager::GetTexture(texture_name + "_roughness")) {
+        ResourceManager::GetTexture(texture_name + "_roughness")->Bind();
+    }
     glActiveTexture(GL_TEXTURE4);
-    ResourceManager::GetTexture(texture_name + "_ao").Bind();
-    glActiveTexture(GL_TEXTURE5);
-    ResourceManager::GetTexture(texture_name + "_height").Bind();
+    if (ResourceManager::GetTexture(texture_name + "_ao")) {
+        ResourceManager::GetTexture(texture_name + "_ao")->Bind();
+    }
+//    glActiveTexture(GL_TEXTURE5);
+//    if (ResourceManager::GetTexture(texture_name + "_height")) {
+//        ResourceManager::GetTexture(texture_name + "_height")->Bind();
+//    }
 }
 
 void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
@@ -355,12 +369,12 @@ void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm:
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
     glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kGlassTextureName).Bind();
+    ResourceManager::GetTexture(kGlassTextureName)->Bind();
     glm::mat4 plane_model = glm::mat4(1.0f);
     plane_model = glm::translate(plane_model, refract_sphere_position);
     plane_model = glm::rotate(plane_model, glm::radians(90.f), glm::vec3(1.0, 0.0, 0.0));
     plane_model = glm::scale(plane_model, glm::vec3(0.06, 0.06, 0.06));
-    shader.SetMatrix4("model", plane_model);
+    shader.SetMatrix4("Model", plane_model);
     plane->Render(shader);
 }
 
@@ -373,7 +387,7 @@ void Scene::RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::ma
         shader.SetMatrix4("view", view);
         glm::mat4 sphere_model = glm::mat4(1.0f);
         sphere_model = glm::translate(sphere_model, PBR_position + glm::vec3(2.5 * i, 0.0, 0.0));
-        shader.SetMatrix4("model", sphere_model);
+        shader.SetMatrix4("Model", sphere_model);
         PBR_sphere->Render(shader);
     }
 }
@@ -467,7 +481,7 @@ void Scene::InitSky() {
     shader.Use();
     shader.SetInteger("HDRMap", 0);
     glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kSkyBoxHdr).Bind();
+    ResourceManager::GetTexture(kSkyBoxHdr)->Bind();
     this->sky_process_->SetCenter(glm::vec3(0, 0, 0));
     this->sky_process_->Render([=](glm::mat4 view, glm::mat4 projection) -> void {
         Shader shader = ResourceManager::GetShader(kSkyBoxGenerateShader);
@@ -516,7 +530,7 @@ void Scene::InitPreflitter() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
     this->prefiltter_process_->SetCenter(glm::vec3(0, 0, 0));
-    auto func = [=](glm::mat4 view, glm::mat4 projection)->void{
+    auto func = [=](glm::mat4 view, glm::mat4 projection) -> void {
         Shader shader = ResourceManager::GetShader(kPrefiltterShader);
         shader.Use();
         shader.SetMatrix4("view", view);
@@ -526,7 +540,7 @@ void Scene::InitPreflitter() {
     // 生成5级渐远纹理
     const int kMaxMipLevels = 5;
     for (int i = 0; i < kMaxMipLevels; ++i) {
-        float roughness = float(i)/(float)(kMaxMipLevels - 1);
+        float roughness = float(i) / (float) (kMaxMipLevels - 1);
         shader.SetFloat("roughness", roughness);
         this->prefiltter_process_->Render(func, i);
     }
@@ -540,14 +554,14 @@ void Scene::RenderPreflitterSphere(Shader &shader, const glm::mat4 &view, const 
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->prefiltter_process_->color_cube_map_);
     glm::mat4 preflitter_sphere_model = glm::mat4(1.0f);
     preflitter_sphere_model = glm::translate(preflitter_sphere_model, preflitter_sphere_position);
-    shader.SetMatrix4("model", preflitter_sphere_model);
+    shader.SetMatrix4("Model", preflitter_sphere_model);
     refract_sphere->Render(shader);
 }
 
 void Scene::InitBRDF() {
     Shader shader = ResourceManager::GetShader(kBrdf);
     shader.Use();
-    this->brdf_process_->Render([=]()->void{
+    this->brdf_process_->Render([=]() -> void {
         this->plane->Render(shader);
     });
 }

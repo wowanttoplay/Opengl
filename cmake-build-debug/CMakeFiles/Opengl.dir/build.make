@@ -298,6 +298,32 @@ CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/RenderPass/BasicQuadProcess.cc -o CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.s
 
+CMakeFiles/Opengl.dir/Model/Model.cc.o: CMakeFiles/Opengl.dir/flags.make
+CMakeFiles/Opengl.dir/Model/Model.cc.o: ../Model/Model.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/Opengl.dir/Model/Model.cc.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/Model/Model.cc.o -c /Users/virgil/Opengl/Model/Model.cc
+
+CMakeFiles/Opengl.dir/Model/Model.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/Model/Model.cc.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/Model/Model.cc > CMakeFiles/Opengl.dir/Model/Model.cc.i
+
+CMakeFiles/Opengl.dir/Model/Model.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/Model/Model.cc.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/Model/Model.cc -o CMakeFiles/Opengl.dir/Model/Model.cc.s
+
+CMakeFiles/Opengl.dir/Model/Mesh.cc.o: CMakeFiles/Opengl.dir/flags.make
+CMakeFiles/Opengl.dir/Model/Mesh.cc.o: ../Model/Mesh.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/Opengl.dir/Model/Mesh.cc.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/Model/Mesh.cc.o -c /Users/virgil/Opengl/Model/Mesh.cc
+
+CMakeFiles/Opengl.dir/Model/Mesh.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/Model/Mesh.cc.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/Model/Mesh.cc > CMakeFiles/Opengl.dir/Model/Mesh.cc.i
+
+CMakeFiles/Opengl.dir/Model/Mesh.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/Model/Mesh.cc.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/Model/Mesh.cc -o CMakeFiles/Opengl.dir/Model/Mesh.cc.s
+
 # Object files for target Opengl
 Opengl_OBJECTS = \
 "CMakeFiles/Opengl.dir/main.cpp.o" \
@@ -316,7 +342,9 @@ Opengl_OBJECTS = \
 "CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o" \
 "CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o" \
 "CMakeFiles/Opengl.dir/RenderPass/HDRProcess.cc.o" \
-"CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.o"
+"CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.o" \
+"CMakeFiles/Opengl.dir/Model/Model.cc.o" \
+"CMakeFiles/Opengl.dir/Model/Mesh.cc.o"
 
 # External object files for target Opengl
 Opengl_EXTERNAL_OBJECTS =
@@ -338,12 +366,14 @@ Opengl: CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderPass/ColorCubeProcess.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderPass/HDRProcess.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderPass/BasicQuadProcess.cc.o
+Opengl: CMakeFiles/Opengl.dir/Model/Model.cc.o
+Opengl: CMakeFiles/Opengl.dir/Model/Mesh.cc.o
 Opengl: CMakeFiles/Opengl.dir/build.make
 Opengl: /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib
 Opengl: /usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.dylib
-Opengl: /usr/local/Cellar/assimp/bin/libassimp.5.dylib
+Opengl: /usr/local/Cellar/assimp/5.0.1/lib/libassimp.5.dylib
 Opengl: CMakeFiles/Opengl.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Linking CXX executable Opengl"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX executable Opengl"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Opengl.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

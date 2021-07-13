@@ -4,6 +4,7 @@
 
 #pragma once
 #include <glew.h>
+#include <string>
 
 class Texture2D
 {
@@ -19,6 +20,8 @@ public:
     GLuint Wrap_T;
     GLuint Filter_Min;
     GLuint Filter_Max;
+    std::string name; // 纹理名称,方便辨别这是个什么纹理
+
 
     bool ready_ = false;
 

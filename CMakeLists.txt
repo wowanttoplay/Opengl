@@ -7,15 +7,15 @@ set(CMAKE_CXX_STANDARD 20)
 set(GLEW_H /usr/local/Cellar/glew/2.2.0_1/include/GL/)
 set(GLFW_H /usr/local/Cellar/glfw/3.3.4/include/GLFW)
 set(GLM_H /usr/local/Cellar/glm)
-set(ASSIMP_H /usr/local/Cellar/assimp/include/assimp)
+set(ASSIMP_H /usr/local/Cellar/assimp/5.0.1/include/)
 include_directories(${GLEW_H} ${GLFW_H} ${GLM_H} ${ASSIMP_H})
 # 添加目标链接
 set(GLEW_LINK /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib)
 set(GLFW_LINK /usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.dylib)
-set(ASSIMP_LINK /usr/local/Cellar/assimp/bin/libassimp.5.dylib)
+set(ASSIMP_LINK /usr/local/Cellar/assimp/5.0.1/lib/libassimp.5.dylib)
 link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${ASSIMP_LINK})
 
-add_executable(Opengl main.cpp window/Window.cc window/Window.h Data/vertex_data.h Thread/Task.cc Thread/Task.h Thread/ThreadPool.cc Thread/ThreadPool.h Tool/PrintTool.cc Tool/PrintTool.h Log/LogUtil.cc Log/LogUtil.h Shader.cc Shader.h Texture2D.cc Texture2D.h ResourceManager.cc ResourceManager.h RenderObject/Plane.cc RenderObject/Plane.h Scene.cc Scene.h RenderObject/Box.cc RenderObject/Box.h RenderObject/Sphere.cc RenderObject/Sphere.h RenderPass/ShadowProcess.cc RenderPass/ShadowProcess.h RenderPass/ColorCubeProcess.cc RenderPass/ColorCubeProcess.h RenderPass/HDRProcess.cc RenderPass/HDRProcess.h RenderPass/BasicQuadProcess.cc RenderPass/BasicQuadProcess.h)
+add_executable(Opengl main.cpp window/Window.cc window/Window.h Data/vertex_data.h Thread/Task.cc Thread/Task.h Thread/ThreadPool.cc Thread/ThreadPool.h Tool/PrintTool.cc Tool/PrintTool.h Log/LogUtil.cc Log/LogUtil.h Shader.cc Shader.h Texture2D.cc Texture2D.h ResourceManager.cc ResourceManager.h RenderObject/Plane.cc RenderObject/Plane.h Scene.cc Scene.h RenderObject/Box.cc RenderObject/Box.h RenderObject/Sphere.cc RenderObject/Sphere.h RenderPass/ShadowProcess.cc RenderPass/ShadowProcess.h RenderPass/ColorCubeProcess.cc RenderPass/ColorCubeProcess.h RenderPass/HDRProcess.cc RenderPass/HDRProcess.h RenderPass/BasicQuadProcess.cc RenderPass/BasicQuadProcess.h Model/Model.cc Model/Model.h Model/Mesh.cc Model/Mesh.h)
 
 if (APPLE)
     target_link_libraries(Opengl "-framework OpenGL")

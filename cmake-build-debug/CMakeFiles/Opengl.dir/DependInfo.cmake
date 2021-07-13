@@ -5,6 +5,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/virgil/Opengl/Log/LogUtil.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
+  "/Users/virgil/Opengl/Model/Mesh.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Model/Mesh.cc.o"
+  "/Users/virgil/Opengl/Model/Model.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Model/Model.cc.o"
   "/Users/virgil/Opengl/RenderObject/Box.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Box.cc.o"
   "/Users/virgil/Opengl/RenderObject/Plane.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"
   "/Users/virgil/Opengl/RenderObject/Sphere.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o"
@@ -29,7 +31,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/local/Cellar/glew/2.2.0_1/include/GL"
   "/usr/local/Cellar/glfw/3.3.4/include/GLFW"
   "/usr/local/Cellar/glm"
-  "/usr/local/Cellar/assimp/include/assimp"
+  "/usr/local/Cellar/assimp/5.0.1/include"
   )
 
 # Targets to which this target links.

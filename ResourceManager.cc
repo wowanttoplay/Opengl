@@ -17,7 +17,7 @@
 
 using namespace std;
 
-std::map<std::string, Texture2D>    ResourceManager::Textures;
+std::map<std::string, shared_ptr<Texture2D>>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
 std::mutex                          ResourceManager::mu_;
 
@@ -33,7 +33,7 @@ Shader ResourceManager::GetShader(std::string name) {
     return Shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const string &file, std::string name) {
+std::shared_ptr<Texture2D> ResourceManager::LoadTexture(const string &file, std::string name) {
     unique_lock<mutex> lc(mu_);
     logI("load texture %s", file.c_str());
     if (file.find(".hdr") != file.npos) {
@@ -46,8 +46,11 @@ Texture2D ResourceManager::LoadTexture(const string &file, std::string name) {
     return Textures[name];
 }
 
-Texture2D ResourceManager::GetTexture(std::string name) {
+std::shared_ptr<Texture2D> ResourceManager::GetTexture(std::string name) {
     unique_lock<mutex> lc(mu_);
+    if (Textures.count(name) == 0) {
+        return nullptr;
+    }
     return Textures[name];
 }
 
@@ -57,7 +60,7 @@ void ResourceManager::Clear() {
         glDeleteProgram(iter.second.ID);
     // (Properly) delete all textures
     for (auto iter : Textures)
-        glDeleteTextures(1, &iter.second.ID);
+        glDeleteTextures(1, &iter.second->ID);
 }
 
 Shader
@@ -99,9 +102,9 @@ ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fSh
     return shader;
 }
 
-Texture2D ResourceManager::loadTextureFromFile(const GLchar *file) {
+std::shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const GLchar *file) {
     // Create Texture object
-    Texture2D texture;
+    shared_ptr<Texture2D> texture = make_shared<Texture2D>();
 
     // Load image
     int width, height, nrChannels;
@@ -110,19 +113,19 @@ Texture2D ResourceManager::loadTextureFromFile(const GLchar *file) {
         logE("the %s file is not found", file);
     }
     if (nrChannels == 4) {
-        texture.Internal_Format = GL_RGBA;
-        texture.Image_Format = GL_RGBA;
+        texture->Internal_Format = GL_RGBA;
+        texture->Image_Format = GL_RGBA;
     }
     // Now generate texture
-    texture.Generate(width, height, data);
+    texture->Generate(width, height, data);
     // And finally free image data
     stbi_image_free(data);
     return texture;
 }
 
-Texture2D ResourceManager::loadTextureFromHDRFile(const GLchar *file) {
+std::shared_ptr<Texture2D> ResourceManager::loadTextureFromHDRFile(const GLchar *file) {
     // Create Texture object
-    Texture2D texture;
+    shared_ptr<Texture2D> texture = make_shared<Texture2D>();
 
     // Load image
     stbi_set_flip_vertically_on_load(true);
@@ -131,10 +134,10 @@ Texture2D ResourceManager::loadTextureFromHDRFile(const GLchar *file) {
     if (!data) {
         logE("the %s file is not found", file);
     }
-    texture.Internal_Format = GL_RGB16F;
-    texture.Image_Format = GL_RGB;
+    texture->Internal_Format = GL_RGB16F;
+    texture->Image_Format = GL_RGB;
     // Now generate texture
-    texture.Generate(width, height, data);
+    texture->Generate(width, height, data);
     // And finally free image data
     stbi_image_free(data);
     return texture;
