@@ -240,6 +240,7 @@ CMakeFiles/Opengl.dir/Model/Model.cc.o
  /usr/local/Cellar/assimp/5.0.1/include/assimp/matrix4x4.inl
  /usr/local/Cellar/assimp/5.0.1/include/assimp/mesh.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/metadata.h
+ /usr/local/Cellar/assimp/5.0.1/include/assimp/pbrmaterial.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/postprocess.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/quaternion.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/quaternion.inl
@@ -2115,6 +2116,7 @@ CMakeFiles/Opengl.dir/Scene.cc.o
  /usr/local/Cellar/assimp/5.0.1/include/assimp/matrix4x4.inl
  /usr/local/Cellar/assimp/5.0.1/include/assimp/mesh.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/metadata.h
+ /usr/local/Cellar/assimp/5.0.1/include/assimp/pbrmaterial.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/postprocess.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/quaternion.h
  /usr/local/Cellar/assimp/5.0.1/include/assimp/scene.h

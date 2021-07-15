@@ -10,30 +10,25 @@ using namespace std;
 void Mesh::Render(Shader shader) {
     shader.Use();
     // 纹理绑定，和shader相关
-    for (int i = 0; i < textures_.size(); ++i) {
-        const string &type_name = textures_.at(i)->name;
-        if (type_name == "base_color") {
-            glActiveTexture(GL_TEXTURE0);
-            textures_.at(i)->Bind();
-        } else if (type_name == "roughness") {
-            glActiveTexture(GL_TEXTURE1);
-            textures_.at(i)->Bind();
-        } else if (type_name == "normal") {
-            glActiveTexture(GL_TEXTURE2);
-            textures_.at(i)->Bind();
-        } else if (type_name == "metal") {
-            glActiveTexture(GL_TEXTURE3);
-            textures_.at(i)->Bind();
-        }
-    }
+    glActiveTexture(GL_TEXTURE0);
+    textures_["albedo"]->Bind();
+    glActiveTexture(GL_TEXTURE1);
+    textures_["normal"]->Bind();
+    glActiveTexture(GL_TEXTURE2);
+    textures_["metallic"]->Bind();
+    glActiveTexture(GL_TEXTURE3);
+    textures_["roughness"]->Bind();
+    glActiveTexture(GL_TEXTURE4);
+    textures_["ao"]->Bind();
+
     glBindVertexArray(this->VAO_);
     glDrawElements(GL_TRIANGLES, indices_.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
 Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices,
-           const std::vector<shared_ptr<Texture2D>> &textures) : vertices_(vertices), indices_(indices),
-                                                                 textures_(textures) {
+           const std::map<std::string, shared_ptr<Texture2D>> &textures) : vertices_(vertices), indices_(indices),
+                                                                           textures_(textures) {
     InitVAO();
 }
 

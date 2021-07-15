@@ -128,7 +128,9 @@ void Scene::Init() {
     refract_sphere = make_shared<Sphere>(30, 30);
     reflect_sphere = make_shared<Sphere>(30, 30);
     PBR_sphere = make_shared<Sphere>(30, 30);
-    this->house_model_ = make_shared<Model>("../Data/model/house/mesh/LOD0_concrete_house_004.obj");
+//    this->house_model_ = make_shared<Model>("../Data/model/spot/uploads_files_2667772_Spot.glb");
+//    this->house_model_ = make_shared<Model>("../Data/model/rocket/uploads_files_2652037_TheRocket.glb");
+    this->house_model_ = make_shared<Model>("../Data/model/spot/uploads_files_2667772_Spot.glb");
 
     // 渲染pass
     InitShadowpass();
@@ -221,6 +223,7 @@ void Scene::Render() {
         shadow_map_shader.SetVector3f("light_position", light_position);
         shadow_map_shader.SetFloat("far_plane", kShadowFarPlane);
         this->RenderPBRSphere(shadow_map_shader, view, projection);
+        this->house_model_->Render(shadow_map_shader, glm::mat4(), glm::mat4());
     });
 
     //正常渲染
@@ -244,6 +247,8 @@ void Scene::Render() {
         glActiveTexture(GL_TEXTURE9);
         this->brdf_process_->texture_.Bind();
         RenderPBRSphere(PBR_texture_shader, view, projection);
+
+        this->house_model_->Render(PBR_texture_shader, view, projection);
 
 //        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
 //        RenderReflectSphere(reflect_shader, view, projection);
@@ -387,7 +392,7 @@ void Scene::RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::ma
         shader.SetMatrix4("view", view);
         glm::mat4 sphere_model = glm::mat4(1.0f);
         sphere_model = glm::translate(sphere_model, PBR_position + glm::vec3(2.5 * i, 0.0, 0.0));
-        shader.SetMatrix4("Model", sphere_model);
+        shader.SetMatrix4("model", sphere_model);
         PBR_sphere->Render(shader);
     }
 }

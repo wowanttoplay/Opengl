@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>
+#include <map>
 
 #include "../Texture2D.h"
 #include "../Shader.h"
@@ -20,13 +21,13 @@ struct Vertex {
 class Mesh {
 public:
     Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices,
-         const std::vector<std::shared_ptr<Texture2D>> &textures);
+         const std::map<std::string,std::shared_ptr<Texture2D>> &textures);
 
     void Render(Shader shader);
 private:
     std::vector<Vertex> vertices_;
     std::vector<uint32_t> indices_;
-    std::vector<std::shared_ptr<Texture2D>> textures_;
+    std::map<std::string, std::shared_ptr<Texture2D>> textures_;
 
     GLuint VAO_, VBO_, EBO_;
     /**

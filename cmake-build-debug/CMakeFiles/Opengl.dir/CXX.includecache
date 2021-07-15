@@ -17,6 +17,8 @@ vector
 -
 memory
 -
+map
+-
 ../Texture2D.h
 /Users/virgil/Opengl/Texture2D.h
 ../Shader.h
@@ -29,11 +31,15 @@ assimp/scene.h
 -
 assimp/postprocess.h
 -
+assimp/pbrmaterial.h
+-
 vector
 -
 string
 -
 memory
+-
+map
 -
 Mesh.h
 /Users/virgil/Opengl/Model/Mesh.h
@@ -367,6 +373,8 @@ stdint.h
 -
 string
 -
+
+/usr/local/Cellar/assimp/5.0.1/include/assimp/pbrmaterial.h
 
 /usr/local/Cellar/assimp/5.0.1/include/assimp/postprocess.h
 types.h
