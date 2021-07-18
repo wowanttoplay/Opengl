@@ -9,26 +9,31 @@ using namespace std;
 
 void Mesh::Render(Shader shader) {
     shader.Use();
-    // 纹理绑定，和shader相关
-    glActiveTexture(GL_TEXTURE0);
-    textures_["albedo"]->Bind();
-    glActiveTexture(GL_TEXTURE1);
-    textures_["normal"]->Bind();
-    glActiveTexture(GL_TEXTURE2);
-    textures_["metallic"]->Bind();
-    glActiveTexture(GL_TEXTURE3);
-    textures_["roughness"]->Bind();
-    glActiveTexture(GL_TEXTURE4);
-    textures_["ao"]->Bind();
+    SetShaderAttributes(shader, "albedo");
+    SetShaderAttributes(shader, "normal");
+    SetShaderAttributes(shader, "metallic");
+    SetShaderAttributes(shader, "roughness");
+    SetShaderAttributes(shader, "ao");
 
     glBindVertexArray(this->VAO_);
     glDrawElements(GL_TRIANGLES, indices_.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
+void Mesh::SetShaderAttributes(Shader &shader, const string name) {
+    shader.SetVector3f(name.c_str(), material_[name]->data);
+    if (material_["albedo"]->texture) {
+        glActiveTexture(GL_TEXTURE0);
+        material_["albedo"]->texture->Bind();
+        shader.SetInteger(("b_" + name + "_texture").c_str(), GL_TRUE);
+    } else {
+        shader.SetInteger(("b_" + name + "_texture").c_str(), GL_FALSE);
+    }
+}
+
 Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices,
-           const std::map<std::string, shared_ptr<Texture2D>> &textures) : vertices_(vertices), indices_(indices),
-                                                                           textures_(textures) {
+           const std::map<std::string, shared_ptr<Material>> &metarial) : vertices_(vertices), indices_(indices),
+                                                                          material_(metarial) {
     InitVAO();
 }
 

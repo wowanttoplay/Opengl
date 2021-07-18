@@ -19,7 +19,7 @@ void Model::Render(Shader shader, glm::mat4 view, glm::mat4 projection) {
     shader.SetMatrix4("projection", projection);
     glm::mat4 model = glm::mat4(1.0);
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
-    model = glm::scale(model, glm::vec3(1.0));
+    model = glm::scale(model, glm::vec3(0.05));
     shader.SetMatrix4("model", model);
     for (int i = 0; i < meshes_.size(); ++i) {
         meshes_.at(i).Render(shader);
@@ -55,7 +55,7 @@ void Model::ProcessNode(aiNode *node, const aiScene *scene) {
 Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
     vector<Vertex> vertices;
     vector<uint32_t> indices;
-    map<string, shared_ptr<Texture2D>> textures;
+    map<string, shared_ptr<Material>> metarials;
 
     // init vertices
     LoadMeshVertices(mesh, vertices);
@@ -64,57 +64,52 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
     LoadMeshIndices(mesh, indices);
 
     // init materials
-    LoadMeshTextures(mesh, scene, textures);
+    LoadMeshTextures(mesh, scene, metarials);
 
-    return Mesh(vertices, indices, textures);
+    return Mesh(vertices, indices, metarials);
 }
 
-void Model::LoadMeshTextures(const aiMesh *mesh, const aiScene *scene, map<string, shared_ptr<Texture2D>> &textures) {
+void Model::LoadMeshTextures(const aiMesh *mesh, const aiScene *scene, map<string, shared_ptr<Material>> &materials) {
+    // load texture
+    if (mesh->mMaterialIndex < 0) {
+        return;
+    }
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+    materials["albedo"] = make_shared<Material>();
+    materials["roughness"] = make_shared<Material>();
+    materials["ao"] = make_shared<Material>();
+    materials["normal"] = make_shared<Material>();
+    materials["metallic"] = make_shared<Material>();
+    // paramter
+    material->Get(AI_MATKEY_COLOR_DIFFUSE, materials["albedo"]->data);
+    material->Get(AI_MATKEY_COLOR_SPECULAR, materials["roughness"]->data);
+    material->Get(AI_MATKEY_COLOR_AMBIENT, materials["ao"]->data);
+    materials["normal"]->data = glm::vec3(0.0); // 无效值，只是为了统一
+    materials["metallic"]->data = glm::vec3(0.0); // 默认不是金属
 
-    if (!ResourceManager::GetTexture(directory_ + "albedo")) {
-        ResourceManager::LoadTexture(directory_ + "albeto.png", directory_ + "albeto");
+    // texture
+    vector<shared_ptr<Texture2D>> albedo = LoadMaterialTextures(material, aiTextureType_DIFFUSE,
+                                                                "albedo");
+    vector<shared_ptr<Texture2D>> roughness = LoadMaterialTextures(material, aiTextureType_SPECULAR,
+                                                                   "roughness");
+    vector<shared_ptr<Texture2D>> normal = LoadMaterialTextures(material, aiTextureType_NORMALS, "normal");
+    vector<shared_ptr<Texture2D>> metallic = LoadMaterialTextures(material, aiTextureType_UNKNOWN, "metallic");
+    vector<shared_ptr<Texture2D>> ao = LoadMaterialTextures(material, aiTextureType_AMBIENT, "ao");
+    if (!albedo.empty()) {
+        materials["albedo"]->texture = albedo.front();
     }
-    if (!ResourceManager::GetTexture(directory_ + "metallic")) {
-        ResourceManager::LoadTexture(directory_ + "metallic.png", directory_ + "metallic");
+    if (!roughness.empty()) {
+        materials["roughness"]->texture = roughness.front();
     }
-    if (!ResourceManager::GetTexture(directory_ + "normal")) {
-        ResourceManager::LoadTexture(directory_ + "normal.png", directory_ + "normal");
+    if (!normal.empty()) {
+        materials["normal"]->texture = normal.front();
     }
-    if (!ResourceManager::GetTexture(directory_ + "roughness")) {
-        ResourceManager::LoadTexture(directory_ + "roughness.png", directory_ + "roughness");
+    if (!metallic.empty()) {
+        materials["metallic"]->texture = metallic.front();
     }
-    if (!ResourceManager::GetTexture(directory_ + "ao")) {
-        ResourceManager::LoadTexture(directory_ + "ao.png", directory_ + "ao");
+    if (!ao.empty()) {
+        materials["ao"]->texture = ao.front();
     }
-    textures["albeto"] = ResourceManager::GetTexture(directory_ + "albeto");
-    textures["metallic"] = ResourceManager::GetTexture(directory_ + "metallic");
-    textures["normal"] = ResourceManager::GetTexture(directory_ + "normal");
-    textures["roughness"] = ResourceManager::GetTexture(directory_ + "roughness");
-    textures["ao"] = ResourceManager::GetTexture(directory_ + "ao");
-
-//    if (mesh->mMaterialIndex >= 0) {
-//        aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-////        aiString base_color, roughness, metallic, normal, ao;
-////        material->GetTexture(aiTextureType_DIFFUSE, 1, &base_color);
-////        material->GetTexture(aiTextureType_SPECULAR, 1, &roughness);
-////        material->GetTexture(aiTextureType_UNKNOWN, 1, &metallic);
-////        material->GetTexture(aiTextureType_NORMALS, 0, &normal);
-////        material->GetTexture(aiTextureType_AMBIENT, 1, &ao);
-//
-//        vector<shared_ptr<Texture2D>> albedo = LoadMaterialTextures(material, aiTextureType_DIFFUSE,
-//                                                                    "albedo");
-//        textures.insert(textures.end(), albedo.begin(), albedo.end());
-//        vector<shared_ptr<Texture2D>> roughness = LoadMaterialTextures(material, aiTextureType_SPECULAR,
-//                                                                       "roughness");
-//        textures.insert(textures.end(), roughness.begin(), roughness.end());
-//        vector<shared_ptr<Texture2D>> normal = LoadMaterialTextures(material, aiTextureType_NORMALS, "normal");
-//        textures.insert(textures.end(), normal.begin(), normal.end());
-//        vector<shared_ptr<Texture2D>> metal = LoadMaterialTextures(material, aiTextureType_UNKNOWN, "metallic");
-//        textures.insert(textures.end(), metal.begin(), metal.end());
-//        vector<shared_ptr<Texture2D>> ao = LoadMaterialTextures(material, aiTextureType_AMBIENT, "ao");
-//        textures.insert(textures.end(), ao.begin(), ao.end());
-//
-//    }
 }
 
 void Model::LoadMeshIndices(const aiMesh *mesh, vector<uint32_t> &indices) const {
@@ -164,6 +159,10 @@ Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::stri
         string real_path = path_;
         real_path = real_path.substr(0, real_path.rfind('/') + 1);
         real_path += file_path.C_Str();
+        if (real_path.rfind("\\") != real_path.npos) {
+            real_path = real_path.replace(real_path.rfind("\\"), 1, "/");
+        }
+
 
         if (ResourceManager::GetTexture(real_path)) {
             textures.push_back(ResourceManager::GetTexture(real_path));

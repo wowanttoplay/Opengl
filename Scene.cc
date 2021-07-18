@@ -35,6 +35,7 @@ const std::string kShinyMetal = "worn-shiny-metal";
 
 const std::string kPBR = "pbr";
 const std::string kPBRTexture = "PBR_texture";
+const std::string kPbrModel = "PBR_Model";
 const std::string kBoxName = "Wall";
 const std::string kLight = "Sphere";
 const std::string kReflectShader = "reflect_sphere";
@@ -117,6 +118,8 @@ void Scene::Init() {
 
     // init PBR with texture shader
     InitPBRTextureShader();
+    // init PBR width model shader
+    InitPBRModelShader();
 
     this->plane = std::make_shared<Plane>();
     this->reflect_plane = std::make_shared<Plane>();
@@ -130,14 +133,15 @@ void Scene::Init() {
     PBR_sphere = make_shared<Sphere>(30, 30);
 //    this->house_model_ = make_shared<Model>("../Data/model/spot/uploads_files_2667772_Spot.glb");
 //    this->house_model_ = make_shared<Model>("../Data/model/rocket/uploads_files_2652037_TheRocket.glb");
-    this->house_model_ = make_shared<Model>("../Data/model/spot/uploads_files_2667772_Spot.glb");
+//    this->house_model_ = make_shared<Model>("../Data/model/cerberus/Cerberus_LP.FBX");
+    this->house_model_ = make_shared<Model>("../Data/model/house/Cabin_Map.FBX");
 
     // 渲染pass
     InitShadowpass();
 
     this->reflect_cube_pass_ = GenerateCubepass(1024, 1024, false);
     this->refract_cube_pass_ = GenerateCubepass(1024, 1024, false);
-    this->sky_process_ = GenerateCubepass(1024, 1024, false);
+    this->sky_process_ = GenerateCubepass(1024, 1024, true);
     this->irradiance_process_ = GenerateCubepass(32, 32, false);
     this->prefiltter_process_ = GenerateCubepass(512, 512, true);
     this->brdf_process_ = make_shared<BasicQuadProcess>(512, 512);
@@ -248,7 +252,11 @@ void Scene::Render() {
         this->brdf_process_->texture_.Bind();
         RenderPBRSphere(PBR_texture_shader, view, projection);
 
-        this->house_model_->Render(PBR_texture_shader, view, projection);
+
+
+        Shader model_shader = ResourceManager::GetShader(kPbrModel);
+        model_shader.Use();
+//        this->house_model_->Render(model_shader, view, projection);
 
 //        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
 //        RenderReflectSphere(reflect_shader, view, projection);
@@ -445,25 +453,25 @@ void Scene::Update(float dt) {
 
 void Scene::process_key(int key, int action) {
     logE("scene, press key : %d", key);
-    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_W) {
         camera_position += looked_direction;
-    } else if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_S) {
         camera_position -= looked_direction;
-    } else if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_A) {
         camera_position -= glm::normalize(glm::cross(looked_direction, glm::vec3(0, 1, 0)));
-    } else if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_D) {
         camera_position += glm::normalize(glm::cross(looked_direction, glm::vec3(0, 1, 0)));
-    } else if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_Q) {
         yaw_angle_ -= 10;
-    } else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_E) {
         yaw_angle_ += 10;
-    } else if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_Z) {
         camera_position += glm::vec3(0, 1, 0);
-    } else if (key == GLFW_KEY_X && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_X) {
         camera_position += glm::vec3(0, -1, 0);
-    } else if (key == GLFW_KEY_C && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_C) {
         pitch_angle_ += 10;
-    } else if (key == GLFW_KEY_V && action == GLFW_PRESS) {
+    } else if (key == GLFW_KEY_V) {
         pitch_angle_ -= 10;
     } else if (key == GLFW_KEY_O && action == GLFW_PRESS) {
         this->hdr_pass_->SetExposure(this->hdr_pass_->GetExposure() - 0.1);
@@ -495,6 +503,8 @@ void Scene::InitSky() {
         shader.SetMatrix4("projection", projection);
         sky_box_->Render(shader);
     }, 0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 }
 
 void Scene::RenderSky(const glm::mat4 &view, const glm::mat4 &projection) {
@@ -569,6 +579,22 @@ void Scene::InitBRDF() {
     this->brdf_process_->Render([=]() -> void {
         this->plane->Render(shader);
     });
+}
+
+void Scene::InitPBRModelShader() const {
+    Shader PBR_model_shader = ResourceManager::LoadShader("../Data/PBR.vs", "../Data/PBR_Model.fs", nullptr,
+                                                          kPbrModel);
+    PBR_model_shader.Use();
+    PBR_model_shader.SetInteger("albedoMap", 0);
+    PBR_model_shader.SetInteger("normalMap", 1);
+    PBR_model_shader.SetInteger("metallicMap", 2);
+    PBR_model_shader.SetInteger("roughnessMap", 3);
+    PBR_model_shader.SetInteger("aoMap", 4);
+    PBR_model_shader.SetInteger("depthMap", 6);
+    PBR_model_shader.SetInteger("irradianceMap", 7);
+    PBR_model_shader.SetInteger("prefilterMap", 8);
+    PBR_model_shader.SetInteger("brdfLUT", 9);
+    PBR_model_shader.SetFloat("farPlane", kShadowFarPlane);
 }
 
 

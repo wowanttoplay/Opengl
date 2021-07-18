@@ -95,10 +95,19 @@ private:
     void InitIrradiance();  //预先计算辐照图
     void InitPreflitter(); // 重要性采样IBL镜反射预处理
     void InitBRDF(); // 预处理brdf部分
-
+    /**
+     * 只支持个顶pbr参数的方式，不支持纹理
+     */
     void InitNormalPBRShader() const;
-
+    /**
+     * 支持纹理的PBR shader
+     */
     void InitPBRTextureShader() const;
+    /**
+     * 支持pbr model的shader，能够灵活适配不同完整度的model，有的model不给或只给了部分texture,需要pbr参数配合
+     */
+    void InitPBRModelShader() const;
+
 
     void InitShadowpass();
 

@@ -33,6 +33,6 @@ private:
 
     void LoadMeshIndices(const aiMesh *mesh, std::vector<uint32_t> &indices) const;
 
-    void LoadMeshTextures(const aiMesh *mesh, const aiScene *scene, std::map<std::string, std::shared_ptr<Texture2D>>& textures);
+    void LoadMeshTextures(const aiMesh *mesh, const aiScene *scene, std::map<std::string, std::shared_ptr<Material>>& materials);
 };
 

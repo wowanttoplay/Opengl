@@ -24,7 +24,7 @@ void main() {
       vec3 sampleWorld = tangentSample.x * right + tangentSample.y * up + tangentSample.z * N;
       // 取样
       irradiance = irradiance + texture(curbMap0, sampleWorld).rgb * cos(theta) * sin(theta);
-      ++number;
+      ++number; 
     }
   }
 
