@@ -4,6 +4,7 @@
 CMakeFiles/Opengl.dir/Log/LogUtil.cc.o: ../Log/LogUtil.cc
 CMakeFiles/Opengl.dir/Log/LogUtil.cc.o: ../Log/LogUtil.h
 
+CMakeFiles/Opengl.dir/Model/Mesh.cc.o: ../Log/LogUtil.h
 CMakeFiles/Opengl.dir/Model/Mesh.cc.o: ../Model/Mesh.cc
 CMakeFiles/Opengl.dir/Model/Mesh.cc.o: ../Model/Mesh.h
 CMakeFiles/Opengl.dir/Model/Mesh.cc.o: ../Shader.h

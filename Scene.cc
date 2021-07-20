@@ -134,7 +134,7 @@ void Scene::Init() {
 //    this->house_model_ = make_shared<Model>("../Data/model/spot/uploads_files_2667772_Spot.glb");
 //    this->house_model_ = make_shared<Model>("../Data/model/rocket/uploads_files_2652037_TheRocket.glb");
 //    this->house_model_ = make_shared<Model>("../Data/model/cerberus/Cerberus_LP.FBX");
-    this->house_model_ = make_shared<Model>("../Data/model/house/Cabin_Map.FBX");
+//    this->house_model_ = make_shared<Model>("../Data/model/house/Cabin_Map.FBX");
 
     // 渲染pass
     InitShadowpass();
@@ -256,7 +256,7 @@ void Scene::Render() {
 
         Shader model_shader = ResourceManager::GetShader(kPbrModel);
         model_shader.Use();
-//        this->house_model_->Render(model_shader, view, projection);
+        this->house_model_->Render(model_shader, view, projection);
 
 //        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
 //        RenderReflectSphere(reflect_shader, view, projection);

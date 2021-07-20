@@ -40,7 +40,7 @@ private:
      */
     void InitVAO();
 
-    void SetShaderAttributes(Shader &shader, const std::string name);
+    void SetShaderAttributes(Shader &shader, const std::vector<std::string> &names);
 };
 
 

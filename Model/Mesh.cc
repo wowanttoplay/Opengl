@@ -3,31 +3,33 @@
 //
 
 #include "Mesh.h"
+#include "../Log/LogUtil.h"
 
 using namespace std;
 
 
 void Mesh::Render(Shader shader) {
     shader.Use();
-    SetShaderAttributes(shader, "albedo");
-    SetShaderAttributes(shader, "normal");
-    SetShaderAttributes(shader, "metallic");
-    SetShaderAttributes(shader, "roughness");
-    SetShaderAttributes(shader, "ao");
+    vector<string> str_vec = {"albedo", "normal", "metallic", "roughness", "ao"};
+
+    SetShaderAttributes(shader, str_vec);
 
     glBindVertexArray(this->VAO_);
     glDrawElements(GL_TRIANGLES, indices_.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
-void Mesh::SetShaderAttributes(Shader &shader, const string name) {
-    shader.SetVector3f(name.c_str(), material_[name]->data);
-    if (material_["albedo"]->texture) {
-        glActiveTexture(GL_TEXTURE0);
-        material_["albedo"]->texture->Bind();
-        shader.SetInteger(("b_" + name + "_texture").c_str(), GL_TRUE);
-    } else {
-        shader.SetInteger(("b_" + name + "_texture").c_str(), GL_FALSE);
+void Mesh::SetShaderAttributes(Shader &shader, const vector<string> &names) {
+    for (int i = 0; i < names.size(); ++i) {
+        const string &name = names.at(i);
+        shader.SetVector3f((name + "Data").c_str(), material_[name]->data);
+        if (material_[name]->texture) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            material_[name]->texture->Bind();
+            shader.SetInteger(("b_" + name + "_texture").c_str(), GL_TRUE);
+        } else {
+            shader.SetInteger(("b_" + name + "_texture").c_str(), GL_FALSE);
+        }
     }
 }
 

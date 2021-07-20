@@ -10,6 +10,7 @@ uniform vec3 albedoData;
 uniform vec3 metallicData;
 uniform vec3 aoData;
 uniform vec3 roughnessData;
+uniform vec3 normalData;
 
 // 是否有相关纹理
 uniform bool b_albedo_texture;//是否有相关纹理
@@ -56,7 +57,7 @@ void main() {
   vec2 realTexCoords = TexCoords;
   vec3 albedo = albedoData;
   if (b_albedo_texture) {
-    albedo *= pow(texture(albedoMap, realTexCoords).rgb, vec3(2.2));
+    albedo = pow(texture(albedoMap, realTexCoords).rgb, vec3(2.2));
     }
 
     float metallic = metallicData.r;
@@ -73,7 +74,6 @@ void main() {
     if (b_ao_texture) {
         ao  = texture(aoMap, realTexCoords).r;
     }
-    ao = 1.0;
 
   vec3 L0 = vec3(0.0);
   vec3 N = Normal;
@@ -116,7 +116,7 @@ void main() {
   vec3 color = vec3(0.0);
   // 计算阴影影响下的反射光
   float shadow = ShadowCalculate(FragPos);
-  color += L0 * (1.0 - shadow);
+  color += L0 * (1.0 - 0.0);
 
   //加上IBL
   // IBL产生的折射部分
@@ -135,7 +135,6 @@ void main() {
   vec3 ambient = (kd * diffuse + IBL_specular) * ao;
   color += ambient;
 
-    color = radiance;
   FragColor = vec4(color, 1.0);
 }
 

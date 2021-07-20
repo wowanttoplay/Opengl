@@ -82,8 +82,10 @@ void Model::LoadMeshTextures(const aiMesh *mesh, const aiScene *scene, map<strin
     materials["metallic"] = make_shared<Material>();
     // paramter
     material->Get(AI_MATKEY_COLOR_DIFFUSE, materials["albedo"]->data);
-    material->Get(AI_MATKEY_COLOR_SPECULAR, materials["roughness"]->data);
-    material->Get(AI_MATKEY_COLOR_AMBIENT, materials["ao"]->data);
+    materials["roughness"]->data = glm::vec3(0.0);
+    materials["ao"]->data = glm::vec3(1.0);
+//    material->Get(AI_MATKEY_COLOR_SPECULAR, materials["roughness"]->data);
+//    material->Get(AI_MATKEY_COLOR_AMBIENT, materials["ao"]->data);
     materials["normal"]->data = glm::vec3(0.0); // 无效值，只是为了统一
     materials["metallic"]->data = glm::vec3(0.0); // 默认不是金属
 
@@ -151,6 +153,7 @@ void Model::LoadMeshVertices(const aiMesh *mesh, vector<Vertex> &vertices) const
 std::vector<std::shared_ptr<Texture2D>>
 Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string &type_name) {
     vector<shared_ptr<Texture2D>> textures;
+
 
     for (int i = 0; i < mat->GetTextureCount(type); ++i) {
         logI("%s find texture type :%s", path_.c_str(), type_name.c_str());
