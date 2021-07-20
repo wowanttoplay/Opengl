@@ -12,6 +12,9 @@ BasicQuadProcess::BasicQuadProcess(float width, float height) : width_(width), h
 
 void BasicQuadProcess::InitFBO() {
     glGenFramebuffers(1, &this->FBO_);
+    this->texture_.Wrap_S = GL_CLAMP_TO_EDGE;
+    this->texture_.Wrap_T = GL_CLAMP_TO_EDGE;
+    this->texture_.Filter_Min = GL_LINEAR;
     this->texture_.Generate(width_, height_, (float *) 0);
     unsigned int rboDepth;
     glGenRenderbuffers(1, &rboDepth);

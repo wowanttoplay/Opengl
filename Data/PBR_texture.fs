@@ -110,7 +110,7 @@ void main() {
   const float kMaxMipLevels = 4.0;
   vec3 R = reflect(-V, N);
   vec3 prefilter_color = textureLod(prefilterMap, R, roughness * kMaxMipLevels).rgb;
-  vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+  vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.00), roughness)).rg;
   vec3 IBL_specular = prefilter_color * (ks * brdf.x + brdf.y);
 
   vec3 ambient = (kd * diffuse + IBL_specular) * ao;

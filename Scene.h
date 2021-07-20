@@ -116,5 +116,7 @@ private:
     void InitNormalLightShader() const;
 
     void RenderSky(const glm::mat4 &view, const glm::mat4 &projection);
+
+    void BRDFRender(const glm::mat4 &view, const glm::mat4 &projection);
 };
 

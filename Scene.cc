@@ -264,6 +264,10 @@ void Scene::Render() {
 //        RenderPreflitterSphere(reflect_shader, view, projection);
         // sky
         RenderSky(view, projection);
+
+        // render brdf
+//        BRDFRender(view, projection);
+
     });
 
     if (b_open_blur_) {
@@ -273,6 +277,18 @@ void Scene::Render() {
     } else {
         this->hdr_pass_->HDRRender();
     }
+}
+
+void Scene::BRDFRender(const glm::mat4 &view, const glm::mat4 &projection) {
+    Shader texture_shader = ResourceManager::GetShader(kTextureShaderName);
+    texture_shader.Use();
+    glActiveTexture(GL_TEXTURE0);
+    texture_shader.SetInteger("texture0", 0);
+    texture_shader.SetMatrix4("model", glm::mat4(2.0));
+    texture_shader.SetMatrix4("view", view);
+    texture_shader.SetMatrix4("projection", projection);
+    brdf_process_->texture_.Bind();
+    plane->Render(texture_shader);
 }
 
 
