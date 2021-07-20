@@ -19,7 +19,7 @@ void Model::Render(Shader shader, glm::mat4 view, glm::mat4 projection) {
     shader.SetMatrix4("projection", projection);
     glm::mat4 model = glm::mat4(1.0);
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
-    model = glm::scale(model, glm::vec3(0.05));
+    model = glm::scale(model, glm::vec3(0.1));
     shader.SetMatrix4("model", model);
     for (int i = 0; i < meshes_.size(); ++i) {
         meshes_.at(i).Render(shader);
@@ -155,17 +155,28 @@ Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::stri
     vector<shared_ptr<Texture2D>> textures;
 
 
-    for (int i = 0; i < mat->GetTextureCount(type); ++i) {
+//    for (int i = 0; i < mat->GetTextureCount(type); ++i) {
         logI("%s find texture type :%s", path_.c_str(), type_name.c_str());
         aiString file_path;
-        mat->GetTexture(type, i, &file_path);
+        mat->GetTexture(type, 0, &file_path);
         string real_path = path_;
         real_path = real_path.substr(0, real_path.rfind('/') + 1);
-        real_path += file_path.C_Str();
+//        real_path += file_path.C_Str();
+        if (type == aiTextureType_DIFFUSE) {
+            real_path += "Textures/Cerberus_A.tga";
+        }else if (type == aiTextureType_SPECULAR) {
+            real_path += "Textures/Cerberus_R.tga";
+        }else if (type == aiTextureType_NORMALS) {
+            real_path += "Textures/Cerberus_N.tga";
+        }else if (type == aiTextureType_UNKNOWN) {
+            real_path += "Textures/Cerberus_M.tga";
+        }else if (type == aiTextureType_AMBIENT) {
+//            real_path += "AO.tif";
+            return vector<shared_ptr<Texture2D>>();
+        }
         if (real_path.rfind("\\") != real_path.npos) {
             real_path = real_path.replace(real_path.rfind("\\"), 1, "/");
         }
-
 
         if (ResourceManager::GetTexture(real_path)) {
             textures.push_back(ResourceManager::GetTexture(real_path));
@@ -176,6 +187,6 @@ Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::stri
             }
         }
         textures.back()->name = type_name;
-    }
+//    }
     return textures;
 }

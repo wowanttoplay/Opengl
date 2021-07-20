@@ -133,8 +133,7 @@ void Scene::Init() {
     PBR_sphere = make_shared<Sphere>(30, 30);
 //    this->house_model_ = make_shared<Model>("../Data/model/spot/uploads_files_2667772_Spot.glb");
 //    this->house_model_ = make_shared<Model>("../Data/model/rocket/uploads_files_2652037_TheRocket.glb");
-//    this->house_model_ = make_shared<Model>("../Data/model/cerberus/Cerberus_LP.FBX");
-//    this->house_model_ = make_shared<Model>("../Data/model/house/Cabin_Map.FBX");
+    this->house_model_ = make_shared<Model>("../Data/model/cerberus/Cerberus_LP.FBX");
 
     // 渲染pass
     InitShadowpass();
@@ -465,6 +464,12 @@ void Scene::Update(float dt) {
     PBR_texture_shader.SetVector3f("cameraPosition", camera_position);
     PBR_texture_shader.SetVector3f("lightPosition", light_position);
     PBR_texture_shader.SetVector3f("light_color", light_color);
+
+    Shader pbr_model_shader = ResourceManager::GetShader(kPbrModel);
+    pbr_model_shader.Use();
+    pbr_model_shader.SetVector3f("cameraPosition", camera_position);
+    pbr_model_shader.SetVector3f("lightPosition", light_position);
+    pbr_model_shader.SetVector3f("light_color", light_color);
 }
 
 void Scene::process_key(int key, int action) {
