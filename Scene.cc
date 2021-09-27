@@ -130,7 +130,7 @@ void Scene::RenderBox(Shader &shadow_texture_light) {// box
     for (int i = 0; i < box_num; ++i) {
         glm::mat4 box_model = glm::mat4(1.0f);
         box_model = glm::translate(box_model, box_position + glm::vec3(i * 1.1, 0, -i * 1.3));
-        box_model = glm::scale(box_model, glm::vec3(1.0f,1.5f,1.0f));
+        box_model = glm::scale(box_model, glm::vec3(1.0f,3.0f,1.0f));
         shadow_texture_light.SetMatrix4("model", box_model);
         box_vec.at(i)->Render(shadow_texture_light);
     }
