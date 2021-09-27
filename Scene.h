@@ -46,34 +46,26 @@ private:
     std::shared_ptr<ThreadPool> thread_pool_;
 
     std::shared_ptr<Plane> plane = nullptr;
-    std::shared_ptr<Plane> reflect_plane = nullptr;
     std::vector<std::shared_ptr<Box>> box_vec;
     std::shared_ptr<Sphere>light = nullptr;
     std::shared_ptr<Sphere>refract_sphere = nullptr; //表现折射的球
-    std::shared_ptr<Sphere> reflect_sphere = nullptr; //表现反射的球
     std::shared_ptr<Sphere> PBR_sphere = nullptr; //表现PBR效果的球
 
     std::shared_ptr<ShadowProcess> shadow_pass_; // 阴影渲染
 
-    std::shared_ptr<ColorCubeProcess> reflect_cube_pass_; // 镜像渲染
-    std::shared_ptr<ColorCubeProcess> refract_cube_pass_; // 折射渲染
     std::shared_ptr<HDRProcess> hdr_pass_; // hd处理
 
     void RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
-    void RenderRefractPlane(Shader& shader, const glm::mat4& view, const glm::mat4 &projection);
 
     void RenderBox(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderLight(const glm::mat4 &view, const glm::mat4 &projection);
-
-    void RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
     void RenderInrradianceSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
     void RenderPreflitterSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
 
     void RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection);
-
 
 private:
     bool b_open_blur_ = true; //是否开启混合效果（按k键）
@@ -83,7 +75,7 @@ private:
 
     // 模型
 private:
-    std::shared_ptr<Model> house_model_;
+    std::shared_ptr<Model> gun_model_;
 
 private:
     std::shared_ptr<Box> sky_box_;
@@ -112,8 +104,6 @@ private:
     void InitShadowpass();
 
     std::shared_ptr <ColorCubeProcess> GenerateCubepass(float width, float height, bool b_mipmap);
-
-    void InitNormalLightShader() const;
 
     void RenderSky(const glm::mat4 &view, const glm::mat4 &projection);
 

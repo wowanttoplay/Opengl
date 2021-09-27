@@ -95,7 +95,7 @@ void Scene::Init() {
     LoadPBRTexture(kGranite);
     LoadPBRTexture(kShinyMetal);
 //    LoadPBRTexture(kAngledTiledFloor);
-//    LoadPBRTexture(kFloorName);
+    LoadPBRTexture(kFloorName);
     ResourceManager::LoadTexture("../Data/Png/Topanga_Forest_B_3k.hdr", kSkyBoxHdr);
     ResourceManager::LoadShader("../Data/sky.vs", "../Data/sky.fs", nullptr, kSkyBoxGenerateShader);
     ResourceManager::LoadShader("../Data/sky.vs", "../Data/irradiance.fs", nullptr, kIrradianceGenerateShader);
@@ -110,8 +110,6 @@ void Scene::Init() {
     ResourceManager::LoadShader("../Data/sky_box.vs", "../Data/sky_box.fs", nullptr, kSkyBoxRender);
     ResourceManager::LoadShader("../Data/Sphere.vs", "../Data/sphere_reflect.fs", nullptr, kReflectShader);
     ResourceManager::LoadShader("../Data/texture.vs", "../Data/texture.fs", nullptr, kTextureShaderName);
-    // init shadow render
-    InitNormalLightShader();
 
     // init PBR shader
     InitNormalPBRShader();
@@ -122,24 +120,17 @@ void Scene::Init() {
     InitPBRModelShader();
 
     this->plane = std::make_shared<Plane>();
-    this->reflect_plane = std::make_shared<Plane>();
     for (int i = 0; i < box_num; ++i) {
         box_vec.emplace_back(make_shared<Box>());
     }
     sky_box_ = std::make_shared<Box>();
     light = make_shared<Sphere>(20, 20);
     refract_sphere = make_shared<Sphere>(30, 30);
-    reflect_sphere = make_shared<Sphere>(30, 30);
     PBR_sphere = make_shared<Sphere>(30, 30);
-//    this->house_model_ = make_shared<Model>("../Data/model/spot/uploads_files_2667772_Spot.glb");
-//    this->house_model_ = make_shared<Model>("../Data/model/rocket/uploads_files_2652037_TheRocket.glb");
-    this->house_model_ = make_shared<Model>("../Data/model/cerberus/Cerberus_LP.FBX");
+    this->gun_model_ = make_shared<Model>("../Data/model/cerberus/Cerberus_LP.FBX");
 
     // 渲染pass
     InitShadowpass();
-
-    this->reflect_cube_pass_ = GenerateCubepass(1024, 1024, false);
-    this->refract_cube_pass_ = GenerateCubepass(1024, 1024, false);
     this->sky_process_ = GenerateCubepass(1024, 1024, true);
     this->irradiance_process_ = GenerateCubepass(32, 32, false);
     this->prefiltter_process_ = GenerateCubepass(512, 512, true);
@@ -150,24 +141,6 @@ void Scene::Init() {
     InitIrradiance();
     InitPreflitter();
     InitBRDF();
-}
-
-void Scene::InitNormalLightShader() const {
-    Shader shadow_texture_light = ResourceManager::LoadShader("../Data/shadow_texture_light.vs",
-                                                              "../Data/shadow_texture_light.fs", nullptr,
-                                                              kShadowTextureLightShaderName);
-
-    shadow_texture_light.Use();
-    shadow_texture_light.SetInteger("texture0", 0);
-    shadow_texture_light.SetInteger("depth_texture", 1);
-    shadow_texture_light.SetInteger("reflect_cube_map", 2);
-    shadow_texture_light.SetInteger("refract_cube_map", 3);
-    shadow_texture_light.SetFloat("far_plane", kShadowFarPlane);
-    shadow_texture_light.SetInteger("b_reflected", false);
-    shadow_texture_light.SetInteger("b_refracted", false);
-    shadow_texture_light.SetFloat("material.ambient_ratio", 0.05);
-    shadow_texture_light.SetFloat("material.diffuse_ratio", 1.0);
-    shadow_texture_light.SetFloat("material.specular_ratio", 32.0);
 }
 
 shared_ptr<ColorCubeProcess> Scene::GenerateCubepass(float width, float height, bool b_mipmap) {
@@ -226,7 +199,8 @@ void Scene::Render() {
         shadow_map_shader.SetVector3f("light_position", light_position);
         shadow_map_shader.SetFloat("far_plane", kShadowFarPlane);
         this->RenderPBRSphere(shadow_map_shader, view, projection);
-        this->house_model_->Render(shadow_map_shader, glm::mat4(), glm::mat4());
+        RenderPlane(shadow_map_shader, view, projection);
+        this->gun_model_->Render(shadow_map_shader, glm::mat4(), glm::mat4());
     });
 
     //正常渲染
@@ -251,14 +225,14 @@ void Scene::Render() {
         this->brdf_process_->texture_.Bind();
         RenderPBRSphere(PBR_texture_shader, view, projection);
 
-
+        RenderPlane(PBR_texture_shader, view ,projection);
 
         Shader model_shader = ResourceManager::GetShader(kPbrModel);
         model_shader.Use();
-        this->house_model_->Render(model_shader, view, projection);
+        this->gun_model_->Render(model_shader, view, projection);
 
-//        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
-//        RenderReflectSphere(reflect_shader, view, projection);
+        Shader reflect_shader = ResourceManager::GetShader(kReflectShader);
+        RenderReflectSphere(reflect_shader, view, projection);
 //        RenderInrradianceSphere(reflect_shader, view, projection);
 //        RenderPreflitterSphere(reflect_shader, view, projection);
         // sky
@@ -290,13 +264,12 @@ void Scene::BRDFRender(const glm::mat4 &view, const glm::mat4 &projection) {
     plane->Render(texture_shader);
 }
 
-
 void Scene::RenderReflectSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.Use();
     shader.SetMatrix4("view", view);
     shader.SetMatrix4("projection", projection);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, this->sky_process_->color_cube_map_);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->shadow_pass_->depth_cube_map_);
     glm::mat4 refract_sphere_model = glm::mat4(1.0f);
     refract_sphere_model = glm::translate(refract_sphere_model, reflect_sphere_position);
     shader.SetMatrix4("Model", refract_sphere_model);
@@ -311,18 +284,6 @@ void Scene::RenderInrradianceSphere(Shader &shader, const glm::mat4 &view, const
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->irradiance_process_->color_cube_map_);
     glm::mat4 refract_sphere_model = glm::mat4(1.0f);
     refract_sphere_model = glm::translate(refract_sphere_model, inrradiance_sphere_position);
-    shader.SetMatrix4("Model", refract_sphere_model);
-    refract_sphere->Render(shader);
-}
-
-
-void Scene::RenderRefractSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
-    shader.SetMatrix4("view", view);
-    shader.SetMatrix4("projection", projection);
-    glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kGlassTextureName)->Bind();
-    glm::mat4 refract_sphere_model = glm::mat4(1.0f);
-    refract_sphere_model = glm::translate(refract_sphere_model, refract_sphere_position);
     shader.SetMatrix4("Model", refract_sphere_model);
     refract_sphere->Render(shader);
 }
@@ -359,9 +320,10 @@ void Scene::RenderPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &
     shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("view", view);
     BindPBRTexture(kFloorName);
-
     glm::mat4 plane_model = glm::mat4(1.0f);
-    shader.SetMatrix4("Model", plane_model);
+    plane_model = glm::rotate(plane_model, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+    plane_model = glm::scale(plane_model, glm::vec3(100.0));
+    shader.SetMatrix4("model", plane_model);
     plane->Render(shader);
 }
 
@@ -392,20 +354,6 @@ void Scene::BindPBRTexture(const string &texture_name) const {
 //    }
 }
 
-void Scene::RenderRefractPlane(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
-    shader.Use();
-    shader.SetMatrix4("projection", projection);
-    shader.SetMatrix4("view", view);
-    glActiveTexture(GL_TEXTURE0);
-    ResourceManager::GetTexture(kGlassTextureName)->Bind();
-    glm::mat4 plane_model = glm::mat4(1.0f);
-    plane_model = glm::translate(plane_model, refract_sphere_position);
-    plane_model = glm::rotate(plane_model, glm::radians(90.f), glm::vec3(1.0, 0.0, 0.0));
-    plane_model = glm::scale(plane_model, glm::vec3(0.06, 0.06, 0.06));
-    shader.SetMatrix4("Model", plane_model);
-    plane->Render(shader);
-}
-
 void Scene::RenderPBRSphere(Shader &shader, const glm::mat4 &view, const glm::mat4 &projection) {
     shader.Use();
     vector<string> spheres{kMetalname, kGranite, kShinyMetal};
@@ -434,24 +382,11 @@ void Scene::Update(float dt) {
     looked_position = camera_position + looked_direction;
     // 更新light的相关属性
     light_position = light_center + glm::vec3(sin(dt / 3) * light_move_radius, 0, cos(dt / 3) * light_move_radius);
-//    light_color = light_base_color + glm::vec3(0, -sin(dt)*0.8, -cos(dt)*0.8);
-    Shader light_shader = ResourceManager::GetShader(kLight);
-    light_shader.Use();
-    light_shader.SetVector3f("color", light_color);
 
     // 更新渲染的相关属性
     plane->Update(dt);
     // 更新render pass中光源的位置，实时更改shadow map
     this->shadow_pass_->SetLightPosition(light_position);
-    // 设置阴影、纹理、光照的着色器
-    Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
-    shadow_texture_light.Use();
-    shadow_texture_light.SetVector3f("light.position", light_position);
-    shadow_texture_light.SetVector3f("light.color", light_color);
-    shadow_texture_light.SetFloat("light.constant", light_constant);
-    shadow_texture_light.SetFloat("light.linear", light_linear);
-    shadow_texture_light.SetFloat("light.quadratic", light_quadratic);
-    shadow_texture_light.SetVector3f("cameraPosition", camera_position);
     // 设置PBR着色器
     Shader PBR_shader = ResourceManager::GetShader(kPBR);
     PBR_shader.Use();

@@ -18,7 +18,8 @@ void Model::Render(Shader shader, glm::mat4 view, glm::mat4 projection) {
     shader.SetMatrix4("view", view);
     shader.SetMatrix4("projection", projection);
     glm::mat4 model = glm::mat4(1.0);
-    model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+//    model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+    model = glm::translate(model, glm::vec3(0.0, 15.0, 0.0));
     model = glm::scale(model, glm::vec3(0.1));
     shader.SetMatrix4("model", model);
     for (int i = 0; i < meshes_.size(); ++i) {
