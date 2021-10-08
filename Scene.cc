@@ -177,6 +177,7 @@ void Scene::Update(float dt) {
     // 设置阴影、纹理、光照的着色器
     Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
     shadow_texture_light.Use();
+
     shadow_texture_light.SetVector3f("light.position", light_position);
     shadow_texture_light.SetVector3f("light.color", light_color);
     shadow_texture_light.SetFloat("light.constant", light_constant);
@@ -208,6 +209,18 @@ void Scene::process_key(int key, int action) {
         looked_direction += glm::vec3(0, 1, 0);
     } else if (key == GLFW_KEY_V && action == GLFW_PRESS) {
         looked_direction += glm::vec3(0, -1, 0);
+    } else if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
+        shadow_texture_light.Use();
+        shadow_texture_light.SetInteger("shadow_type", 0);
+    } else if (key == GLFW_KEY_N && action == GLFW_PRESS) {
+        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
+        shadow_texture_light.Use();
+        shadow_texture_light.SetInteger("shadow_type", 1);
+    } else if (key == GLFW_KEY_M && action == GLFW_PRESS) {
+        Shader shadow_texture_light = ResourceManager::GetShader(kShadowTextureLightShaderName);
+        shadow_texture_light.Use();
+        shadow_texture_light.SetInteger("shadow_type", 2);
     }
 
     logE("printf camara info");
