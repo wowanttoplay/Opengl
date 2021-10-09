@@ -4,7 +4,7 @@
 
 #PBR效果
 
-
+<img src="/Users/virgil/Opengl/README.assets/截屏2021-10-10 上午12.59.56.png" alt="截屏2021-10-10 上午12.59.56" style="zoom:50%;" />
 
 #阴影效果对比
 
