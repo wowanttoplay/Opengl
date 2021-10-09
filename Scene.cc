@@ -14,7 +14,7 @@
 
 using namespace std;
 
-const uint32_t box_num = 2;
+const uint32_t box_num = 1;
 const std::string kFloorName = "floor";
 
 const std::string kBoxName = "Wall";
@@ -28,12 +28,13 @@ const float near_plane = 0.1f, far_plane = 100.f;
 //box
 glm::vec3 box_position = glm::vec3(0.0f, 0.0f, 0.0f);
 // light
-const glm::vec3 light_center = glm::vec3(0.0f, 8.0f, 0.0f);;
+const glm::vec3 light_center = glm::vec3(0.0f, 30.0f, 0.0f);
+const float light_radius = 0.3f;
 glm::vec3 light_position = light_center;
-const glm::vec3 light_base_color = glm::vec3(1.0f, 1.0f, 1.0f);
+const glm::vec3 light_base_color = glm::vec3(3.0f, 3.0f, 3.0f);
 glm::vec3 light_color = light_base_color;
 float light_constant = 1.0f, light_linear = 0.045f, light_quadratic = 0.0075f;
-const float light_move_radius = 5.0f;
+const float light_move_radius = 10.0f;
 //shadow
 const float kShadowFarPlane = 100.0f;
 
@@ -110,7 +111,7 @@ void Scene::RenderLight() {
     light_shader.Use();
     glm::mat4 light_model = glm::mat4(1.0);
     light_model = glm::translate(light_model, light_position);
-    light_model = glm::scale(light_model, glm::vec3(0.5f));
+    light_model = glm::scale(light_model, glm::vec3(light_radius));
     light_shader.SetMatrix4("model", light_model);
     light_shader.SetMatrix4("view", view);
     light_shader.SetMatrix4("projection", projection);
@@ -130,7 +131,7 @@ void Scene::RenderBox(Shader &shadow_texture_light) {// box
     for (int i = 0; i < box_num; ++i) {
         glm::mat4 box_model = glm::mat4(1.0f);
         box_model = glm::translate(box_model, box_position + glm::vec3(i * 1.1, 0, -i * 1.3));
-        box_model = glm::scale(box_model, glm::vec3(1.0f,3.0f,1.0f));
+        box_model = glm::scale(box_model, glm::vec3(1.0f,10.0f,1.0f));
         shadow_texture_light.SetMatrix4("model", box_model);
         box_vec.at(i)->Render(shadow_texture_light);
     }
@@ -183,7 +184,9 @@ void Scene::Update(float dt) {
     shadow_texture_light.SetFloat("light.constant", light_constant);
     shadow_texture_light.SetFloat("light.linear", light_linear);
     shadow_texture_light.SetFloat("light.quadratic", light_quadratic);
+    shadow_texture_light.SetFloat("light.radius", light_radius);
     shadow_texture_light.SetVector3f("cameraPosition", camera_position);
+
 
 }
 
