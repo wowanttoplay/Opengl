@@ -10,11 +10,11 @@
 
 使用分支shadow,快捷键是B->hard shadow, N->PCL, M->PCSS
 
-<img src="/Users/virgil/Opengl/README.assets/截屏2021-10-10 上午12.32.20.png" alt="截屏2021-10-10 上午12.32.20" style="zoom:50%;" />
+https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.32.20.png
 
-<img src="/Users/virgil/Opengl/README.assets/截屏2021-10-10 上午12.32.29.png" alt="截屏2021-10-10 上午12.32.29" style="zoom:50%;" />
+https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.32.29.png
 
-<img src="/Users/virgil/Opengl/README.assets/截屏2021-10-10 上午12.32.38.png" alt="截屏2021-10-10 上午12.32.38" style="zoom:50%;" />
+https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.32.38.png
 
 # 实时光追
 
