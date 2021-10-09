@@ -8,6 +8,10 @@
 
 #阴影效果对比
 
+使用分支shadow,快捷键是B->hard shadow, N->PCL, M->PCSS
+
+
+
 
 
 #实时光追
