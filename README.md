@@ -4,7 +4,7 @@
 
 #PBR效果
 
-<img src="/Users/virgil/Opengl/README.assets/截屏2021-10-10 上午12.59.56.png" alt="截屏2021-10-10 上午12.59.56" style="zoom:50%;" />
+![image](https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.59.56.png)
 
 #阴影效果对比
 
