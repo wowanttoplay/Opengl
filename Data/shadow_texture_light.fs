@@ -65,7 +65,7 @@ void main() {
   float distance = length(light.position - fs_in.FragPos);
   float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
   // frag color,考虑光衰减和阴影
-  fragcolor = vec4(vec3(ambient + (diffuse + specular) * (1 - shadow)) * attenuation, 1.0);
+  fragcolor = vec4(vec3(ambient + (diffuse + specular) * (1 - shadow) * attenuation), 1.0);
 }
 
 float NomralShadowCalculate(vec3 fragPosition) {
