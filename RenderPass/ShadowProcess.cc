@@ -39,7 +39,7 @@ void ShadowProcess::ConfigShaderAndMatrix(Shader shader) {
     shadowTransforms.push_back(projection * glm::lookAt(light_position_, light_position_ + glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)));
     shadowTransforms.push_back(projection * glm::lookAt(light_position_, light_position_ + glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)));
     shadowTransforms.push_back(projection * glm::lookAt(light_position_, light_position_ + glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f)));
-    //set shader
+    //set Shader
     shader.Use();
     for (int i = 0; i < 6; ++i) {
         string mat_name = "shadowMatrices[" + to_string(i) + "]";

@@ -4,15 +4,16 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/Users/virgil/Opengl/Camera.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Camera.cc.o"
   "/Users/virgil/Opengl/RenderObject/Box.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Box.cc.o"
   "/Users/virgil/Opengl/RenderObject/Plane.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"
   "/Users/virgil/Opengl/RenderObject/Sphere.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o"
   "/Users/virgil/Opengl/RenderPass/ShadowProcess.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o"
   "/Users/virgil/Opengl/ResourceManager.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/ResourceManager.cc.o"
   "/Users/virgil/Opengl/Scene.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Scene.cc.o"
-  "/Users/virgil/Opengl/Shader.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Shader.cc.o"
   "/Users/virgil/Opengl/Texture2D.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Texture2D.cc.o"
   "/Users/virgil/Opengl/main.cpp" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/main.cpp.o"
+  "/Users/virgil/Opengl/shader.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/shader.cc.o"
   "/Users/virgil/Opengl/window/Window.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/window/Window.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")

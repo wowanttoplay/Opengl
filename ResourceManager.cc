@@ -75,7 +75,7 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
     }
     catch (std::exception e)
     {
-        LOG(INFO) << "ERROR::SHADER: Failed to read shader files";
+        LOG(INFO) << "ERROR::SHADER: Failed to read Shader files";
     }
     const GLchar *vShaderCode = vertexCode.c_str();
     const GLchar *fShaderCode = fragmentCode.c_str();

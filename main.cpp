@@ -19,7 +19,7 @@ bool InitGlew() {
 
 int main(int argc, char* argv[]) {
     google::InitGoogleLogging(argv[0]);
-    google::SetStderrLogging(google::ERROR);
+    google::SetStderrLogging(google::INFO);
     FLAGS_colorlogtostderr = true;
 
     GLFWwindow *window = Window::InitGLFWWindow();
@@ -33,21 +33,29 @@ int main(int argc, char* argv[]) {
     glViewport(0, 0, width, height);
 
     Scene scene(width, height);
-    scene.Init();
 
-    function<void(int,int)>func = [&scene](int key, int action)->void{
-        scene.process_key(key, action);
+    function<void(int,int)>key_func = [&scene](int key, int action)->void{
+        scene.ProcessKey(key, action);
     };
-    Window::func = &func;
-    glEnable(GL_DEPTH_TEST);
+    function<void(double, double)> mouse_func = [&scene](double x, double y)->void{
+        scene.MouseCallBack(x, y);
+    };
+    function<void(double, double)> mouse_scroll_func = [&scene](double x, double y)->void{
+        scene.MouseScrollCallBack(x, y);
+    };
 
+
+    Window::window_key_func = &key_func;
+    Window::window_mouse_func = &mouse_func;
+    Window::window_mouse_scroll_func = &mouse_scroll_func;
+
+    glEnable(GL_DEPTH_TEST);
     // render
     while (!glfwWindowShouldClose(const_cast<GLFWwindow*>(window))) {
         glClearColor(0.2, 0.2 ,0.2 ,1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         scene.Update((float)glfwGetTime());
         scene.Draw();
-
         glfwSwapBuffers(const_cast<GLFWwindow*>(window));
         glfwPollEvents();
     }

@@ -89,8 +89,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/local/Cellar/cmake/3.21.2/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -142,6 +142,33 @@ Opengl: cmake_check_build_system
 Opengl/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/build
 .PHONY : Opengl/fast
+
+Camera.o: Camera.cc.o
+
+.PHONY : Camera.o
+
+# target to build an object file
+Camera.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Camera.cc.o
+.PHONY : Camera.cc.o
+
+Camera.i: Camera.cc.i
+
+.PHONY : Camera.i
+
+# target to preprocess a source file
+Camera.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Camera.cc.i
+.PHONY : Camera.cc.i
+
+Camera.s: Camera.cc.s
+
+.PHONY : Camera.s
+
+# target to generate assembly for a file
+Camera.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Camera.cc.s
+.PHONY : Camera.cc.s
 
 RenderObject/Box.o: RenderObject/Box.cc.o
 
@@ -305,33 +332,6 @@ Scene.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Scene.cc.s
 .PHONY : Scene.cc.s
 
-Shader.o: Shader.cc.o
-
-.PHONY : Shader.o
-
-# target to build an object file
-Shader.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.o
-.PHONY : Shader.cc.o
-
-Shader.i: Shader.cc.i
-
-.PHONY : Shader.i
-
-# target to preprocess a source file
-Shader.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.i
-.PHONY : Shader.cc.i
-
-Shader.s: Shader.cc.s
-
-.PHONY : Shader.s
-
-# target to generate assembly for a file
-Shader.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.s
-.PHONY : Shader.cc.s
-
 Texture2D.o: Texture2D.cc.o
 
 .PHONY : Texture2D.o
@@ -386,6 +386,33 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+shader.o: shader.cc.o
+
+.PHONY : shader.o
+
+# target to build an object file
+shader.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/shader.cc.o
+.PHONY : shader.cc.o
+
+shader.i: shader.cc.i
+
+.PHONY : shader.i
+
+# target to preprocess a source file
+shader.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/shader.cc.i
+.PHONY : shader.cc.i
+
+shader.s: shader.cc.s
+
+.PHONY : shader.s
+
+# target to generate assembly for a file
+shader.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/shader.cc.s
+.PHONY : shader.cc.s
+
 window/Window.o: window/Window.cc.o
 
 .PHONY : window/Window.o
@@ -422,6 +449,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Opengl"
+	@echo "... Camera.o"
+	@echo "... Camera.i"
+	@echo "... Camera.s"
 	@echo "... RenderObject/Box.o"
 	@echo "... RenderObject/Box.i"
 	@echo "... RenderObject/Box.s"
@@ -440,15 +470,15 @@ help:
 	@echo "... Scene.o"
 	@echo "... Scene.i"
 	@echo "... Scene.s"
-	@echo "... Shader.o"
-	@echo "... Shader.i"
-	@echo "... Shader.s"
 	@echo "... Texture2D.o"
 	@echo "... Texture2D.i"
 	@echo "... Texture2D.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... shader.o"
+	@echo "... shader.i"
+	@echo "... shader.s"
 	@echo "... window/Window.o"
 	@echo "... window/Window.i"
 	@echo "... window/Window.s"

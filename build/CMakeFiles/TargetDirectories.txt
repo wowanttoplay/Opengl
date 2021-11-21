@@ -1,3 +1,0 @@
-/Users/virgil/Opengl/build/CMakeFiles/rebuild_cache.dir
-/Users/virgil/Opengl/build/CMakeFiles/edit_cache.dir
-/Users/virgil/Opengl/build/CMakeFiles/Opengl.dir

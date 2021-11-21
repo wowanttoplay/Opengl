@@ -17,7 +17,7 @@ set(GLFW_LINK /usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.dylib)
 #set(ASSIMP_LINK /usr/local/Cellar/assimp/bin/libassimp.5.dylib)
 link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} )
 
-add_executable(Opengl main.cpp window/Window.cc window/Window.h Data/vertex_data.h Shader.cc Shader.h Texture2D.cc Texture2D.h ResourceManager.cc ResourceManager.h RenderObject/Plane.cc RenderObject/Plane.h Scene.cc Scene.h RenderObject/Box.cc RenderObject/Box.h RenderObject/Sphere.cc RenderObject/Sphere.h RenderPass/HDRProcess.h RenderPass/ShadowProcess.cc RenderPass/ShadowProcess.h)
+add_executable(Opengl main.cpp window/Window.cc window/Window.h Data/vertex_data.h Shader.cc Shader.h Texture2D.cc Texture2D.h ResourceManager.cc ResourceManager.h RenderObject/Plane.cc RenderObject/Plane.h Scene.cc Scene.h RenderObject/Box.cc RenderObject/Box.h RenderObject/Sphere.cc RenderObject/Sphere.h RenderPass/HDRProcess.h RenderPass/ShadowProcess.cc RenderPass/ShadowProcess.h Camera.cc Camera.h)
 target_link_libraries(Opengl glog::glog)
 
 if (APPLE)
