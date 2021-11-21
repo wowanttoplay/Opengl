@@ -3,8 +3,8 @@
 //
 
 #include "Shader.h"
-
-#include "Log/LogUtil.h"
+#include "glog/logging.h"
+using namespace google;
 
 void Shader::Use() const
 {
@@ -115,7 +115,8 @@ void Shader::checkCompileErrors(GLuint object, std::string type)
         if (!success)
         {
             glGetShaderInfoLog(object, 1024, NULL, infoLog);
-            logE("ERROR::SHADER: Compile-time error: Type: %s, info : %s\n", type.c_str(), infoLog);
+
+            LOG(INFO) << "HADER: Compile-time error: Type:" << type << "info : " << infoLog;
         }
     }
     else
@@ -124,7 +125,7 @@ void Shader::checkCompileErrors(GLuint object, std::string type)
         if (!success)
         {
             glGetProgramInfoLog(object, 1024, NULL, infoLog);
-            logE("ERROR::Shader: Link-time error: Type: %s, info : %s\n", type.c_str(), infoLog);
+            LOG(INFO) << "Shader: Link-time error: Type: " << type << "info : " << infoLog;
         }
     }
 }

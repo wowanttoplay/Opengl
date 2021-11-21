@@ -8,8 +8,8 @@
 #include <fstream>
 #define STB_IMAGE_IMPLEMENTATION
 #include "third/stb_image.h"
+#include "glog/logging.h"
 
-#include "Log/LogUtil.h"
 
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
@@ -77,7 +77,7 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
     }
     catch (std::exception e)
     {
-        logE("ERROR::SHADER: Failed to read shader files\n");
+        LOG(INFO) << "ERROR::SHADER: Failed to read shader files";
     }
     const GLchar *vShaderCode = vertexCode.c_str();
     const GLchar *fShaderCode = fragmentCode.c_str();

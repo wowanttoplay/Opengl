@@ -1,13 +1,9 @@
 
 #include <glew.h>
 #include <glfw3.h>
-#include <cmath>
 #include "window/Window.h"
-#include "Thread/ThreadPool.h"
-#include "Thread/Task.h"
-#include "Tool/PrintTool.h"
-#include "Log/LogUtil.h"
 #include "Scene.h"
+#include "glog/logging.h"
 
 bool InitGlew();
 
@@ -30,8 +26,10 @@ bool InitGlew() {
     return true;
 }
 
-int main() {
-    log_level = LogLevel::LogLevel_Error;
+int main(int argc, char* argv[]) {
+    google::InitGoogleLogging(argv[0]);
+    google::SetStderrLogging(google::WARNING);
+
     GLFWwindow *window = Window::InitGLFWWindow();
     if (window == nullptr) {
         return -1;

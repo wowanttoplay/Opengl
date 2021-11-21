@@ -143,33 +143,6 @@ Opengl/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/build
 .PHONY : Opengl/fast
 
-Log/LogUtil.o: Log/LogUtil.cc.o
-
-.PHONY : Log/LogUtil.o
-
-# target to build an object file
-Log/LogUtil.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Log/LogUtil.cc.o
-.PHONY : Log/LogUtil.cc.o
-
-Log/LogUtil.i: Log/LogUtil.cc.i
-
-.PHONY : Log/LogUtil.i
-
-# target to preprocess a source file
-Log/LogUtil.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Log/LogUtil.cc.i
-.PHONY : Log/LogUtil.cc.i
-
-Log/LogUtil.s: Log/LogUtil.cc.s
-
-.PHONY : Log/LogUtil.s
-
-# target to generate assembly for a file
-Log/LogUtil.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Log/LogUtil.cc.s
-.PHONY : Log/LogUtil.cc.s
-
 RenderObject/Box.o: RenderObject/Box.cc.o
 
 .PHONY : RenderObject/Box.o
@@ -386,87 +359,6 @@ Texture2D.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Texture2D.cc.s
 .PHONY : Texture2D.cc.s
 
-Thread/Task.o: Thread/Task.cc.o
-
-.PHONY : Thread/Task.o
-
-# target to build an object file
-Thread/Task.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Thread/Task.cc.o
-.PHONY : Thread/Task.cc.o
-
-Thread/Task.i: Thread/Task.cc.i
-
-.PHONY : Thread/Task.i
-
-# target to preprocess a source file
-Thread/Task.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Thread/Task.cc.i
-.PHONY : Thread/Task.cc.i
-
-Thread/Task.s: Thread/Task.cc.s
-
-.PHONY : Thread/Task.s
-
-# target to generate assembly for a file
-Thread/Task.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Thread/Task.cc.s
-.PHONY : Thread/Task.cc.s
-
-Thread/ThreadPool.o: Thread/ThreadPool.cc.o
-
-.PHONY : Thread/ThreadPool.o
-
-# target to build an object file
-Thread/ThreadPool.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o
-.PHONY : Thread/ThreadPool.cc.o
-
-Thread/ThreadPool.i: Thread/ThreadPool.cc.i
-
-.PHONY : Thread/ThreadPool.i
-
-# target to preprocess a source file
-Thread/ThreadPool.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.i
-.PHONY : Thread/ThreadPool.cc.i
-
-Thread/ThreadPool.s: Thread/ThreadPool.cc.s
-
-.PHONY : Thread/ThreadPool.s
-
-# target to generate assembly for a file
-Thread/ThreadPool.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.s
-.PHONY : Thread/ThreadPool.cc.s
-
-Tool/PrintTool.o: Tool/PrintTool.cc.o
-
-.PHONY : Tool/PrintTool.o
-
-# target to build an object file
-Tool/PrintTool.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o
-.PHONY : Tool/PrintTool.cc.o
-
-Tool/PrintTool.i: Tool/PrintTool.cc.i
-
-.PHONY : Tool/PrintTool.i
-
-# target to preprocess a source file
-Tool/PrintTool.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Tool/PrintTool.cc.i
-.PHONY : Tool/PrintTool.cc.i
-
-Tool/PrintTool.s: Tool/PrintTool.cc.s
-
-.PHONY : Tool/PrintTool.s
-
-# target to generate assembly for a file
-Tool/PrintTool.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Tool/PrintTool.cc.s
-.PHONY : Tool/PrintTool.cc.s
-
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -530,9 +422,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Opengl"
-	@echo "... Log/LogUtil.o"
-	@echo "... Log/LogUtil.i"
-	@echo "... Log/LogUtil.s"
 	@echo "... RenderObject/Box.o"
 	@echo "... RenderObject/Box.i"
 	@echo "... RenderObject/Box.s"
@@ -557,15 +446,6 @@ help:
 	@echo "... Texture2D.o"
 	@echo "... Texture2D.i"
 	@echo "... Texture2D.s"
-	@echo "... Thread/Task.o"
-	@echo "... Thread/Task.i"
-	@echo "... Thread/Task.s"
-	@echo "... Thread/ThreadPool.o"
-	@echo "... Thread/ThreadPool.i"
-	@echo "... Thread/ThreadPool.s"
-	@echo "... Tool/PrintTool.o"
-	@echo "... Tool/PrintTool.i"
-	@echo "... Tool/PrintTool.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

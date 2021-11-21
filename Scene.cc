@@ -7,10 +7,10 @@
 #include "RenderObject/Plane.h"
 #include "RenderObject/Box.h"
 #include "RenderObject/Sphere.h"
-
-#include "Log/LogUtil.h"
-#include "Tool/PrintTool.h"
 #include "RenderPass/ShadowProcess.h"
+#include "glm/ext.hpp"
+#include "glm/gtx/string_cast.hpp"
+#include "glog/logging.h"
 
 using namespace std;
 
@@ -148,7 +148,6 @@ void Scene::RenderPlane(Shader &shadow_texture_light) {//plane
 void Scene::SetView(float width, float height) {
     this->scene_width = width;
     this->scene_height = height;
-    logI("scene width: %f, height :%f", width, height);
 }
 
 void Scene::Update(float dt) {
@@ -191,7 +190,6 @@ void Scene::Update(float dt) {
 }
 
 void Scene::process_key(int key, int action) {
-    logE("scene, press key : %d", key);
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {
         camera_position += glm::vec3(0.0, 0.0, -1.0);
     } else if (key == GLFW_KEY_S && action == GLFW_PRESS) {
@@ -225,8 +223,4 @@ void Scene::process_key(int key, int action) {
         shadow_texture_light.Use();
         shadow_texture_light.SetInteger("shadow_type", 2);
     }
-
-    logE("printf camara info");
-    tool::Print(camera_position);
-    tool::Print(looked_direction);
 }

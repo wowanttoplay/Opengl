@@ -4,7 +4,6 @@
 
 #include "Plane.h"
 #include "../Data/vertex_data.h"
-#include "../Log/LogUtil.h"
 
 Plane::Plane() {
     // generate VAO

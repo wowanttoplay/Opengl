@@ -3,8 +3,6 @@
 //
 
 #include "Sphere.h"
-#include "../Log/LogUtil.h"
-#include "../Tool/PrintTool.h"
 
 using namespace std;
 

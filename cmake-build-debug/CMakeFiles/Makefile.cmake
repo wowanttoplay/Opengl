@@ -11,8 +11,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeCXXInformation.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeCommonLanguageInclude.cmake"
-  "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake"
-  "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeFindCodeBlocks.cmake"
+  "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeFindDependencyMacro.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeGenericSystem.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeInitializeConfigs.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/CMakeLanguageInformation.cmake"
@@ -32,11 +31,15 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/Platform/Darwin-Initialize.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/Platform/Darwin.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/Platform/UnixPaths.cmake"
-  "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.17/Modules/ProcessorCount.cmake"
   "../CMakeLists.txt"
   "CMakeFiles/3.17.3/CMakeCCompiler.cmake"
   "CMakeFiles/3.17.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.17.3/CMakeSystem.cmake"
+  "/usr/local/lib/cmake/glog/glog-config-version.cmake"
+  "/usr/local/lib/cmake/glog/glog-config.cmake"
+  "/usr/local/lib/cmake/glog/glog-modules.cmake"
+  "/usr/local/lib/cmake/glog/glog-targets-noconfig.cmake"
+  "/usr/local/lib/cmake/glog/glog-targets.cmake"
   )
 
 # The corresponding makefile is:

@@ -1,5 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Opengl.dir/Log/LogUtil.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Box.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o"
@@ -8,9 +7,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/Opengl.dir/Scene.cc.o"
   "CMakeFiles/Opengl.dir/Shader.cc.o"
   "CMakeFiles/Opengl.dir/Texture2D.cc.o"
-  "CMakeFiles/Opengl.dir/Thread/Task.cc.o"
-  "CMakeFiles/Opengl.dir/Thread/ThreadPool.cc.o"
-  "CMakeFiles/Opengl.dir/Tool/PrintTool.cc.o"
   "CMakeFiles/Opengl.dir/main.cpp.o"
   "CMakeFiles/Opengl.dir/window/Window.cc.o"
   "Opengl"
