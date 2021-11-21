@@ -32,8 +32,7 @@ int main(int argc, char* argv[]) {
     auto[width, height] = Window::GetWindowSize(const_cast<GLFWwindow*>(window));
     glViewport(0, 0, width, height);
 
-    Scene scene;
-    scene.SetView(width, height);
+    Scene scene(width, height);
     scene.Init();
 
     function<void(int,int)>func = [&scene](int key, int action)->void{
@@ -47,7 +46,7 @@ int main(int argc, char* argv[]) {
         glClearColor(0.2, 0.2 ,0.2 ,1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         scene.Update((float)glfwGetTime());
-        scene.Render();
+        scene.Draw();
 
         glfwSwapBuffers(const_cast<GLFWwindow*>(window));
         glfwPollEvents();

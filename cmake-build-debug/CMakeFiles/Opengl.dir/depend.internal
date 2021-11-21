@@ -1051,9 +1051,7 @@ CMakeFiles/Opengl.dir/ResourceManager.cc.o
  /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/Opengl.dir/Scene.cc.o
  /Users/virgil/Opengl/RenderObject/Box.h
- /Users/virgil/Opengl/RenderObject/Plane.h
  /Users/virgil/Opengl/RenderObject/Sphere.h
- /Users/virgil/Opengl/RenderPass/ShadowProcess.h
  /Users/virgil/Opengl/ResourceManager.h
  /Users/virgil/Opengl/Scene.cc
  /Users/virgil/Opengl/Scene.h

@@ -13,15 +13,17 @@
 
 class Scene {
 public:
-    glm::vec3 camera_position;
-    glm::vec3 looked_direction;
-    glm::vec3 looked_position;
-
+    explicit Scene(uint32_t width, uint32_t height);
     virtual ~Scene();
     void process_key(int key, int action);
-    void Render();
+    void Draw();
     void Init();
     void Update(float dt);
 private:
+    glm::vec3 camera_position_;
+    glm::vec3 looked_direction_;
+    glm::vec3 looked_position_;
+
+    uint32_t width_ = 0, height_ = 0; // viewport 大小
 };
 

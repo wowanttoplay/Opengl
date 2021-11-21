@@ -1050,9 +1050,7 @@ CMakeFiles/Opengl.dir/ResourceManager.cc.o: /usr/local/include/glog/platform.h
 CMakeFiles/Opengl.dir/ResourceManager.cc.o: /usr/local/include/glog/vlog_is_on.h
 
 CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Box.h
-CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Plane.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Sphere.h
-CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderPass/ShadowProcess.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../ResourceManager.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Scene.cc
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Scene.h
