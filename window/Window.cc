@@ -3,8 +3,10 @@
 //
 
 #include "Window.h"
+#include "glog/logging.h"
 
 using namespace std;
+using namespace google;
 
 const GLuint window_width = 800;
 const GLuint window_height = 600;
@@ -21,7 +23,7 @@ GLFWwindow *Window::InitGLFWWindow() {
     GLFWwindow *window = glfwCreateWindow(window_width, window_height, window_title.c_str(), nullptr, nullptr);
 
     if (window == nullptr) {
-        cout << "Faild to create GLFW window" << endl;
+        LOG_AT_LEVEL(ERROR) << "Faild to create GLFW window";
         glfwTerminate();
         return nullptr;
     }
@@ -31,7 +33,7 @@ GLFWwindow *Window::InitGLFWWindow() {
 }
 
 void Window::Key_CallBack(GLFWwindow *window, int key, int scancode, int action, int mode) {
-    cout << " key call back, key = " << key << endl;
+    LOG_AT_LEVEL(INFO) << " key call back, key = " << key;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }

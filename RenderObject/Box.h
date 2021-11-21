@@ -14,7 +14,6 @@ public:
     uint32_t VAO, VBO;
     Box();
     void Render(Shader shader);
-
 };
 
 

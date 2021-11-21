@@ -1884,3 +1884,8 @@ CMakeFiles/Opengl.dir/window/Window.cc.o
  /Users/virgil/Opengl/window/Window.h
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
+ /usr/local/include/glog/export.h
+ /usr/local/include/glog/log_severity.h
+ /usr/local/include/glog/logging.h
+ /usr/local/include/glog/platform.h
+ /usr/local/include/glog/vlog_is_on.h

@@ -25,7 +25,6 @@ Box::Box() {
 }
 
 void Box::Render(Shader shader) {
-
     shader.Use();
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);

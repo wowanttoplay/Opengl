@@ -10,29 +10,27 @@
 #include "third/stb_image.h"
 #include "glog/logging.h"
 
+using namespace std;
+
 
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
 
-Shader ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile, std::string name)
+Shader ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile)
 {
-    Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+    string name = string(vShaderFile) + "_" + string(fShaderFile);
+    if (Shaders.count(name) == 0) {
+        Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+    }
     return Shaders[name];
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Texture2D ResourceManager::LoadTexture(const GLchar *file)
 {
-    return Shaders[name];
-}
-
-Texture2D ResourceManager::LoadTexture(const GLchar *file, std::string name)
-{
-    Textures[name] = loadTextureFromFile(file);
-    return Textures[name];
-}
-
-Texture2D ResourceManager::GetTexture(std::string name)
-{
+    string name(file);
+    if (Textures.count(name) == 0) {
+        Textures[name] = loadTextureFromFile(file);
+    }
     return Textures[name];
 }
 

@@ -6,7 +6,6 @@
 #include <map>
 #include <string>
 #include <glew.h>
-
 #include "Shader.h"
 #include "Texture2D.h"
 
@@ -18,17 +17,14 @@ public:
     static std::map<std::string, Shader>    Shaders;
     static std::map<std::string, Texture2D> Textures;
 
+    static Shader   LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile);
 
-    static Shader   LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile, std::string name);
-    static Shader   GetShader(std::string name);
-
-    static Texture2D LoadTexture(const GLchar *file, std::string name);
-    static Texture2D GetTexture(std::string name);
+    static Texture2D LoadTexture(const GLchar *file);
 
     static void      Clear();
 private:
 
-    ResourceManager() { }
+    ResourceManager() = default;
 
     static Shader    loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile = nullptr);
 
