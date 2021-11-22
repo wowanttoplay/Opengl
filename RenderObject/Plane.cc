@@ -34,8 +34,6 @@ void Plane::Draw() {
 
 void Plane::Update(float dt) {
     LOG_AT_LEVEL(INFO) << "Update begin, dt :" << dt;
-
-
     LOG_AT_LEVEL(INFO) << "Update end";
 }
 
