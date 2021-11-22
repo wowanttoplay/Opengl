@@ -36,7 +36,7 @@ Sphere::Sphere(int x_num, int y_num) {
     // 绑定数据
     glGenVertexArrays(1, &this->VAO);
     glBindVertexArray(this->VAO);
-    // VBO
+    // VBO_
     glGenBuffers(1, &this->VBO);
     glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices_data.size() * sizeof(float), &vertices_data[0], GL_STATIC_DRAW);

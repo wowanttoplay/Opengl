@@ -82,9 +82,6 @@
 		<Unit filename="/Users/virgil/Opengl/Camera.h">
 			<Option target="Opengl"/>
 		</Unit>
-		<Unit filename="/Users/virgil/Opengl/Data/vertex_data.h">
-			<Option target="Opengl"/>
-		</Unit>
 		<Unit filename="/Users/virgil/Opengl/RenderObject/BaseObject.cc">
 			<Option target="Opengl"/>
 		</Unit>

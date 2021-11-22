@@ -20,7 +20,9 @@ shared_ptr<Shader> ResourceManager::LoadShader(const GLchar *vShaderFile, const 
 {
     string name = string(vShaderFile) + "_" + string(fShaderFile);
     if (Shaders.count(name) == 0) {
-        Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+        auto shader = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+        Shaders[name] = shader;
+        LOG(ERROR) << "load shader, name :" << name << " ptr" << shader.get();
     }
     return Shaders[name];
 }
@@ -29,7 +31,9 @@ shared_ptr<Texture2D> ResourceManager::LoadTexture(const GLchar *file)
 {
     string name(file);
     if (Textures.count(name) == 0) {
-        Textures[name] = loadTextureFromFile(file);
+        auto texture = loadTextureFromFile(file);
+        Textures[name] = texture;
+        LOG(ERROR) << "load texture, name :" << name << "ptr :" << texture.get() << "width : " << texture->Width << " height : " << texture->Height;
     }
     return Textures[name];
 }

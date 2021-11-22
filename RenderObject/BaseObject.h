@@ -14,7 +14,7 @@ class BaseObject {
 public:
     explicit BaseObject(ObjectType type, std::weak_ptr<Scene> scene);
 
-    virtual ~BaseObject() = default;
+    virtual ~BaseObject();
 
     /**
      * 绘制shadow map时执行
