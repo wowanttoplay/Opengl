@@ -103,18 +103,18 @@ CMakeFiles/Opengl.dir/window/Window.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/window/Window.cc.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/window/Window.cc -o CMakeFiles/Opengl.dir/window/Window.cc.s
 
-CMakeFiles/Opengl.dir/shader.cc.o: CMakeFiles/Opengl.dir/flags.make
-CMakeFiles/Opengl.dir/shader.cc.o: ../shader.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Opengl.dir/shader.cc.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/shader.cc.o -c /Users/virgil/Opengl/shader.cc
+CMakeFiles/Opengl.dir/Shader.cc.o: CMakeFiles/Opengl.dir/flags.make
+CMakeFiles/Opengl.dir/Shader.cc.o: ../Shader.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Opengl.dir/Shader.cc.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/Shader.cc.o -c /Users/virgil/Opengl/Shader.cc
 
-CMakeFiles/Opengl.dir/shader.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/shader.cc.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/shader.cc > CMakeFiles/Opengl.dir/shader.cc.i
+CMakeFiles/Opengl.dir/Shader.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/Shader.cc.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/Shader.cc > CMakeFiles/Opengl.dir/Shader.cc.i
 
-CMakeFiles/Opengl.dir/shader.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/shader.cc.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/shader.cc -o CMakeFiles/Opengl.dir/shader.cc.s
+CMakeFiles/Opengl.dir/Shader.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/Shader.cc.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/Shader.cc -o CMakeFiles/Opengl.dir/Shader.cc.s
 
 CMakeFiles/Opengl.dir/Texture2D.cc.o: CMakeFiles/Opengl.dir/flags.make
 CMakeFiles/Opengl.dir/Texture2D.cc.o: ../Texture2D.cc
@@ -220,11 +220,24 @@ CMakeFiles/Opengl.dir/Camera.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/Camera.cc.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/Camera.cc -o CMakeFiles/Opengl.dir/Camera.cc.s
 
+CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: CMakeFiles/Opengl.dir/flags.make
+CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../RenderObject/BaseObject.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o -c /Users/virgil/Opengl/RenderObject/BaseObject.cc
+
+CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/virgil/Opengl/RenderObject/BaseObject.cc > CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.i
+
+CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/virgil/Opengl/RenderObject/BaseObject.cc -o CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.s
+
 # Object files for target Opengl
 Opengl_OBJECTS = \
 "CMakeFiles/Opengl.dir/main.cpp.o" \
 "CMakeFiles/Opengl.dir/window/Window.cc.o" \
-"CMakeFiles/Opengl.dir/shader.cc.o" \
+"CMakeFiles/Opengl.dir/Shader.cc.o" \
 "CMakeFiles/Opengl.dir/Texture2D.cc.o" \
 "CMakeFiles/Opengl.dir/ResourceManager.cc.o" \
 "CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o" \
@@ -232,14 +245,15 @@ Opengl_OBJECTS = \
 "CMakeFiles/Opengl.dir/RenderObject/Box.cc.o" \
 "CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o" \
 "CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o" \
-"CMakeFiles/Opengl.dir/Camera.cc.o"
+"CMakeFiles/Opengl.dir/Camera.cc.o" \
+"CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o"
 
 # External object files for target Opengl
 Opengl_EXTERNAL_OBJECTS =
 
 Opengl: CMakeFiles/Opengl.dir/main.cpp.o
 Opengl: CMakeFiles/Opengl.dir/window/Window.cc.o
-Opengl: CMakeFiles/Opengl.dir/shader.cc.o
+Opengl: CMakeFiles/Opengl.dir/Shader.cc.o
 Opengl: CMakeFiles/Opengl.dir/Texture2D.cc.o
 Opengl: CMakeFiles/Opengl.dir/ResourceManager.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o
@@ -248,12 +262,13 @@ Opengl: CMakeFiles/Opengl.dir/RenderObject/Box.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o
 Opengl: CMakeFiles/Opengl.dir/RenderPass/ShadowProcess.cc.o
 Opengl: CMakeFiles/Opengl.dir/Camera.cc.o
+Opengl: CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o
 Opengl: CMakeFiles/Opengl.dir/build.make
 Opengl: /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib
 Opengl: /usr/local/Cellar/glfw/3.3.4/lib/libglfw.3.dylib
 Opengl: /usr/local/lib/libglog.0.6.0.dylib
 Opengl: CMakeFiles/Opengl.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable Opengl"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/virgil/Opengl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable Opengl"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Opengl.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

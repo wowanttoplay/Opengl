@@ -19,17 +19,13 @@ Scene::~Scene() {
     ResourceManager::Clear();
 }
 
-
 void Scene::Draw() {
 
 }
 
-
 void Scene::Update(float dt) {
 
 }
-
-
 
 Scene::Scene(uint32_t width, uint32_t height) : width_(width), height_(height) {
     LOG_AT_LEVEL(ERROR) << "Scene()";

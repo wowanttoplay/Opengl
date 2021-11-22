@@ -33,3 +33,7 @@ void Texture2D::Bind() const
 {
     glBindTexture(GL_TEXTURE_2D, this->ID);
 }
+
+Texture2D::~Texture2D() {
+    glDeleteTextures(1, &this->ID);
+}

@@ -4,8 +4,9 @@
 
 #include "Plane.h"
 #include "../Data/vertex_data.h"
+#include "../ResourceManager.h"
 
-Plane::Plane() {
+Plane::Plane(weak_ptr<Scene> scene) : BaseObject(ObjectType::PLANE, scene) {
     // generate VAO
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -23,17 +24,23 @@ Plane::Plane() {
     // unload
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
-    // prepare
 }
 
-void Plane::Render(Shader shader) {
-    shader.Use();
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+void Plane::Draw() {
+
 }
 
 void Plane::Update(float dt) {
+
+}
+
+Plane::~Plane() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+}
+
+void Plane::DrawShadow() {
+
 }
 
 

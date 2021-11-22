@@ -24,6 +24,8 @@ public:
 
     Texture2D();
 
+    virtual ~Texture2D();
+
     void Generate(GLuint width, GLuint height, unsigned char* data);
 
     void Bind() const;

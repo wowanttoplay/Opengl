@@ -19,7 +19,7 @@ bool InitGlew() {
 
 int main(int argc, char* argv[]) {
     google::InitGoogleLogging(argv[0]);
-    google::SetStderrLogging(google::INFO);
+    google::SetStderrLogging(google::ERROR);
     FLAGS_colorlogtostderr = true;
 
     GLFWwindow *window = Window::InitGLFWWindow();
