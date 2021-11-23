@@ -37,14 +37,14 @@ Scene::Scene(uint32_t width, uint32_t height, const string& resource_dir) : widt
 }
 
 void Scene::ProcessKey(int key, int action) {
-    const float kDeltatime = 0.2f;
-    if (key == GLFW_KEY_W && action == GLFW_PRESS)
+    const float kDeltatime = 0.1f;
+    if (key == GLFW_KEY_W)
         camera_->ProcessKeyboard(Camera_Movement::FORWARD, kDeltatime);
-    if (key == GLFW_KEY_S && action == GLFW_PRESS)
+    if (key == GLFW_KEY_S)
         camera_->ProcessKeyboard(Camera_Movement::BACKWARD, kDeltatime);
-    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+    if (key == GLFW_KEY_A)
         camera_->ProcessKeyboard(Camera_Movement::LEFT, kDeltatime);
-    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+    if (key == GLFW_KEY_D)
         camera_->ProcessKeyboard(Camera_Movement::RIGHT, kDeltatime);
 }
 

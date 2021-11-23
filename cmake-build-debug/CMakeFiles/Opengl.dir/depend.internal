@@ -218,8 +218,10 @@ CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o
  /Users/virgil/Opengl/Camera.h
  /Users/virgil/Opengl/RenderObject/BaseObject.cc
  /Users/virgil/Opengl/RenderObject/BaseObject.h
+ /Users/virgil/Opengl/ResourceManager.h
  /Users/virgil/Opengl/Scene.h
  /Users/virgil/Opengl/Shader.h
+ /Users/virgil/Opengl/Texture2D.h
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
  /usr/local/Cellar/glm/glm/common.hpp
@@ -1493,6 +1495,7 @@ CMakeFiles/Opengl.dir/ResourceManager.cc.o
  /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/Opengl.dir/Scene.cc.o
  /Users/virgil/Opengl/Camera.h
+ /Users/virgil/Opengl/RenderObject/BaseObject.h
  /Users/virgil/Opengl/RenderObject/Box.h
  /Users/virgil/Opengl/RenderObject/Sphere.h
  /Users/virgil/Opengl/ResourceManager.h
@@ -2109,8 +2112,12 @@ CMakeFiles/Opengl.dir/Texture2D.cc.o
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
 CMakeFiles/Opengl.dir/main.cpp.o
  /Users/virgil/Opengl/Camera.h
+ /Users/virgil/Opengl/RenderObject/BaseObject.h
+ /Users/virgil/Opengl/RenderObject/Plane.h
+ /Users/virgil/Opengl/ResourceManager.h
  /Users/virgil/Opengl/Scene.h
  /Users/virgil/Opengl/Shader.h
+ /Users/virgil/Opengl/Texture2D.h
  /Users/virgil/Opengl/main.cpp
  /Users/virgil/Opengl/window/Window.h
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h

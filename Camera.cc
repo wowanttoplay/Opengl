@@ -62,8 +62,8 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPi
 
 void Camera::ProcessMouseScroll(float yoffset) {
     fov_ -= (float)yoffset;
-    if (fov_ < 1.0f)
-        fov_ = 1.0f;
+    if (fov_ < 10.0f)
+        fov_ = 10.0f;
     if (fov_ > 89.0f)
         fov_ = 89.0f;
     updateCameraVectors();
@@ -80,7 +80,7 @@ void Camera::updateCameraVectors() {
     right_ = glm::normalize(glm::cross(front_, world_up_));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     up_    = glm::normalize(glm::cross(right_, front_));
     view_matrix_ = glm::lookAt(position_, position_ + front_, up_);
-    projection_matrix_ = glm::perspectiveFov(fov_, size_.x, size_.y, near_, far_);
+    projection_matrix_ = glm::perspective(fov_, size_.x/size_.y, near_, far_);
 }
 
 void Camera::PrintSlef() {

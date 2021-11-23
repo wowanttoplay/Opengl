@@ -217,8 +217,10 @@ CMakeFiles/Opengl.dir/Camera.cc.o: /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../Camera.h
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../RenderObject/BaseObject.cc
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../RenderObject/BaseObject.h
+CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../ResourceManager.h
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../Scene.h
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../Shader.h
+CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: ../Texture2D.h
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
 CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o: /usr/local/Cellar/glm/glm/common.hpp
@@ -1492,6 +1494,7 @@ CMakeFiles/Opengl.dir/ResourceManager.cc.o: /usr/local/include/glog/platform.h
 CMakeFiles/Opengl.dir/ResourceManager.cc.o: /usr/local/include/glog/vlog_is_on.h
 
 CMakeFiles/Opengl.dir/Scene.cc.o: ../Camera.h
+CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/BaseObject.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Box.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../RenderObject/Sphere.h
 CMakeFiles/Opengl.dir/Scene.cc.o: ../ResourceManager.h
@@ -2108,8 +2111,12 @@ CMakeFiles/Opengl.dir/Texture2D.cc.o: ../Texture2D.h
 CMakeFiles/Opengl.dir/Texture2D.cc.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
 
 CMakeFiles/Opengl.dir/main.cpp.o: ../Camera.h
+CMakeFiles/Opengl.dir/main.cpp.o: ../RenderObject/BaseObject.h
+CMakeFiles/Opengl.dir/main.cpp.o: ../RenderObject/Plane.h
+CMakeFiles/Opengl.dir/main.cpp.o: ../ResourceManager.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Scene.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../Shader.h
+CMakeFiles/Opengl.dir/main.cpp.o: ../Texture2D.h
 CMakeFiles/Opengl.dir/main.cpp.o: ../main.cpp
 CMakeFiles/Opengl.dir/main.cpp.o: ../window/Window.h
 CMakeFiles/Opengl.dir/main.cpp.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
