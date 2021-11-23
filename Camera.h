@@ -17,7 +17,7 @@ enum class Camera_Movement {
 const float kCameraYaw         = -90.0f;
 const float kCameraPitch       =  0.0f;
 const float kCameraSpeed       =  2.5f;
-const float kSensitivity =  0.1f;
+const float kSensitivity =  0.2f;
 const float kZoom        =  45.0f;
 
 class Camera
