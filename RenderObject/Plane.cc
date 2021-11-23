@@ -14,20 +14,19 @@
 using namespace std;
 using namespace google;
 
-Plane::Plane(shared_ptr<Scene> scene, const glm::vec3& size, const glm::vec3& center) :
-BaseObject(ObjectType::PLANE, scene),
-size_(size),
-center_(center)
+Plane::Plane(shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& center) :
+        BaseObject(ObjectType::PLANE, scene),
+        scale_(scale),
+        center_(center)
 {
     model_ = glm::mat4(1.0f);
     model_ = glm::translate(model_, center_);
-    model_ = glm::scale(model_, size_);
-    LOG(WARNING) << "Plane construct, scale size :" << glm::to_string(size_) << ", center : " << glm::to_string(center_) << ", model matrix :"
-    << glm::to_string(model_);
+    model_ = glm::scale(model_, scale_);
+    LOG(WARNING) << "Plane construct, scale scale :" << glm::to_string(scale_) << ", center : " << glm::to_string(center_) << ", model matrix :"
+                 << glm::to_string(model_);
 }
 
 void Plane::Draw() {
-    LOG_AT_LEVEL(INFO) << "Draw() begin";
     if (!glIsVertexArray(VAO_)) {
         ConstructGeometry();
     }
@@ -46,8 +45,6 @@ void Plane::Draw() {
 
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    LOG_AT_LEVEL(INFO) << "Draw() end";
 }
 
 void Plane::Update(float dt) {

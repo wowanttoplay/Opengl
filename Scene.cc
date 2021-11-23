@@ -30,7 +30,7 @@ void Scene::Update(float dt) {
 
 Scene::Scene(uint32_t width, uint32_t height, const string& resource_dir) : width_(width), height_(height) {
     LOG_AT_LEVEL(ERROR) << "Scene()" << ", ptr : " << this;
-    camera_ = make_shared<Camera>(glm::vec3(0.0, 0.0, 3.0f));
+    camera_ = make_shared<Camera>(glm::vec3(0, 3.0f, 8.0f));
     resource_manager_ = make_shared<ResourceManager>(resource_dir);
     CHECK(camera_ != nullptr);
     CHECK(resource_manager_ != nullptr);

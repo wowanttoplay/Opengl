@@ -25,7 +25,7 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene);
 int main(int argc, char* argv[]) {
     // 初始化glog
     google::InitGoogleLogging(argv[0]);
-    google::SetStderrLogging(google::WARNING);
+    google::SetStderrLogging(google::INFO);
     FLAGS_colorlogtostderr = true;
 
 
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
 }
 
 void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
-    shared_ptr<Plane> ground = std::make_shared<Plane>(scene, glm::vec3(3.0f, 1.0f, 3.0f), glm::vec3(0.0f, -0.1f, 0.0f));
+    shared_ptr<Plane> ground = std::make_shared<Plane>(scene, glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     scene->PushObject(ground);
 }
 

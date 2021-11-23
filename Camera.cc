@@ -81,6 +81,7 @@ void Camera::updateCameraVectors() {
     up_    = glm::normalize(glm::cross(right_, front_));
     view_matrix_ = glm::lookAt(position_, position_ + front_, up_);
     projection_matrix_ = glm::perspective(fov_, size_.x/size_.y, near_, far_);
+    PrintSlef();
 }
 
 void Camera::PrintSlef() {
