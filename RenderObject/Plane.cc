@@ -3,15 +3,18 @@
 //
 
 #include "Plane.h"
+
+#include <utility>
 #include "../Data/vertex_data.h"
 #include "../ResourceManager.h"
 #include "glog/logging.h"
 #include "glm/gtx/string_cast.hpp"
+#include "../Scene.h"
 
 using namespace std;
 using namespace google;
 
-Plane::Plane(weak_ptr<Scene> scene, const glm::vec3& size, const glm::vec3& center) :
+Plane::Plane(shared_ptr<Scene> scene, const glm::vec3& size, const glm::vec3& center) :
 BaseObject(ObjectType::PLANE, scene),
 size_(size),
 center_(center)
@@ -28,6 +31,21 @@ void Plane::Draw() {
     if (!glIsVertexArray(VAO_)) {
         ConstructGeometry();
     }
+    auto scene = GetScene();
+    if (!scene) LOG(ERROR) << "scene ptr is nullptr";
+    auto camera = scene->GetCamera();
+    auto resource_manager = scene->GetResourceManager();
+    const glm::mat4 view = camera->GetViewMatrix();
+    const glm::mat4 projective = camera->GetProjectionMatrix();
+    auto MVP = projective * view * model_;
+    auto shader = resource_manager->LoadShader("color.vs", "color.fs");
+
+    shader->Use();
+    shader->SetMatrix4("MVP", MVP);
+    shader->SetVector3f("objectColor", glm::vec3(1.0f, 0.5f, 0.0f));
+
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     LOG_AT_LEVEL(INFO) << "Draw() end";
 }
@@ -38,6 +56,7 @@ void Plane::Update(float dt) {
 }
 
 Plane::~Plane() {
+    LOG(WARNING) << "~Plane(), ptr : " << this;
     glDeleteVertexArrays(1, &VAO_);
     glDeleteBuffers(1, &VBO_);
 }
@@ -52,7 +71,7 @@ void Plane::DrawShadow() {
 }
 
 void Plane::ConstructGeometry() {
-    LOG_AT_LEVEL(INFO) << "ConstructGeometry() begin";
+    LOG_AT_LEVEL(WARNING) << "ConstructGeometry() begin";
     // generate VAO_
     glGenVertexArrays(1, &VAO_);
     glBindVertexArray(VAO_);
@@ -71,7 +90,7 @@ void Plane::ConstructGeometry() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    LOG_AT_LEVEL(INFO) << "ConstructGeometry() end, VAO_ :" << VAO_ << " VBO :" << VBO_;
+    LOG_AT_LEVEL(WARNING) << "ConstructGeometry() end, VAO_ :" << VAO_ << " VBO :" << VBO_;
 }
 
 

@@ -10,26 +10,38 @@
 #include "Texture2D.h"
 #include "memory.h"
 
-
 class ResourceManager
 {
 public:
 
-    static std::map<std::string, std::shared_ptr<Shader>>    Shaders;
-    static std::map<std::string, std::shared_ptr<Texture2D>> Textures;
+    /**
+     * 传入工作目录,构造资源管理器
+     * @param dir
+     */
+    explicit ResourceManager(const std::string& dir);
 
-    static std::shared_ptr<Shader> LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile);
+    virtual ~ResourceManager();
 
-    static std::shared_ptr<Texture2D> LoadTexture(const GLchar *file);
+    std::shared_ptr<Shader> LoadShader(const std::string &vShaderFile, const std::string &fShaderFile, const std::string &gShaderFile = "");
 
-    static void      Clear();
+    std::shared_ptr<Texture2D> LoadTexture(const std::string &file);
+
+    // 设置工作目录
+    void SetDir(const std::string& dir);
+
+
 private:
+    std::shared_ptr<Shader> loadShaderFromFile(const std::string &vShaderFile, const std::string &fShaderFile, const std::string &gShaderFile = nullptr);
 
-    ResourceManager() = default;
+    std::shared_ptr<Texture2D> loadTextureFromFile(const std::string &file);
 
-    static std::shared_ptr<Shader> loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile = nullptr);
+    std::map<std::string, std::shared_ptr<Shader>>    Shaders;
 
-    static std::shared_ptr<Texture2D> loadTextureFromFile(const GLchar *file);
+    std::map<std::string, std::shared_ptr<Texture2D>> Textures;
+
+    std::string shader_dir_; // shade 存放目录
+    std::string texture_dir_; // 纹理存放目录
+    std::string model_dir_; // 模型存放目录
 };
 
 

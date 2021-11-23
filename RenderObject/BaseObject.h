@@ -3,16 +3,17 @@
 //
 #pragma once
 #include <memory>
-#include "../Scene.h"
+
 
 enum class ObjectType{
     PLANE,
     SPHERE,
 };
 
+class Scene;
 class BaseObject {
 public:
-    explicit BaseObject(ObjectType type, std::weak_ptr<Scene> scene);
+    BaseObject(ObjectType type, std::shared_ptr<Scene> scene);
 
     virtual ~BaseObject();
 
@@ -32,6 +33,11 @@ public:
       */
      virtual void Update(float dt) = 0;
 
+     /**
+      * 获取scene的智能指针
+      * @return scene的智能指针
+      */
+     std::shared_ptr<Scene> GetScene();
 private:
     ObjectType type_;
     std::weak_ptr<Scene> scene_ptr_;

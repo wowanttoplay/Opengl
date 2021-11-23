@@ -24,12 +24,15 @@ class Camera
 {
 public:
     // constructor with vectors
-    explicit Camera(glm::vec3 position = glm::vec3(0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = kCameraYaw, float pitch = kCameraPitch);
+    explicit Camera(glm::vec3 position = glm::vec3(0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2 size = glm::vec2(100.0f, 100.0f), float yaw = kCameraYaw, float pitch = kCameraPitch);
 
     virtual ~Camera();
 
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
     const glm::mat4& GetViewMatrix() const {return view_matrix_;}
+
+    // return the projection matrix calculated using fov, near, far,
+    const glm::mat4& GetProjectionMatrix() const {return projection_matrix_;}
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
@@ -45,7 +48,7 @@ private:
     void updateCameraVectors();
 
     // 打印cameara 的信息
-    void Print();
+    void PrintSlef();
 
 private:
     // camera Attributes
@@ -61,8 +64,12 @@ private:
     float speed_;
     float mouse_sensitivity_;
     float fov_;
+    float near_ = 0.01f;
+    float far_ = 100.0f;
+    glm::vec2 size_; // width, height
 
     glm::mat4 view_matrix_;
+    glm::mat4 projection_matrix_;
 };
 
 

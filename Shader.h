@@ -18,8 +18,6 @@ public:
 
     void    Compile(const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr);
 
-    bool    ready_ = false;
-
     void    SetFloat    (const GLchar *name, GLfloat value, GLboolean useShader = false);
     void    SetInteger  (const GLchar *name, GLint value, GLboolean useShader = false);
     void    SetVector2f (const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader = false);

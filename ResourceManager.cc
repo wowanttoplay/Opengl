@@ -11,42 +11,57 @@
 #include "glog/logging.h"
 
 using namespace std;
+using namespace google;
 
 
-std::map<std::string, shared_ptr<Texture2D>>    ResourceManager::Textures;
-std::map<std::string, shared_ptr<Shader>>       ResourceManager::Shaders;
 
-shared_ptr<Shader> ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile)
+ResourceManager::ResourceManager(const string &dir) {
+    shader_dir_ = dir + "shader/";
+    texture_dir_ = dir + "texture/";
+    model_dir_ = dir + "model/";
+    LOG(ERROR) << "ResourceManager(), dir :" << dir;
+    LOG(ERROR) << "shader dir :" << shader_dir_;
+    LOG(ERROR) << "texture dir : " << texture_dir_;
+    LOG(ERROR) << "model dir : " << model_dir_;
+}
+
+ResourceManager::~ResourceManager() {
+    // (Properly) delete all shaders
+    Shaders.clear();
+    // (Properly) delete all textures
+    Textures.clear();
+    LOG(ERROR) << "~ResourceManager(), ptr : " << this;
+}
+
+shared_ptr<Shader> ResourceManager::LoadShader(const string &vShaderFile, const string &fShaderFile, const string &gShaderFile)
 {
+    CHECK(!vShaderFile.empty() && !fShaderFile.empty());
     string name = string(vShaderFile) + "_" + string(fShaderFile);
+    string vFile = shader_dir_ + vShaderFile;
+    string fFile = shader_dir_ + fShaderFile;
+    string gFile = gShaderFile.empty() ? gShaderFile : shader_dir_ + gShaderFile;
     if (Shaders.count(name) == 0) {
-        auto shader = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+        auto shader = loadShaderFromFile( vFile, fFile, gFile);
+        CHECK(shader != nullptr);
         Shaders[name] = shader;
-        LOG(ERROR) << "load shader, name :" << name << " ptr" << shader.get();
+        LOG(WARNING) << "load shader, name :" << name << " ptr : " << shader.get();
     }
     return Shaders[name];
 }
 
-shared_ptr<Texture2D> ResourceManager::LoadTexture(const GLchar *file)
+shared_ptr<Texture2D> ResourceManager::LoadTexture(const string &file)
 {
+    CHECK(!file.empty());
     string name(file);
     if (Textures.count(name) == 0) {
-        auto texture = loadTextureFromFile(file);
+        auto texture = loadTextureFromFile(texture_dir_ + file);
         Textures[name] = texture;
         LOG(ERROR) << "load texture, name :" << name << "ptr :" << texture.get() << "width : " << texture->Width << " height : " << texture->Height;
     }
     return Textures[name];
 }
 
-void ResourceManager::Clear()
-{
-    // (Properly) delete all shaders
-    Shaders.clear();
-    // (Properly) delete all textures
-    Textures.clear();
-}
-
-shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile)
+shared_ptr<Shader> ResourceManager::loadShaderFromFile(const string &vShaderFile, const string &fShaderFile, const string &gShaderFile)
 {
     // 从文件读取对应的code
     std::string vertexCode;
@@ -66,7 +81,7 @@ shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShaderFile
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
 
-        if (gShaderFile != nullptr)
+        if (!gShaderFile.empty() )
         {
             std::ifstream geometryShaderFile(gShaderFile);
             std::stringstream gShaderStream;
@@ -77,25 +92,25 @@ shared_ptr<Shader> ResourceManager::loadShaderFromFile(const GLchar *vShaderFile
     }
     catch (std::exception e)
     {
-        LOG(INFO) << "ERROR::SHADER: Failed to read Shader files";
+        LOG(ERROR) << "ERROR::SHADER: Failed to read Shader files";
     }
     const GLchar *vShaderCode = vertexCode.c_str();
     const GLchar *fShaderCode = fragmentCode.c_str();
-    const GLchar *gShaderCode = geometryCode.c_str();
+    const GLchar *gShaderCode = geometryCode.empty() ? nullptr : geometryCode.c_str();
     // 创建shader
     shared_ptr<Shader> shader = make_shared<Shader>();
-    shader->Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+    shader->Compile(vShaderCode, fShaderCode, gShaderCode);
     return shader;
 }
 
-shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const GLchar *file)
+shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const string &file)
 {
     // Create Texture object
     shared_ptr<Texture2D> texture = make_shared<Texture2D>();
 
     // Load image
     int width, height, nrChannels;
-    unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
     if (nrChannels == 4)
     {
         texture->Internal_Format = GL_RGBA;
@@ -107,3 +122,9 @@ shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const GLchar *file)
     stbi_image_free(data);
     return texture;
 }
+
+void ResourceManager::SetDir(const string &dir) {
+
+}
+
+

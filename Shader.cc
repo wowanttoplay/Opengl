@@ -46,7 +46,6 @@ void Shader::Compile(const GLchar* vertexSource, const GLchar* fragmentSource, c
     if (geometrySource != nullptr)
         glDeleteShader(gShader);
 
-    ready_ = true;
 }
 
 void Shader::SetFloat(const GLchar *name, GLfloat value, GLboolean useShader)
@@ -116,7 +115,7 @@ void Shader::checkCompileErrors(GLuint object, std::string type)
         {
             glGetShaderInfoLog(object, 1024, NULL, infoLog);
 
-            LOG(INFO) << "HADER: Compile-time error: Type:" << type << "info : " << infoLog;
+            LOG(ERROR) << "HADER: Compile-time error: Type:" << type << "info : " << infoLog;
         }
     }
     else
@@ -125,7 +124,7 @@ void Shader::checkCompileErrors(GLuint object, std::string type)
         if (!success)
         {
             glGetProgramInfoLog(object, 1024, NULL, infoLog);
-            LOG(INFO) << "Shader: Link-time error: Type: " << type << "info : " << infoLog;
+            LOG(ERROR) << "Shader: Link-time error: Type: " << type << "info : " << infoLog;
         }
     }
 }

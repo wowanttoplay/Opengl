@@ -9,11 +9,10 @@
 #include "../Shader.h"
 #include "../Texture2D.h"
 
-
 class Plane : public BaseObject {
 public:
-    Plane(std::weak_ptr<Scene> scene, const glm::vec3& size, const glm::vec3& center);
-    virtual ~Plane() override;
+    Plane(std::shared_ptr<Scene> scene, const glm::vec3& size, const glm::vec3& center);
+    ~Plane() override;
     void DrawShadow() override;
     void Draw() override;
     void Update(float dt) override;
