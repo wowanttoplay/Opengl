@@ -6,25 +6,24 @@
 #include <glew.h>
 #include <memory>
 #include "BaseObject.h"
-#include "../Shader.h"
-#include "../Texture2D.h"
+#include <glm/glm.hpp>
+
 
 class Plane : public BaseObject {
 public:
-    Plane(std::shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& center);
+    Plane(std::shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& position);
     ~Plane() override;
-    void DrawShadow() override;
-    void Draw() override;
-    void Update(float dt) override;
+    void drawShadow() override;
+    void draw() override;
+    void update() override;
 private:
     /*
      * 构造VAO
      */
     void ConstructGeometry();
     uint32_t VAO_,VBO_;
-    glm::vec3 scale_; // 形状大小
-    glm::vec3 center_; // 中心点
-    glm::mat4 model_; // model矩阵
+
+    void SimpleColorDraw();
 };
 
 

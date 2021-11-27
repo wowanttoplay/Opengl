@@ -11,14 +11,14 @@ Camera::~Camera() {
 }
 
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, glm::vec2 size, float yaw, float pitch) :
+Camera::Camera(std::shared_ptr<Scene> scene, glm::vec3 position, glm::vec3 up, glm::vec2 size, float yaw, float pitch) :
+        BaseObject(ObjectType::Camera, scene, glm::vec3(1.0f), position),
         front_(glm::vec3(0.0f, 0.0f, -1.0f)),
         speed_(kCameraSpeed),
         mouse_sensitivity_(kSensitivity),
         fov_(kZoom)
 {
     LOG_AT_LEVEL(ERROR) << "Camera()" << ", ptr : " << this;
-    position_ = position;
     world_up_ = up;
     size_ = size;
     yaw_ = yaw;
@@ -30,13 +30,13 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, glm::vec2 size, float yaw, floa
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     float velocity = speed_ * deltaTime;
     if (direction == Camera_Movement::FORWARD)
-        position_ += front_ * velocity;
+        setPosition(getPosition() + front_ * velocity);
     if (direction == Camera_Movement::BACKWARD)
-        position_ -= front_ * velocity;
+        setPosition(getPosition() - front_ * velocity);
     if (direction == Camera_Movement::LEFT)
-        position_ -= right_ * velocity;
+        setPosition(getPosition() - right_ * velocity);
     if (direction == Camera_Movement::RIGHT)
-        position_ += right_ * velocity;
+        setPosition(getPosition() + right_ * velocity);
     updateCameraVectors();
 }
 
@@ -79,13 +79,13 @@ void Camera::updateCameraVectors() {
     // also re-calculate the right_ and up_ vector
     right_ = glm::normalize(glm::cross(front_, world_up_));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     up_    = glm::normalize(glm::cross(right_, front_));
-    view_matrix_ = glm::lookAt(position_, position_ + front_, up_);
+    view_matrix_ = glm::lookAt(getPosition(), getPosition() + front_, up_);
     projection_matrix_ = glm::perspective(fov_, size_.x/size_.y, near_, far_);
     PrintSlef();
 }
 
 void Camera::PrintSlef() {
-    LOG(INFO) << "position_ : " << glm::to_string(position_);
+    LOG(INFO) << "position_ : " << glm::to_string(getPosition());
     LOG(INFO) << "front_ : " << glm::to_string(front_);
     LOG(INFO) << "up_ : " << glm::to_string(up_);
     LOG(INFO) << "right_ : " << glm::to_string(right_);
@@ -97,4 +97,12 @@ void Camera::PrintSlef() {
     LOG(INFO) << "fov_ : " << fov_;
     LOG(INFO) << "view matrix : " << glm::to_string(view_matrix_);
     LOG(INFO) << "projection matrix : " << glm::to_string(projection_matrix_);
+}
+
+void Camera::update() {
+
+}
+
+void Camera::draw() {
+
 }

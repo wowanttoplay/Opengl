@@ -40,13 +40,13 @@ void ShadowProcess::ConfigShaderAndMatrix(Shader shader) {
     shadowTransforms.push_back(projection * glm::lookAt(light_position_, light_position_ + glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)));
     shadowTransforms.push_back(projection * glm::lookAt(light_position_, light_position_ + glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f)));
     //set Shader
-    shader.Use();
+    shader.use();
     for (int i = 0; i < 6; ++i) {
         string mat_name = "shadowMatrices[" + to_string(i) + "]";
-        shader.SetMatrix4(mat_name.c_str(), shadowTransforms[i]);
+        shader.setMatrix4(mat_name.c_str(), shadowTransforms[i]);
     }
-    shader.SetFloat("far_plane", this->far_);
-    shader.SetVector3f("light_position", this->light_position_);
+    shader.setFloat("far_plane", this->far_);
+    shader.setVector3f("light_position", this->light_position_);
 }
 
 // 准备好阴影渲染的环境

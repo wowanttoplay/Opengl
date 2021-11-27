@@ -10,46 +10,49 @@
 #include "glog/logging.h"
 #include "glm/gtx/string_cast.hpp"
 #include "../Scene.h"
+#include "../Shader.h"
+#include "../Texture2D.h"
 
 using namespace std;
 using namespace google;
 
-Plane::Plane(shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& center) :
-        BaseObject(ObjectType::PLANE, scene),
-        scale_(scale),
-        center_(center)
+Plane::Plane(shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& position) :
+        BaseObject(ObjectType::Plane, scene, scale, position)
 {
-    model_ = glm::mat4(1.0f);
-    model_ = glm::translate(model_, center_);
-    model_ = glm::scale(model_, scale_);
-    LOG(WARNING) << "Plane construct, scale scale :" << glm::to_string(scale_) << ", center : " << glm::to_string(center_) << ", model matrix :"
-                 << glm::to_string(model_);
+    LOG(WARNING) << "Plane(), ptr : " << this;
 }
 
-void Plane::Draw() {
+void Plane::draw() {
+    SimpleColorDraw();
+
+}
+
+void Plane::SimpleColorDraw() {
     if (!glIsVertexArray(VAO_)) {
         ConstructGeometry();
     }
-    auto scene = GetScene();
-    if (!scene) LOG(ERROR) << "scene ptr is nullptr";
-    auto camera = scene->GetCamera();
-    auto resource_manager = scene->GetResourceManager();
-    const glm::mat4 view = camera->GetViewMatrix();
-    const glm::mat4 projective = camera->GetProjectionMatrix();
-    auto MVP = projective * view * model_;
+    auto scene = getScene();
+    if (!scene) {
+        LOG(ERROR) << "scene ptr is nullptr";
+        return;
+    }
+    auto camera = scene->getCamera();
+    auto resource_manager = scene->getResourceManager();
+    const glm::mat4 view = camera->getViewMatrix();
+    const glm::mat4 projective = camera->getProjectionMatrix();
+    auto MVP = projective * view * getModelMatrix();
     auto shader = resource_manager->LoadShader("color.vs", "color.fs");
 
-    shader->Use();
-    shader->SetMatrix4("MVP", MVP);
-    shader->SetVector3f("objectColor", glm::vec3(1.0f, 0.5f, 0.0f));
+    shader->use();
+    shader->setMatrix4("MVP", MVP);
+    shader->setVector4f("objectColor", getColor());
 
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Plane::Update(float dt) {
-    LOG_AT_LEVEL(INFO) << "Update begin, dt :" << dt;
-    LOG_AT_LEVEL(INFO) << "Update end";
+void Plane::update() {
+
 }
 
 Plane::~Plane() {
@@ -58,17 +61,15 @@ Plane::~Plane() {
     glDeleteBuffers(1, &VBO_);
 }
 
-void Plane::DrawShadow() {
-    LOG_AT_LEVEL(INFO) << "DrawShadow() begin";
+void Plane::drawShadow() {
     if (!glIsVertexArray(VAO_)) {
         ConstructGeometry();
     }
 
-    LOG_AT_LEVEL(INFO) << "DrawShaow() end";
 }
 
 void Plane::ConstructGeometry() {
-    LOG_AT_LEVEL(WARNING) << "ConstructGeometry() begin";
+    LOG_AT_LEVEL(WARNING) << "constructGeometry() begin";
     // generate VAO_
     glGenVertexArrays(1, &VAO_);
     glBindVertexArray(VAO_);
@@ -87,7 +88,7 @@ void Plane::ConstructGeometry() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    LOG_AT_LEVEL(WARNING) << "ConstructGeometry() end, VAO_ :" << VAO_ << " VBO :" << VBO_;
+    LOG_AT_LEVEL(WARNING) << "constructGeometry() end, VAO_ :" << VAO_ << " VBO_ :" << VBO_;
 }
 
 

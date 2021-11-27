@@ -7,7 +7,10 @@
 #include "ResourceManager.h"
 #include "RenderObject/BaseObject.h"
 #include "RenderObject/Plane.h"
-
+#include "RenderObject/Box.h"
+#include "RenderObject/Sphere.h"
+#include "RenderObject/Light/PointLight.h"
+#include "Camera.h"
 
 using namespace std;
 bool InitGlew() {
@@ -25,7 +28,7 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene);
 int main(int argc, char* argv[]) {
     // 初始化glog
     google::InitGoogleLogging(argv[0]);
-    google::SetStderrLogging(google::INFO);
+    google::SetStderrLogging(google::WARNING);
     FLAGS_colorlogtostderr = true;
 
 
@@ -43,6 +46,8 @@ int main(int argc, char* argv[]) {
     std::string resource_dir = getcwd(nullptr, 0);
     resource_dir = resource_dir.substr(0, resource_dir.rfind('/'));
     auto scene = make_shared<Scene>(width, height, resource_dir + "/Data/");
+    auto camera = make_shared<Camera>(scene, glm::vec3(0, 6.0f, 16.0f));
+    scene->setCamera(camera);
 
     function<void(int,int)>key_func = [&scene](int key, int action)->void{
         scene->ProcessKey(key, action);
@@ -65,7 +70,7 @@ int main(int argc, char* argv[]) {
     while (!glfwWindowShouldClose(const_cast<GLFWwindow*>(window))) {
         glClearColor(0.2, 0.2 ,0.2 ,1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        scene->Update((float)glfwGetTime());
+        scene->Update();
         scene->Draw();
         glfwSwapBuffers(const_cast<GLFWwindow*>(window));
         glfwPollEvents();
@@ -76,8 +81,37 @@ int main(int argc, char* argv[]) {
 }
 
 void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
-    shared_ptr<Plane> ground = std::make_shared<Plane>(scene, glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    scene->PushObject(ground);
+    shared_ptr<Plane> ground = std::make_shared<Plane>(scene, glm::vec3(10.0f), glm::vec3(0.0f, -0.002f, 0.0f));
+    ground->setColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+    scene->pushObject(ground);
+
+    shared_ptr<Box> right_box = std::make_shared<Box>(scene, glm::vec3(1.0f), glm::vec3(2.0, 0.5f, 0.0));
+    right_box->setColor(glm::vec4(0.3f, 1.0f, 0.0f, 1.0f));
+    scene->pushObject(right_box);
+
+    shared_ptr<Box> left_box = std::make_shared<Box>(scene, glm::vec3(1.0f), glm::vec3(-2.0, 0.5f, 0.0));
+    left_box->setColor(glm::vec4(1.0f, 0.3f, 0.4f, 1.0f));
+    scene->pushObject(left_box);
+
+    shared_ptr<Sphere> sphere = std::make_shared<Sphere>(scene, glm::vec3(1.0f), glm::vec3(0.0f, 0.5f, 3.0f), 30, 30);
+    sphere->setColor(glm::vec4(0.8f, 0.8f, 0.8f, 0.8f));
+    scene->pushObject(sphere);
+
+    shared_ptr<Box> left_wall = std::make_shared<Box>(scene, glm::vec3(0.1, 5.0, 5.0), glm::vec3(3.0, 2.5f, 0.0f));
+    left_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    scene->pushObject(left_wall);
+
+    shared_ptr<Box> right_wall = std::make_shared<Box>(scene, glm::vec3(0.1f, 5.0f, 5.0f), glm::vec3(-3.0f, 2.5f, 0.0f));
+    right_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    scene->pushObject(right_wall);
+
+    shared_ptr<Box> front_wall = std::make_shared<Box>(scene, glm::vec3(6.2f, 5.0f, 0.1f), glm::vec3(0.0f, 2.5f, -3.0f));
+    front_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    scene->pushObject(front_wall);
+
+    shared_ptr<PointLight> light = std::make_shared<PointLight>(scene, glm::vec3(0.3f), glm::vec3(-3.0f, 8.0f,1.0f));
+    light->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    scene->setLight(light);
 }
 
 

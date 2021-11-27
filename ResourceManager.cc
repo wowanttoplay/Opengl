@@ -99,7 +99,7 @@ shared_ptr<Shader> ResourceManager::loadShaderFromFile(const string &vShaderFile
     const GLchar *gShaderCode = geometryCode.empty() ? nullptr : geometryCode.c_str();
     // 创建shader
     shared_ptr<Shader> shader = make_shared<Shader>();
-    shader->Compile(vShaderCode, fShaderCode, gShaderCode);
+    shader->compile(vShaderCode, fShaderCode, gShaderCode);
     return shader;
 }
 

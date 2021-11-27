@@ -19,20 +19,20 @@ Scene::~Scene() {
 }
 
 void Scene::Draw() {
-    for (auto object : objects_) {
-        object->Draw();
+    for (const auto& object : objects_) {
+        object->draw();
     }
+
+    light_->draw();
 }
 
-void Scene::Update(float dt) {
+void Scene::Update() {
 
 }
 
 Scene::Scene(uint32_t width, uint32_t height, const string& resource_dir) : width_(width), height_(height) {
     LOG_AT_LEVEL(ERROR) << "Scene()" << ", ptr : " << this;
-    camera_ = make_shared<Camera>(glm::vec3(0, 3.0f, 8.0f));
     resource_manager_ = make_shared<ResourceManager>(resource_dir);
-    CHECK(camera_ != nullptr);
     CHECK(resource_manager_ != nullptr);
 }
 
@@ -69,15 +69,15 @@ void Scene::MouseScrollCallBack(double x_offset, double y_offset) {
     camera_->ProcessMouseScroll(y_offset);
 }
 
-std::shared_ptr<Camera> Scene::GetCamera() {
+std::shared_ptr<Camera> Scene::getCamera() {
     return camera_;
 }
 
-std::shared_ptr<ResourceManager> Scene::GetResourceManager() {
+std::shared_ptr<ResourceManager> Scene::getResourceManager() {
     return resource_manager_;
 }
 
-void Scene::PushObject(std::shared_ptr<BaseObject> object) {
+void Scene::pushObject(std::shared_ptr<BaseObject> object) {
     if (!object) {
         LOG(ERROR) << "Push object is nullptr";
         return;
@@ -87,3 +87,16 @@ void Scene::PushObject(std::shared_ptr<BaseObject> object) {
     objects_.push_back(object);
     LOG(WARNING) << "current objects size : " << objects_.size();
 }
+
+void Scene::setLight(const shared_ptr<BaseLight> &light) {
+    light_ = light;
+}
+
+const shared_ptr<BaseLight> &Scene::getLight() const {
+    return light_;
+}
+
+void Scene::setCamera(const shared_ptr<Camera> &camera) {
+    camera_ = camera;
+}
+

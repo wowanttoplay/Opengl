@@ -94,6 +94,18 @@
 		<Unit filename="/Users/virgil/Opengl/RenderObject/Box.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Light/BaseLight.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Light/BaseLight.h">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Light/PointLight.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Light/PointLight.h">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/RenderObject/Plane.cc">
 			<Option target="Opengl"/>
 		</Unit>

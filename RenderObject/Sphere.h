@@ -6,33 +6,30 @@
 #include <glm/glm.hpp>
 #include <tuple>
 #include <vector>
+#include <memory>
+#include "BaseObject.h"
 
-#include "../Texture2D.h"
-#include "../Shader.h"
-
-
-struct Point{
-    float x_;
-    float y_;
-    float z_;
-    Point(float x, float y ,float z) : x_(x), y_(y), z_(z){}
-};
-
-struct TriangleIndices{
-    uint32_t first_;
-    uint32_t second_;
-    uint32_t third_;
-    TriangleIndices(uint32_t first, uint32_t second, uint32_t third) : first_(first), second_(second), third_(third){}
-};
-
-class Sphere {
+class Sphere : public BaseObject {
 public:
-    virtual ~Sphere();
-    explicit Sphere(int x_num, int y_num);
-    void Render(Shader shader);
+    Sphere(std::shared_ptr<Scene>scene, const glm::vec3& scale, const  glm::vec3& position, int x_num, int y_num);
+    ~Sphere() override;
+
+    void drawShadow() override;
+    void draw() override;
+    void update() override;
+
+    /**
+     * 绘制纯色object
+     */
+    void drawSimpleColor();
+
 private:
-    uint32_t VAO,VBO,EBO;
+    void ConstructGeometry();
+private:
+    uint32_t VAO_,VBO_,EBO_;
+    uint32_t x_num_, y_num_;
     std::vector<float>vertices_data;
     std::vector<uint32_t> indices_data;
+
 };
 

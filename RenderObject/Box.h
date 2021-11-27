@@ -5,15 +5,25 @@
 
 #pragma once
 #include <glew.h>
-#include "../Texture2D.h"
-#include "../Shader.h"
-#include "../ResourceManager.h"
+#include <glm/glm.hpp>
+#include <memory>
+#include "BaseObject.h"
 
-class Box {
+
+class Box : public BaseObject {
 public:
-    uint32_t VAO, VBO;
-    Box();
-    void Render(Shader shader);
+    Box(std::shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& position);
+    ~Box() override;
+    void drawShadow() override;
+    void draw() override;
+    void update() override;
+
+private:
+    void constructGeometry();
+private:
+    uint32_t VAO_, VBO_;
+
+    void simpleColorDraw();
 };
 
 
