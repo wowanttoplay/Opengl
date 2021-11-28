@@ -19,7 +19,7 @@ class Scene : public std::enable_shared_from_this<Scene>{
 public:
     Scene(uint32_t width, uint32_t height, const std::string& resource_dir);
     virtual ~Scene();
-    void Draw();
+    void draw();
     void Update();
 
     /**
@@ -33,31 +33,44 @@ public:
      * @return camera的智能指针
      */
     std::shared_ptr<Camera> getCamera();
+    void setCamera(const std::shared_ptr<Camera> &camera);
 
     /**
      * 获取资源管理器
      * @return resource manager 的智能指针
      */
     std::shared_ptr<ResourceManager> getResourceManager();
+
+    const std::shared_ptr<BaseLight> &getLight() const;
+    void setLight(const std::shared_ptr<BaseLight> &light);
+
+    const std::shared_ptr<Texture2D> &getShadowMap() const;
+
+    /**
+     * 是否开启阴影
+     * @param openShadow
+     */
+    void setOpenShadow(bool openShadow);
+
 public:
     // 外部回调
-    void ProcessKey(int key, int action);
-    void MouseCallBack(double x, double y);
-    void MouseScrollCallBack(double x_offset, double y_offset);
-private:
-    std::shared_ptr<Camera> camera_ = nullptr;
-public:
-    void setCamera(const std::shared_ptr<Camera> &camera);
+    void processKey(int key, int action);
+    void mouseCallBack(double x, double y);
+    void mouseScrollCallBack(double x_offset, double y_offset);
 
 private:
+    std::shared_ptr<Camera> camera_ = nullptr;
     std::shared_ptr<ResourceManager> resource_manager_ = nullptr;
     uint32_t width_ = 0, height_ = 0; // viewport 大小
     std::vector<std::shared_ptr<BaseObject>> objects_; // 所有可绘制物体
     std::shared_ptr<BaseLight> light_;
-public:
-    const std::shared_ptr<BaseLight> &getLight() const;
+    GLuint FBO_; // 常用的FBO，用于离屏渲染
+/////////////////////绘制阴影相关
+    bool open_shadow_ = false;
+    std::shared_ptr<Texture2D>shadow_map_ = nullptr;
+private:
+    void drawShaow();
 
-public:
-    void setLight(const std::shared_ptr<BaseLight> &light);
+    void normalDraw();
 };
 

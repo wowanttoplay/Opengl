@@ -13,8 +13,6 @@
 using namespace std;
 using namespace google;
 
-
-
 ResourceManager::ResourceManager(const string &dir) {
     shader_dir_ = dir + "shader/";
     texture_dir_ = dir + "texture/";
@@ -56,7 +54,8 @@ shared_ptr<Texture2D> ResourceManager::LoadTexture(const string &file)
     if (Textures.count(name) == 0) {
         auto texture = loadTextureFromFile(texture_dir_ + file);
         Textures[name] = texture;
-        LOG(ERROR) << "load texture, name :" << name << "ptr :" << texture.get() << "width : " << texture->Width << " height : " << texture->Height;
+        LOG(ERROR) << "load texture, name :" << name << "ptr :" << texture.get() << "width : " << texture-> getWidth()
+        << " height : " << texture->getHeight();
     }
     return Textures[name];
 }
@@ -113,11 +112,11 @@ shared_ptr<Texture2D> ResourceManager::loadTextureFromFile(const string &file)
     unsigned char* data = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
     if (nrChannels == 4)
     {
-        texture->Internal_Format = GL_RGBA;
-        texture->Image_Format = GL_RGBA;
+        texture->setImageFormate(GL_RGBA);
+        texture->setImageFormate(GL_RGBA);
     }
     // Now generate texture
-    texture->Generate(width, height, data);
+    texture->generate(width, height, data);
     // And finally free image data
     stbi_image_free(data);
     return texture;

@@ -48,15 +48,16 @@ int main(int argc, char* argv[]) {
     auto scene = make_shared<Scene>(width, height, resource_dir + "/Data/");
     auto camera = make_shared<Camera>(scene, glm::vec3(0, 6.0f, 16.0f));
     scene->setCamera(camera);
+    scene->setOpenShadow(true);
 
     function<void(int,int)>key_func = [&scene](int key, int action)->void{
-        scene->ProcessKey(key, action);
+        scene->processKey(key, action);
     };
     function<void(double, double)> mouse_func = [&scene](double x, double y)->void{
-        scene->MouseCallBack(x, y);
+        scene->mouseCallBack(x, y);
     };
     function<void(double, double)> mouse_scroll_func = [&scene](double x, double y)->void{
-        scene->MouseScrollCallBack(x, y);
+        scene->mouseScrollCallBack(x, y);
     };
 
     AddObjectToScene(scene);
@@ -68,10 +69,9 @@ int main(int argc, char* argv[]) {
     glEnable(GL_DEPTH_TEST);
     // render
     while (!glfwWindowShouldClose(const_cast<GLFWwindow*>(window))) {
-        glClearColor(0.2, 0.2 ,0.2 ,1.0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         scene->Update();
-        scene->Draw();
+        scene->draw();
         glfwSwapBuffers(const_cast<GLFWwindow*>(window));
         glfwPollEvents();
     }
@@ -94,23 +94,24 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
     scene->pushObject(left_box);
 
     shared_ptr<Sphere> sphere = std::make_shared<Sphere>(scene, glm::vec3(1.0f), glm::vec3(0.0f, 0.5f, 3.0f), 30, 30);
-    sphere->setColor(glm::vec4(0.8f, 0.8f, 0.8f, 0.8f));
+    sphere->setColor(glm::vec4(0.f, 0.f, 0.8f, 1.0f));
     scene->pushObject(sphere);
 
-    shared_ptr<Box> left_wall = std::make_shared<Box>(scene, glm::vec3(0.1, 5.0, 5.0), glm::vec3(3.0, 2.5f, 0.0f));
-    left_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    scene->pushObject(left_wall);
-
-    shared_ptr<Box> right_wall = std::make_shared<Box>(scene, glm::vec3(0.1f, 5.0f, 5.0f), glm::vec3(-3.0f, 2.5f, 0.0f));
+    shared_ptr<Box> right_wall = std::make_shared<Box>(scene, glm::vec3(0.1, 5.0, 5.0), glm::vec3(3.0, 2.5f, 0.0f));
     right_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     scene->pushObject(right_wall);
 
-    shared_ptr<Box> front_wall = std::make_shared<Box>(scene, glm::vec3(6.2f, 5.0f, 0.1f), glm::vec3(0.0f, 2.5f, -3.0f));
+//    shared_ptr<Box> right_wall = std::make_shared<Box>(scene, glm::vec3(0.1f, 5.0f, 5.0f), glm::vec3(-3.0f, 2.5f, 0.0f));
+//    right_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+//    scene->pushObject(right_wall);
+
+    shared_ptr<Box> front_wall = std::make_shared<Box>(scene, glm::vec3(6.1f, 5.0f, 0.1f), glm::vec3(0.0f, 2.5f, -2.5f));
     front_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     scene->pushObject(front_wall);
 
     shared_ptr<PointLight> light = std::make_shared<PointLight>(scene, glm::vec3(0.3f), glm::vec3(-3.0f, 8.0f,1.0f));
-    light->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    light->setColor(glm::vec4(15.0f));
+    light->setTarget(glm::vec3(0.0));
     scene->setLight(light);
 }
 

@@ -20,7 +20,7 @@ private:
     /*
      * 构造VAO
      */
-    void ConstructGeometry();
+    void constructGeometry();
     uint32_t VAO_,VBO_;
 
     void SimpleColorDraw();

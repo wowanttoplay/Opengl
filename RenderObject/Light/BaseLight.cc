@@ -19,3 +19,11 @@ BaseLight::~BaseLight() {
     LOG(WARNING) << "BaseLight(), ptr : " << this;
 }
 
+const glm::mat4 &BaseLight::getViewMatrix() const {
+    return view_matrix_;
+}
+
+const glm::mat4 &BaseLight::getProjectionMatrix() const {
+    return projection_matrix_;
+}
+

@@ -24,7 +24,7 @@ public:
     void drawSimpleColor();
 
 private:
-    void ConstructGeometry();
+    void constructGeometry();
 private:
     uint32_t VAO_,VBO_,EBO_;
     uint32_t x_num_, y_num_;

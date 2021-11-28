@@ -939,6 +939,8 @@ CMakeFiles/Opengl.dir/RenderObject/Light/PointLight.cc.o: \
  /usr/local/Cellar/glm/glm/detail/type_vec4.inl \
  /usr/local/Cellar/glm/glm/detail/type_vec4_simd.inl \
  /usr/local/Cellar/glm/glm/exponential.hpp \
+ /usr/local/Cellar/glm/glm/ext/matrix_clip_space.hpp \
+ /usr/local/Cellar/glm/glm/ext/matrix_clip_space.inl \
  /usr/local/Cellar/glm/glm/ext/matrix_double2x2.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_double2x2_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_double2x3.hpp \
@@ -975,6 +977,11 @@ CMakeFiles/Opengl.dir/RenderObject/Light/PointLight.cc.o: \
  /usr/local/Cellar/glm/glm/ext/matrix_float4x3_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_float4x4.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_float4x4_precision.hpp \
+ /usr/local/Cellar/glm/glm/ext/matrix_projection.hpp \
+ /usr/local/Cellar/glm/glm/ext/matrix_projection.inl \
+ /usr/local/Cellar/glm/glm/ext/matrix_transform.hpp \
+ /usr/local/Cellar/glm/glm/ext/scalar_constants.hpp \
+ /usr/local/Cellar/glm/glm/ext/scalar_constants.inl \
  /usr/local/Cellar/glm/glm/ext/scalar_int_sized.hpp \
  /usr/local/Cellar/glm/glm/ext/scalar_uint_sized.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_bool2.hpp \
@@ -1010,6 +1017,12 @@ CMakeFiles/Opengl.dir/RenderObject/Light/PointLight.cc.o: \
  /usr/local/Cellar/glm/glm/fwd.hpp \
  /usr/local/Cellar/glm/glm/geometric.hpp \
  /usr/local/Cellar/glm/glm/glm.hpp \
+ /usr/local/Cellar/glm/glm/gtc/constants.hpp \
+ /usr/local/Cellar/glm/glm/gtc/constants.inl \
+ /usr/local/Cellar/glm/glm/gtc/matrix_transform.hpp \
+ /usr/local/Cellar/glm/glm/gtc/matrix_transform.inl \
+ /usr/local/Cellar/glm/glm/gtx/transform.hpp \
+ /usr/local/Cellar/glm/glm/gtx/transform.inl \
  /usr/local/Cellar/glm/glm/integer.hpp \
  /usr/local/Cellar/glm/glm/mat2x2.hpp \
  /usr/local/Cellar/glm/glm/mat2x3.hpp \
@@ -1915,7 +1928,6 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  ../RenderObject/BaseObject.h \
  ../RenderObject/Box.h \
  ../RenderObject/Light/BaseLight.h \
- ../RenderObject/Sphere.h \
  ../ResourceManager.h \
  ../Scene.cc \
  ../Scene.h \
@@ -1925,7 +1937,6 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h \
  /usr/local/Cellar/glm/glm/common.hpp \
  /usr/local/Cellar/glm/glm/detail/_fixes.hpp \
- /usr/local/Cellar/glm/glm/detail/_noise.hpp \
  /usr/local/Cellar/glm/glm/detail/_swizzle.hpp \
  /usr/local/Cellar/glm/glm/detail/_swizzle_func.hpp \
  /usr/local/Cellar/glm/glm/detail/_vectorize.hpp \
@@ -1984,11 +1995,8 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  /usr/local/Cellar/glm/glm/detail/type_vec4.inl \
  /usr/local/Cellar/glm/glm/detail/type_vec4_simd.inl \
  /usr/local/Cellar/glm/glm/exponential.hpp \
- /usr/local/Cellar/glm/glm/ext.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_clip_space.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_clip_space.inl \
- /usr/local/Cellar/glm/glm/ext/matrix_common.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_common.inl \
  /usr/local/Cellar/glm/glm/ext/matrix_double2x2.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_double2x2_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_double2x3.hpp \
@@ -2025,55 +2033,14 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  /usr/local/Cellar/glm/glm/ext/matrix_float4x3_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_float4x4.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_float4x4_precision.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int2x2.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int2x2_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int2x3.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int2x3_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int2x4.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int2x4_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int3x2.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int3x2_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int3x3.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int3x3_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int3x4.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int3x4_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int4x2.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int4x2_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int4x3.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int4x3_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int4x4.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_int4x4_sized.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_projection.hpp \
  /usr/local/Cellar/glm/glm/ext/matrix_projection.inl \
- /usr/local/Cellar/glm/glm/ext/matrix_relational.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_relational.inl \
  /usr/local/Cellar/glm/glm/ext/matrix_transform.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_transform.inl \
- /usr/local/Cellar/glm/glm/ext/matrix_uint2x2.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint2x2_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint2x3.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint2x3_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint2x4.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint2x4_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint3x2.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint3x2_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint3x3.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint3x3_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint3x4.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint3x4_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint4x2.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint4x2_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint4x3.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint4x3_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint4x4.hpp \
- /usr/local/Cellar/glm/glm/ext/matrix_uint4x4_sized.hpp \
  /usr/local/Cellar/glm/glm/ext/quaternion_common.hpp \
  /usr/local/Cellar/glm/glm/ext/quaternion_common.inl \
  /usr/local/Cellar/glm/glm/ext/quaternion_common_simd.inl \
  /usr/local/Cellar/glm/glm/ext/quaternion_double.hpp \
  /usr/local/Cellar/glm/glm/ext/quaternion_double_precision.hpp \
- /usr/local/Cellar/glm/glm/ext/quaternion_exponential.hpp \
- /usr/local/Cellar/glm/glm/ext/quaternion_exponential.inl \
  /usr/local/Cellar/glm/glm/ext/quaternion_float.hpp \
  /usr/local/Cellar/glm/glm/ext/quaternion_float_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/quaternion_geometric.hpp \
@@ -2084,22 +2051,10 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  /usr/local/Cellar/glm/glm/ext/quaternion_transform.inl \
  /usr/local/Cellar/glm/glm/ext/quaternion_trigonometric.hpp \
  /usr/local/Cellar/glm/glm/ext/quaternion_trigonometric.inl \
- /usr/local/Cellar/glm/glm/ext/scalar_common.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_common.inl \
  /usr/local/Cellar/glm/glm/ext/scalar_constants.hpp \
  /usr/local/Cellar/glm/glm/ext/scalar_constants.inl \
  /usr/local/Cellar/glm/glm/ext/scalar_int_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_integer.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_integer.inl \
- /usr/local/Cellar/glm/glm/ext/scalar_packing.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_packing.inl \
- /usr/local/Cellar/glm/glm/ext/scalar_reciprocal.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_reciprocal.inl \
- /usr/local/Cellar/glm/glm/ext/scalar_relational.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_relational.inl \
  /usr/local/Cellar/glm/glm/ext/scalar_uint_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_ulp.hpp \
- /usr/local/Cellar/glm/glm/ext/scalar_ulp.inl \
  /usr/local/Cellar/glm/glm/ext/vector_bool1.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_bool1_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_bool2.hpp \
@@ -2108,8 +2063,6 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  /usr/local/Cellar/glm/glm/ext/vector_bool3_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_bool4.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_bool4_precision.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_common.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_common.inl \
  /usr/local/Cellar/glm/glm/ext/vector_double1.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_double1_precision.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_double2.hpp \
@@ -2134,12 +2087,6 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  /usr/local/Cellar/glm/glm/ext/vector_int3_sized.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_int4.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_int4_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_integer.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_integer.inl \
- /usr/local/Cellar/glm/glm/ext/vector_packing.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_packing.inl \
- /usr/local/Cellar/glm/glm/ext/vector_reciprocal.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_reciprocal.inl \
  /usr/local/Cellar/glm/glm/ext/vector_relational.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_relational.inl \
  /usr/local/Cellar/glm/glm/ext/vector_uint1.hpp \
@@ -2150,141 +2097,27 @@ CMakeFiles/Opengl.dir/Scene.cc.o: \
  /usr/local/Cellar/glm/glm/ext/vector_uint3_sized.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_uint4.hpp \
  /usr/local/Cellar/glm/glm/ext/vector_uint4_sized.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_ulp.hpp \
- /usr/local/Cellar/glm/glm/ext/vector_ulp.inl \
  /usr/local/Cellar/glm/glm/fwd.hpp \
  /usr/local/Cellar/glm/glm/geometric.hpp \
  /usr/local/Cellar/glm/glm/glm.hpp \
- /usr/local/Cellar/glm/glm/gtc/bitfield.hpp \
- /usr/local/Cellar/glm/glm/gtc/bitfield.inl \
- /usr/local/Cellar/glm/glm/gtc/color_space.hpp \
- /usr/local/Cellar/glm/glm/gtc/color_space.inl \
  /usr/local/Cellar/glm/glm/gtc/constants.hpp \
  /usr/local/Cellar/glm/glm/gtc/constants.inl \
  /usr/local/Cellar/glm/glm/gtc/epsilon.hpp \
  /usr/local/Cellar/glm/glm/gtc/epsilon.inl \
- /usr/local/Cellar/glm/glm/gtc/integer.hpp \
- /usr/local/Cellar/glm/glm/gtc/integer.inl \
- /usr/local/Cellar/glm/glm/gtc/matrix_access.hpp \
- /usr/local/Cellar/glm/glm/gtc/matrix_access.inl \
- /usr/local/Cellar/glm/glm/gtc/matrix_integer.hpp \
- /usr/local/Cellar/glm/glm/gtc/matrix_inverse.hpp \
- /usr/local/Cellar/glm/glm/gtc/matrix_inverse.inl \
  /usr/local/Cellar/glm/glm/gtc/matrix_transform.hpp \
- /usr/local/Cellar/glm/glm/gtc/noise.hpp \
- /usr/local/Cellar/glm/glm/gtc/noise.inl \
- /usr/local/Cellar/glm/glm/gtc/packing.hpp \
- /usr/local/Cellar/glm/glm/gtc/packing.inl \
+ /usr/local/Cellar/glm/glm/gtc/matrix_transform.inl \
  /usr/local/Cellar/glm/glm/gtc/quaternion.hpp \
  /usr/local/Cellar/glm/glm/gtc/quaternion.inl \
  /usr/local/Cellar/glm/glm/gtc/quaternion_simd.inl \
- /usr/local/Cellar/glm/glm/gtc/random.hpp \
- /usr/local/Cellar/glm/glm/gtc/random.inl \
- /usr/local/Cellar/glm/glm/gtc/reciprocal.hpp \
- /usr/local/Cellar/glm/glm/gtc/round.hpp \
- /usr/local/Cellar/glm/glm/gtc/round.inl \
- /usr/local/Cellar/glm/glm/gtc/type_aligned.hpp \
  /usr/local/Cellar/glm/glm/gtc/type_precision.hpp \
  /usr/local/Cellar/glm/glm/gtc/type_precision.inl \
  /usr/local/Cellar/glm/glm/gtc/type_ptr.hpp \
  /usr/local/Cellar/glm/glm/gtc/type_ptr.inl \
- /usr/local/Cellar/glm/glm/gtc/ulp.hpp \
- /usr/local/Cellar/glm/glm/gtc/ulp.inl \
  /usr/local/Cellar/glm/glm/gtc/vec1.hpp \
- /usr/local/Cellar/glm/glm/gtx/associated_min_max.hpp \
- /usr/local/Cellar/glm/glm/gtx/associated_min_max.inl \
- /usr/local/Cellar/glm/glm/gtx/bit.hpp \
- /usr/local/Cellar/glm/glm/gtx/bit.inl \
- /usr/local/Cellar/glm/glm/gtx/closest_point.hpp \
- /usr/local/Cellar/glm/glm/gtx/closest_point.inl \
- /usr/local/Cellar/glm/glm/gtx/color_encoding.hpp \
- /usr/local/Cellar/glm/glm/gtx/color_encoding.inl \
- /usr/local/Cellar/glm/glm/gtx/color_space.hpp \
- /usr/local/Cellar/glm/glm/gtx/color_space_YCoCg.hpp \
- /usr/local/Cellar/glm/glm/gtx/color_space_YCoCg.inl \
- /usr/local/Cellar/glm/glm/gtx/compatibility.hpp \
- /usr/local/Cellar/glm/glm/gtx/compatibility.inl \
- /usr/local/Cellar/glm/glm/gtx/component_wise.hpp \
- /usr/local/Cellar/glm/glm/gtx/component_wise.inl \
  /usr/local/Cellar/glm/glm/gtx/dual_quaternion.hpp \
  /usr/local/Cellar/glm/glm/gtx/dual_quaternion.inl \
- /usr/local/Cellar/glm/glm/gtx/euler_angles.hpp \
- /usr/local/Cellar/glm/glm/gtx/euler_angles.inl \
- /usr/local/Cellar/glm/glm/gtx/extend.hpp \
- /usr/local/Cellar/glm/glm/gtx/extend.inl \
- /usr/local/Cellar/glm/glm/gtx/extended_min_max.hpp \
- /usr/local/Cellar/glm/glm/gtx/extended_min_max.inl \
- /usr/local/Cellar/glm/glm/gtx/fast_exponential.hpp \
- /usr/local/Cellar/glm/glm/gtx/fast_exponential.inl \
- /usr/local/Cellar/glm/glm/gtx/fast_square_root.hpp \
- /usr/local/Cellar/glm/glm/gtx/fast_square_root.inl \
- /usr/local/Cellar/glm/glm/gtx/fast_trigonometry.hpp \
- /usr/local/Cellar/glm/glm/gtx/fast_trigonometry.inl \
- /usr/local/Cellar/glm/glm/gtx/functions.hpp \
- /usr/local/Cellar/glm/glm/gtx/functions.inl \
- /usr/local/Cellar/glm/glm/gtx/gradient_paint.hpp \
- /usr/local/Cellar/glm/glm/gtx/gradient_paint.inl \
- /usr/local/Cellar/glm/glm/gtx/handed_coordinate_space.hpp \
- /usr/local/Cellar/glm/glm/gtx/handed_coordinate_space.inl \
- /usr/local/Cellar/glm/glm/gtx/integer.hpp \
- /usr/local/Cellar/glm/glm/gtx/intersect.hpp \
- /usr/local/Cellar/glm/glm/gtx/intersect.inl \
- /usr/local/Cellar/glm/glm/gtx/log_base.hpp \
- /usr/local/Cellar/glm/glm/gtx/log_base.inl \
- /usr/local/Cellar/glm/glm/gtx/matrix_cross_product.hpp \
- /usr/local/Cellar/glm/glm/gtx/matrix_cross_product.inl \
- /usr/local/Cellar/glm/glm/gtx/matrix_interpolation.hpp \
- /usr/local/Cellar/glm/glm/gtx/matrix_interpolation.inl \
- /usr/local/Cellar/glm/glm/gtx/matrix_major_storage.hpp \
- /usr/local/Cellar/glm/glm/gtx/matrix_major_storage.inl \
- /usr/local/Cellar/glm/glm/gtx/matrix_operation.hpp \
- /usr/local/Cellar/glm/glm/gtx/matrix_operation.inl \
- /usr/local/Cellar/glm/glm/gtx/matrix_query.hpp \
- /usr/local/Cellar/glm/glm/gtx/matrix_query.inl \
- /usr/local/Cellar/glm/glm/gtx/mixed_product.hpp \
- /usr/local/Cellar/glm/glm/gtx/mixed_product.inl \
- /usr/local/Cellar/glm/glm/gtx/norm.hpp \
- /usr/local/Cellar/glm/glm/gtx/norm.inl \
- /usr/local/Cellar/glm/glm/gtx/normal.hpp \
- /usr/local/Cellar/glm/glm/gtx/normal.inl \
- /usr/local/Cellar/glm/glm/gtx/normalize_dot.hpp \
- /usr/local/Cellar/glm/glm/gtx/normalize_dot.inl \
- /usr/local/Cellar/glm/glm/gtx/number_precision.hpp \
- /usr/local/Cellar/glm/glm/gtx/number_precision.inl \
- /usr/local/Cellar/glm/glm/gtx/optimum_pow.hpp \
- /usr/local/Cellar/glm/glm/gtx/optimum_pow.inl \
- /usr/local/Cellar/glm/glm/gtx/orthonormalize.hpp \
- /usr/local/Cellar/glm/glm/gtx/orthonormalize.inl \
- /usr/local/Cellar/glm/glm/gtx/perpendicular.hpp \
- /usr/local/Cellar/glm/glm/gtx/perpendicular.inl \
- /usr/local/Cellar/glm/glm/gtx/polar_coordinates.hpp \
- /usr/local/Cellar/glm/glm/gtx/polar_coordinates.inl \
- /usr/local/Cellar/glm/glm/gtx/projection.hpp \
- /usr/local/Cellar/glm/glm/gtx/projection.inl \
- /usr/local/Cellar/glm/glm/gtx/quaternion.hpp \
- /usr/local/Cellar/glm/glm/gtx/range.hpp \
- /usr/local/Cellar/glm/glm/gtx/raw_data.hpp \
- /usr/local/Cellar/glm/glm/gtx/raw_data.inl \
- /usr/local/Cellar/glm/glm/gtx/rotate_vector.hpp \
- /usr/local/Cellar/glm/glm/gtx/rotate_vector.inl \
- /usr/local/Cellar/glm/glm/gtx/scalar_multiplication.hpp \
- /usr/local/Cellar/glm/glm/gtx/spline.hpp \
- /usr/local/Cellar/glm/glm/gtx/spline.inl \
- /usr/local/Cellar/glm/glm/gtx/std_based_type.hpp \
- /usr/local/Cellar/glm/glm/gtx/std_based_type.inl \
  /usr/local/Cellar/glm/glm/gtx/string_cast.hpp \
  /usr/local/Cellar/glm/glm/gtx/string_cast.inl \
- /usr/local/Cellar/glm/glm/gtx/transform.hpp \
- /usr/local/Cellar/glm/glm/gtx/transform.inl \
- /usr/local/Cellar/glm/glm/gtx/transform2.hpp \
- /usr/local/Cellar/glm/glm/gtx/transform2.inl \
- /usr/local/Cellar/glm/glm/gtx/vec_swizzle.hpp \
- /usr/local/Cellar/glm/glm/gtx/vector_angle.hpp \
- /usr/local/Cellar/glm/glm/gtx/vector_angle.inl \
- /usr/local/Cellar/glm/glm/gtx/vector_query.hpp \
- /usr/local/Cellar/glm/glm/gtx/vector_query.inl \
- /usr/local/Cellar/glm/glm/gtx/wrap.hpp \
- /usr/local/Cellar/glm/glm/gtx/wrap.inl \
  /usr/local/Cellar/glm/glm/integer.hpp \
  /usr/local/Cellar/glm/glm/mat2x2.hpp \
  /usr/local/Cellar/glm/glm/mat2x3.hpp \
@@ -2529,7 +2362,12 @@ CMakeFiles/Opengl.dir/Shader.cc.o: \
 CMakeFiles/Opengl.dir/Texture2D.cc.o: \
  ../Texture2D.cc \
  ../Texture2D.h \
- /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
+ /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h \
+ /usr/local/include/glog/export.h \
+ /usr/local/include/glog/log_severity.h \
+ /usr/local/include/glog/logging.h \
+ /usr/local/include/glog/platform.h \
+ /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/Opengl.dir/main.cpp.o: \
  ../Camera.h \
  ../RenderObject/BaseObject.h \

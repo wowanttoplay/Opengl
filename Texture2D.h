@@ -8,26 +8,36 @@
 class Texture2D
 {
 public:
-
-    GLuint ID;
-
-    GLuint Width, Height;
-    GLuint Internal_Format; // Format of texture object
-    GLuint Image_Format; // Format of loaded image
-
-    GLuint Wrap_S;
-    GLuint Wrap_T;
-    GLuint Filter_Min;
-    GLuint Filter_Max;
-
-    bool ready_ = false;
-
-    Texture2D();
+    Texture2D(GLuint internalFormat = GL_RGB, GLuint imageFormate = GL_RGB, GLuint wrap_s = GL_REPEAT, GLuint wrap_t = GL_REPEAT, GLuint filter_min = GL_LINEAR, GLuint filter_max = GL_LINEAR, GLuint type = GL_UNSIGNED_BYTE);
 
     virtual ~Texture2D();
 
-    void Generate(GLuint width, GLuint height, unsigned char* data);
+    void generate(GLuint width, GLuint height, unsigned char* data);
 
-    void Bind() const;
+    void bind() const;
+
+    void setInternalFormat(GLuint internalFormat);
+
+    void setImageFormate(GLuint imageFormate);
+
+    GLuint getId() const;
+
+    GLuint getWidth() const;
+
+    GLuint getHeight() const;
+
+private:
+    GLuint id_;
+    GLuint width_, height_;
+    GLuint internal_format_;
+
+    // Format of texture object
+    GLuint image_formate_; // Format of loaded image
+
+    GLuint wrap_s_;
+    GLuint wrap_t_;
+    GLuint filter_min_;
+    GLuint filter_max_;
+    GLuint type_;
 };
 
