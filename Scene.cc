@@ -37,7 +37,9 @@ void Scene::normalDraw() {
 }
 
 void Scene::drawShaow() {
+    const uint32_t kShadowWidth = 1024;
     glViewport(0, 0, width_, height_);
+    light_->setAspect(width_/height_);
     if (!glIsFramebuffer(FBO_)) {
         LOG(WARNING) << "generate FBO";
         glGenFramebuffers(1, &FBO_);
@@ -46,18 +48,20 @@ void Scene::drawShaow() {
         shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_REPEAT, GL_REPEAT, GL_NEAREST,
                                              GL_NEAREST, GL_FLOAT);
         shadow_map_->generate(width_, height_, NULL);
+        glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
+        shadow_map_->bind();
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_map_->getId(), 0);
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
-    shadow_map_->bind();
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_map_->getId(), 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
 
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         LOG(ERROR) << "frame buffer is not complete";
     }
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
     for (const auto &object: objects_) {
         object->drawShadow();
     }
@@ -71,6 +75,8 @@ void Scene::Update() {
 Scene::Scene(uint32_t width, uint32_t height, const string &resource_dir) : width_(width), height_(height) {
     LOG_AT_LEVEL(ERROR) << "Scene()" << ", ptr : " << this << "\t width : " << width_ << "\t height : " << height_;
     resource_manager_ = make_shared<ResourceManager>(resource_dir);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     CHECK(resource_manager_ != nullptr);
 }
 

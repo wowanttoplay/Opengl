@@ -29,13 +29,21 @@ protected:
     glm::mat4 view_matrix_;
     glm::mat4 projection_matrix_;
     float far_plane_ = 10.0f;
+    float near_plane_ = 0.1f;
+    float aspect_ = 1.0f;
+public:
+    void setAspect(float aspect);
+
+public:
+    float getAspect() const;
+
 public:
     void setFarPlane(float farPlane);
 
     void setNearPlane(float nearPlane);
 
-protected:
-    float near_plane_ = 0.1f;
+private:
+    void updateMatrix();
 };
 
 

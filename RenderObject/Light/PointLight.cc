@@ -10,6 +10,7 @@
 PointLight::PointLight(std::shared_ptr<Scene> scene, const glm::vec3 &scale, const glm::vec3 &position) : BaseLight(
         scene, scale, position, ObjectType::PointLight) {
     LOG(WARNING) << "PointLight(), ptr : " << this;
+
 }
 
 PointLight::~PointLight() {
@@ -18,8 +19,8 @@ PointLight::~PointLight() {
 
 void PointLight::draw() {
     if (!object_) {
-       object_ = std::make_shared<Sphere>(getScene(), getScale(), getPosition(), 20, 20);
-       object_->setColor(getColor());
+        object_ = std::make_shared<Sphere>(getScene(), getScale(), getPosition(), 20, 20);
+        object_->setColor(getColor());
     }
     object_->drawSimpleColor();
 }

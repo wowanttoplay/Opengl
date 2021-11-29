@@ -39,14 +39,29 @@ float BaseLight::getFarPlane() const {
 
 void BaseLight::setTarget(const glm::vec3 &target) {
     target_ = target;
-    view_matrix_ = glm::lookAt(getPosition(), target_, glm::vec3(0.0, 1.0, 0.0));
-    projection_matrix_ = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+    updateMatrix();
 }
 
 void BaseLight::setFarPlane(float farPlane) {
     far_plane_ = farPlane;
+    updateMatrix();
 }
 
 void BaseLight::setNearPlane(float nearPlane) {
     near_plane_ = nearPlane;
+    updateMatrix();
+}
+
+float BaseLight::getAspect() const {
+    return aspect_;
+}
+
+void BaseLight::setAspect(float aspect) {
+    BaseLight::aspect_ = aspect;
+    updateMatrix();
+}
+
+void BaseLight::updateMatrix() {
+    view_matrix_ = glm::lookAt(getPosition(), target_, glm::vec3(0.0, 1.0, 0.0));
+    projection_matrix_ = glm::perspective(glm::radians(90.0f), aspect_, near_plane_, far_plane_);
 }

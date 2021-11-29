@@ -29,9 +29,8 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene);
 int main(int argc, char* argv[]) {
     // 初始化glog
     google::InitGoogleLogging(argv[0]);
-    google::SetStderrLogging(google::WARNING);
+    google::SetStderrLogging(google::ERROR);
     FLAGS_colorlogtostderr = true;
-
 
     GLFWwindow *window = Window::InitGLFWWindow();
     if (window == nullptr) {
@@ -112,6 +111,7 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
     shared_ptr<PointLight> light = std::make_shared<PointLight>(scene, glm::vec3(0.3f), glm::vec3(-3.0f, 8.0f,1.0f));
     light->setColor(glm::vec4(15.0f));
     light->setTarget(glm::vec3(0.0));
+    light->setFarPlane(18.0f);
     scene->setLight(light);
 }
 
