@@ -8,7 +8,7 @@
 class Texture2D
 {
 public:
-    Texture2D(GLuint internalFormat = GL_RGB, GLuint imageFormate = GL_RGB, GLuint wrap_s = GL_REPEAT, GLuint wrap_t = GL_REPEAT, GLuint filter_min = GL_LINEAR, GLuint filter_max = GL_LINEAR, GLuint type = GL_UNSIGNED_BYTE);
+    Texture2D(GLuint internalFormat = GL_RGB, GLuint imageFormate = GL_RGB, GLuint wrap_s = GL_REPEAT, GLuint wrap_t = GL_REPEAT, GLuint filter_min = GL_LINEAR, GLuint filter_max = GL_LINEAR, GLuint type = GL_UNSIGNED_BYTE, bool mipmap = false);
 
     virtual ~Texture2D();
 
@@ -39,5 +39,6 @@ private:
     GLuint filter_min_;
     GLuint filter_max_;
     GLuint type_;
+    bool mipmap_;
 };
 

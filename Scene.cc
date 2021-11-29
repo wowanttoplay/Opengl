@@ -16,11 +16,11 @@ using namespace google;
 
 Scene::~Scene() {
     LOG_AT_LEVEL(ERROR) << "~Scene(), ptr : " << this;
+    glDeleteFramebuffers(1, &FBO_);
 }
 
 void Scene::draw() {
     // 检测是否绘制阴影
-    glEnable(GL_DEPTH_TEST);
     if (open_shadow_) drawShaow();
     normalDraw();
     debug();
@@ -37,15 +37,15 @@ void Scene::normalDraw() {
 }
 
 void Scene::drawShaow() {
-    const uint32_t kShadowWidth = 1024;
-    glViewport(0, 0, kShadowWidth, kShadowWidth);
+    glViewport(0, 0, width_, height_);
     if (!glIsFramebuffer(FBO_)) {
+        LOG(WARNING) << "generate FBO";
         glGenFramebuffers(1, &FBO_);
     }
     if (!shadow_map_) {
-        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_NEAREST, GL_NEAREST, GL_REPEAT,
-                                             GL_REPEAT, GL_FLOAT);
-        shadow_map_->generate(kShadowWidth, kShadowWidth, nullptr);
+        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE,
+                                             GL_CLAMP_TO_EDGE, GL_FLOAT);
+        shadow_map_->generate(width_, height_, nullptr);
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
@@ -53,6 +53,10 @@ void Scene::drawShaow() {
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_map_->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        LOG(ERROR) << "frame buffer is not complete";
+    }
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     for (const auto &object: objects_) {
         object->drawShadow();
@@ -65,7 +69,7 @@ void Scene::Update() {
 }
 
 Scene::Scene(uint32_t width, uint32_t height, const string &resource_dir) : width_(width), height_(height) {
-    LOG_AT_LEVEL(ERROR) << "Scene()" << ", ptr : " << this << "\t width : " <<width_ << "\t height : " << height_;
+    LOG_AT_LEVEL(ERROR) << "Scene()" << ", ptr : " << this << "\t width : " << width_ << "\t height : " << height_;
     resource_manager_ = make_shared<ResourceManager>(resource_dir);
     CHECK(resource_manager_ != nullptr);
 }
@@ -156,8 +160,7 @@ void Scene::debug() {
 }
 
 void Scene::debugShadow() {
-    glViewport(0, 0, width_ / 2, height_ / 2);
-    glDisable(GL_DEPTH_TEST);
+    glViewport(width_ / 2, height_ / 2, width_ / 2, height_ / 2);
 //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
