@@ -24,7 +24,7 @@ in vec4 positionFromLight;
 float directUseShadowMap(sampler2D shadowMap, vec4 shadowCoord) {
   float depth = texture(shadowMap, shadowCoord.xy).r;
   const float bias = 0.01;
-  if (depth + bias > shadowCoord.z) {
+  if (depth + bias > shadowCoord.z || depth == 0.0) {
     return 1.0;
   }
 

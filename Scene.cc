@@ -43,11 +43,10 @@ void Scene::drawShaow() {
         glGenFramebuffers(1, &FBO_);
     }
     if (!shadow_map_) {
-        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE,
-                                             GL_CLAMP_TO_EDGE, GL_FLOAT);
-        shadow_map_->generate(width_, height_, nullptr);
+        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_REPEAT, GL_REPEAT, GL_NEAREST,
+                                             GL_NEAREST, GL_FLOAT);
+        shadow_map_->generate(width_, height_, NULL);
     }
-
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
     shadow_map_->bind();
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_map_->getId(), 0);
@@ -58,6 +57,7 @@ void Scene::drawShaow() {
         LOG(ERROR) << "frame buffer is not complete";
     }
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
     for (const auto &object: objects_) {
         object->drawShadow();
     }

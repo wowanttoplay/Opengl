@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
 
     glEnable(GL_DEPTH_TEST);
     // render
+    glGetError();
     while (!glfwWindowShouldClose(const_cast<GLFWwindow*>(window))) {
 
         scene->Update();
