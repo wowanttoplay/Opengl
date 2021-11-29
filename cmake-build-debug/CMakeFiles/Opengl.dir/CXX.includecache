@@ -32,12 +32,46 @@ memory
 BaseObject.h
 /Users/virgil/Opengl/RenderObject/BaseObject.h
 
+/Users/virgil/Opengl/RenderObject/Debug/DebugPlane.h
+glew.h
+-
+memory
+-
+glm/glm.hpp
+-
+../BaseObject.h
+/Users/virgil/Opengl/RenderObject/BaseObject.h
+
 /Users/virgil/Opengl/RenderObject/Light/BaseLight.h
 glm/glm.hpp
 -
 memory
 -
 ../BaseObject.h
+/Users/virgil/Opengl/RenderObject/BaseObject.h
+../Sphere.h
+/Users/virgil/Opengl/RenderObject/Sphere.h
+
+/Users/virgil/Opengl/RenderObject/Plane.h
+glew.h
+-
+memory
+-
+BaseObject.h
+/Users/virgil/Opengl/RenderObject/BaseObject.h
+glm/glm.hpp
+-
+
+/Users/virgil/Opengl/RenderObject/Sphere.h
+glm/glm.hpp
+-
+tuple
+-
+vector
+-
+memory
+-
+BaseObject.h
 /Users/virgil/Opengl/RenderObject/BaseObject.h
 
 /Users/virgil/Opengl/ResourceManager.h
@@ -65,6 +99,10 @@ glm/gtx/string_cast.hpp
 /Users/virgil/Opengl/glm/gtx/string_cast.hpp
 glog/logging.h
 /Users/virgil/Opengl/glog/logging.h
+RenderObject/Plane.h
+/Users/virgil/Opengl/RenderObject/Plane.h
+RenderObject/Debug/DebugPlane.h
+/Users/virgil/Opengl/RenderObject/Debug/DebugPlane.h
 
 /Users/virgil/Opengl/Scene.h
 glew.h

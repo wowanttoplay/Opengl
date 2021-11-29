@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Opengl.dir/Camera.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Box.cc.o"
+  "CMakeFiles/Opengl.dir/RenderObject/Debug/DebugPlane.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Light/BaseLight.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Light/PointLight.cc.o"
   "CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"

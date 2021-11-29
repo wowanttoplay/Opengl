@@ -12,6 +12,7 @@ enum class ObjectType{
     Box,
     Camera,
     PointLight,
+    DeubgPlane,
 };
 
 class Scene;

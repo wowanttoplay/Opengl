@@ -57,7 +57,6 @@ void Plane::draw() {
     auto lightMVP = light_projection * light_view * getModelMatrix();
     shader->setMatrix4("lightMVP", lightMVP);
 
-
     // draw vertex
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -142,6 +141,24 @@ void Plane::constructGeometry() {
     glBindVertexArray(0);
 
     LOG_AT_LEVEL(WARNING) << "constructGeometry() end, VAO_ :" << VAO_ << " VBO_ :" << VBO_;
+}
+
+void Plane::drawTexture(std::shared_ptr<Texture2D> texture) {
+    if (!glIsVertexArray(VAO_)) {
+        constructGeometry();
+    }
+    auto scene = getScene();
+    if (!scene) {
+        LOG(ERROR) << "scene ptr is nullptr";
+        return;
+    }
+    auto resource_manager = scene->getResourceManager();
+    auto shader = resource_manager->LoadShader("texture.vs", "texture.fs");
+    shader->use();
+    shader->setInteger("texUnit", 0);
+    texture->bind();
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 

@@ -77,8 +77,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/local/Cellar/cmake/3.21.2/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -200,6 +200,30 @@ RenderObject/Box.s: RenderObject/Box.cc.s
 RenderObject/Box.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Box.cc.s
 .PHONY : RenderObject/Box.cc.s
+
+RenderObject/Debug/DebugPlane.o: RenderObject/Debug/DebugPlane.cc.o
+.PHONY : RenderObject/Debug/DebugPlane.o
+
+# target to build an object file
+RenderObject/Debug/DebugPlane.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Debug/DebugPlane.cc.o
+.PHONY : RenderObject/Debug/DebugPlane.cc.o
+
+RenderObject/Debug/DebugPlane.i: RenderObject/Debug/DebugPlane.cc.i
+.PHONY : RenderObject/Debug/DebugPlane.i
+
+# target to preprocess a source file
+RenderObject/Debug/DebugPlane.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Debug/DebugPlane.cc.i
+.PHONY : RenderObject/Debug/DebugPlane.cc.i
+
+RenderObject/Debug/DebugPlane.s: RenderObject/Debug/DebugPlane.cc.s
+.PHONY : RenderObject/Debug/DebugPlane.s
+
+# target to generate assembly for a file
+RenderObject/Debug/DebugPlane.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/RenderObject/Debug/DebugPlane.cc.s
+.PHONY : RenderObject/Debug/DebugPlane.cc.s
 
 RenderObject/Light/BaseLight.o: RenderObject/Light/BaseLight.cc.o
 .PHONY : RenderObject/Light/BaseLight.o
@@ -483,6 +507,9 @@ help:
 	@echo "... RenderObject/Box.o"
 	@echo "... RenderObject/Box.i"
 	@echo "... RenderObject/Box.s"
+	@echo "... RenderObject/Debug/DebugPlane.o"
+	@echo "... RenderObject/Debug/DebugPlane.i"
+	@echo "... RenderObject/Debug/DebugPlane.s"
 	@echo "... RenderObject/Light/BaseLight.o"
 	@echo "... RenderObject/Light/BaseLight.i"
 	@echo "... RenderObject/Light/BaseLight.s"

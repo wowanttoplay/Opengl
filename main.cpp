@@ -11,6 +11,7 @@
 #include "RenderObject/Sphere.h"
 #include "RenderObject/Light/PointLight.h"
 #include "Camera.h"
+#include "RenderObject/Light/BaseLight.h"
 
 using namespace std;
 bool InitGlew() {
@@ -49,6 +50,7 @@ int main(int argc, char* argv[]) {
     auto camera = make_shared<Camera>(scene, glm::vec3(0, 6.0f, 16.0f));
     scene->setCamera(camera);
     scene->setOpenShadow(true);
+    scene->setDebugShadow(true);
 
     function<void(int,int)>key_func = [&scene](int key, int action)->void{
         scene->processKey(key, action);
@@ -88,7 +90,7 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
     shared_ptr<Box> right_box = std::make_shared<Box>(scene, glm::vec3(1.0f), glm::vec3(2.0, 0.5f, 0.0));
     right_box->setColor(glm::vec4(0.3f, 1.0f, 0.0f, 1.0f));
     scene->pushObject(right_box);
-
+//
     shared_ptr<Box> left_box = std::make_shared<Box>(scene, glm::vec3(1.0f), glm::vec3(-2.0, 0.5f, 0.0));
     left_box->setColor(glm::vec4(1.0f, 0.3f, 0.4f, 1.0f));
     scene->pushObject(left_box);
@@ -101,9 +103,6 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
     right_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     scene->pushObject(right_wall);
 
-//    shared_ptr<Box> right_wall = std::make_shared<Box>(scene, glm::vec3(0.1f, 5.0f, 5.0f), glm::vec3(-3.0f, 2.5f, 0.0f));
-//    right_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-//    scene->pushObject(right_wall);
 
     shared_ptr<Box> front_wall = std::make_shared<Box>(scene, glm::vec3(6.1f, 5.0f, 0.1f), glm::vec3(0.0f, 2.5f, -2.5f));
     front_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));

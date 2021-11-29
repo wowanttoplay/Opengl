@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/virgil/Opengl/Camera.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/Camera.cc.o"
   "/Users/virgil/Opengl/RenderObject/BaseObject.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/BaseObject.cc.o"
   "/Users/virgil/Opengl/RenderObject/Box.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Box.cc.o"
+  "/Users/virgil/Opengl/RenderObject/Debug/DebugPlane.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Debug/DebugPlane.cc.o"
   "/Users/virgil/Opengl/RenderObject/Light/BaseLight.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Light/BaseLight.cc.o"
   "/Users/virgil/Opengl/RenderObject/Light/PointLight.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Light/PointLight.cc.o"
   "/Users/virgil/Opengl/RenderObject/Plane.cc" "/Users/virgil/Opengl/cmake-build-debug/CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o"

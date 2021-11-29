@@ -15,6 +15,7 @@
 #include "RenderObject/BaseObject.h"
 #include "RenderObject/Light/BaseLight.h"
 
+class DebugPlane;
 class Scene : public std::enable_shared_from_this<Scene>{
 public:
     Scene(uint32_t width, uint32_t height, const std::string& resource_dir);
@@ -48,9 +49,11 @@ public:
 
     /**
      * 是否开启阴影
-     * @param openShadow
+     * @param open_shadow
      */
-    void setOpenShadow(bool openShadow);
+    void setOpenShadow(bool open_shadow);
+
+    void setDebugShadow(bool debug_shadow);
 
 public:
     // 外部回调
@@ -67,10 +70,16 @@ private:
     GLuint FBO_; // 常用的FBO，用于离屏渲染
 /////////////////////绘制阴影相关
     bool open_shadow_ = false;
+    bool debug_shadow_ = false;
     std::shared_ptr<Texture2D>shadow_map_ = nullptr;
 private:
     void drawShaow();
-
     void normalDraw();
+
+
+private:
+    void debug();
+    void debugShadow();
+    std::shared_ptr<DebugPlane> debug_plane_ = nullptr;
 };
 

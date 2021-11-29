@@ -17,10 +17,6 @@ public:
 
 private:
     std::shared_ptr<Sphere> object_ = nullptr; // 用来绘制的实体
-    glm::vec3 target_;
-public:
-    void setTarget(const glm::vec3 &target);
-    // 光源照射的目标
 };
 
 
