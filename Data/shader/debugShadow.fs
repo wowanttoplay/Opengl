@@ -14,5 +14,5 @@ float LinearizeDepth(float depth) {
 
 void main() {
   float depth = texture(texUnit, vTexCoords).r;
-  fragColor = vec4(vec3(LinearizeDepth(depth) / farPlane), nearPlane);
+  fragColor = vec4(vec3(LinearizeDepth(depth) / farPlane), 1.0);
 }

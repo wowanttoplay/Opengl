@@ -94,10 +94,10 @@
 		<Unit filename="/Users/virgil/Opengl/RenderObject/Box.h">
 			<Option target="Opengl"/>
 		</Unit>
-		<Unit filename="/Users/virgil/Opengl/RenderObject/DebugPlane.cc">
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Debug/DebugPlane.cc">
 			<Option target="Opengl"/>
 		</Unit>
-		<Unit filename="/Users/virgil/Opengl/RenderObject/DebugPlane.h">
+		<Unit filename="/Users/virgil/Opengl/RenderObject/Debug/DebugPlane.h">
 			<Option target="Opengl"/>
 		</Unit>
 		<Unit filename="/Users/virgil/Opengl/RenderObject/Light/BaseLight.cc">

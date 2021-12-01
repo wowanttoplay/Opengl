@@ -134,6 +134,9 @@ void Sphere::draw() {
     shader->setVector3f("cameraPos", camera->getPosition());
     shader->setVector3f("light.position", light->getPosition());
     shader->setVector3f("light.color", light->getColor());
+    shader->setFloat("light.radius", light->getScale().x);
+    shader->setFloat("light.nearPlane", light->getNearPlane());
+    shader->setFloat("light.farPlane", light->getFarPlane());
     // set shadow
     shared_ptr<Texture2D> shadow_map = scene->getShadowMap();
     shader->setInteger("shadowMap", 0);

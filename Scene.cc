@@ -45,7 +45,7 @@ void Scene::drawShaow() {
         glGenFramebuffers(1, &FBO_);
     }
     if (!shadow_map_) {
-        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_REPEAT, GL_REPEAT, GL_NEAREST,
+        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_NEAREST,
                                              GL_NEAREST, GL_FLOAT);
         shadow_map_->generate(width_, height_, NULL);
         glBindFramebuffer(GL_FRAMEBUFFER, FBO_);

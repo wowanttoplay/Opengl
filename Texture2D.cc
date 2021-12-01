@@ -4,6 +4,7 @@
 
 #include "Texture2D.h"
 #include <glog/logging.h>
+#include <glm/glm.hpp>
 
 using namespace std;
 using namespace google;
@@ -39,6 +40,10 @@ void Texture2D::generate(GLuint width, GLuint height, unsigned char* data)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t_);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter_min_);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter_max_);
+    if (wrap_s_ == GL_CLAMP_TO_BORDER || wrap_t_ == GL_CLAMP_TO_BORDER) {
+        GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    }
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
