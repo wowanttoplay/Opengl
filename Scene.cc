@@ -7,7 +7,6 @@
 #include "RenderObject/Box.h"
 #include "glm/gtx/string_cast.hpp"
 #include "glog/logging.h"
-#include "RenderObject/Plane.h"
 #include "RenderObject/Debug/DebugPlane.h"
 
 using namespace std;
