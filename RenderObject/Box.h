@@ -14,7 +14,7 @@ class Box : public BaseObject {
 public:
     Box(std::shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& position);
     ~Box() override;
-    void drawShadow() override;
+    void drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) override;
     void draw() override;
     void update() override;
 

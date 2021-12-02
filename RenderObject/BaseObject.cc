@@ -23,7 +23,7 @@ std::shared_ptr<Scene> BaseObject::getScene() {
     return scene_ptr_.lock();
 }
 
-void BaseObject::drawShadow() {
+void BaseObject::drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) {
 
 }
 

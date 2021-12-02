@@ -14,7 +14,7 @@ public:
     Sphere(std::shared_ptr<Scene>scene, const glm::vec3& scale, const  glm::vec3& position, int x_num, int y_num);
     ~Sphere() override;
 
-    void drawShadow() override;
+    void drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) override;
     void draw() override;
     void update() override;
 

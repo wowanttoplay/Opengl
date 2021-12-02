@@ -63,7 +63,7 @@ void Scene::drawShaow() {
     glClear(GL_DEPTH_BUFFER_BIT);
 
     for (const auto &object: objects_) {
-        object->drawShadow();
+        object->drawDepthMap(light_->getViewMatrix(), light_->getProjectionMatrix());
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

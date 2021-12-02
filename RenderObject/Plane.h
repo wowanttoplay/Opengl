@@ -13,7 +13,7 @@ class Plane : public BaseObject {
 public:
     Plane(std::shared_ptr<Scene> scene, const glm::vec3& scale, const glm::vec3& position);
     ~Plane() override;
-    void drawShadow() override;
+    void drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) override;
     void draw() override;
     void update() override;
     void drawTexture(std::shared_ptr<Texture2D> texture);

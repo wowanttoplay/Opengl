@@ -85,7 +85,7 @@ void Sphere::constructGeometry() {
     glBindVertexArray(0);
 }
 
-void Sphere::drawShadow() {
+void Sphere::drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
@@ -95,9 +95,6 @@ void Sphere::drawShadow() {
         return;
     }
     auto resource_manager = scene->getResourceManager();
-    auto light = scene->getLight();
-    const glm::mat4 view = light->getViewMatrix();
-    const glm::mat4 projection = light->getProjectionMatrix();
     auto shader = resource_manager->LoadShader("simpleShadow.vs", "simpleShadow.fs");
     shader->use();
     shader->setMatrix4("model", getModelMatrix());

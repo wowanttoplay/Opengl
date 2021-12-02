@@ -25,7 +25,7 @@ public:
     /**
      * 绘制shadow map时执行
      */
-    virtual void drawShadow();
+    virtual void drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection);
 
     /**
      * 正常绘制

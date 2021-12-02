@@ -100,7 +100,7 @@ Plane::~Plane() {
     glDeleteBuffers(1, &VBO_);
 }
 
-void Plane::drawShadow() {
+void Plane::drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
@@ -110,9 +110,6 @@ void Plane::drawShadow() {
         return;
     }
     auto resource_manager = scene->getResourceManager();
-    auto light = scene->getLight();
-    const glm::mat4 view = light->getViewMatrix();
-    const glm::mat4 projection = light->getProjectionMatrix();
     auto shader = resource_manager->LoadShader("simpleShadow.vs", "simpleShadow.fs");
     shader->use();
     shader->setMatrix4("model", getModelMatrix());

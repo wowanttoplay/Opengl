@@ -208,12 +208,4 @@ void main() {
   float visibility = calculateVisibility();
   vec3 phongColor = blinnPhong(visibility);
   fragColor = vec4(phongColor, 1.0);
-
-  // vec3 shadowCoord = positionFromLight.xyz / positionFromLight.w;
-  // shadowCoord = (shadowCoord + vec3(1.0)) * 0.5;
-
-  // float d = texture(shadowMap, shadowCoord.xy).r;
-  // d = LinearizeDepth(d) / light.farPlane;
-
-  // fragColor = fragColor * 0.01 + vec4(vec3(d), 1.0);
 }
