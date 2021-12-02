@@ -48,7 +48,15 @@ void Box::draw() {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
+    auto scene = getScene();
+    if (scene->isOpenShadow()) {
+        drawShadowPhong();
+    }else {
+        drawSimplePhong();
+    }
+}
 
+void Box::drawShadowPhong() {
     auto scene = getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";
@@ -88,10 +96,6 @@ void Box::draw() {
 }
 
 void Box::drawSimplePhong() {
-    if (!glIsVertexArray(VAO_)) {
-        constructGeometry();
-    }
-
     auto scene = getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";
@@ -121,10 +125,6 @@ void Box::drawSimplePhong() {
 }
 
 void Box::simpleColorDraw() {
-    if (!glIsVertexArray(VAO_)) {
-        constructGeometry();
-    }
-
     auto scene = getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";

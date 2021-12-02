@@ -50,6 +50,8 @@ int main(int argc, char* argv[]) {
     scene->setCamera(camera);
     scene->setOpenShadow(true);
     scene->setDebugShadow(true);
+    scene->setOpenAo(true);
+    scene->setDebugAo(true);
 
     function<void(int,int)>key_func = [&scene](int key, int action)->void{
         scene->processKey(key, action);
@@ -107,7 +109,7 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
     front_wall->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     scene->pushObject(front_wall);
 
-    shared_ptr<PointLight> light = std::make_shared<PointLight>(scene, glm::vec3(1.0f), glm::vec3(-6.0f, 8.0f,3.0f));
+    shared_ptr<PointLight> light = std::make_shared<PointLight>(scene, glm::vec3(1.0f), glm::vec3(-6.0f, 9.0f,3.0f));
     light->setColor(glm::vec4(15.0f));
     light->setTarget(glm::vec3(0.0));
     light->setFarPlane(30.0f);

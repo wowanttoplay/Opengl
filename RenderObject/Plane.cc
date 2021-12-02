@@ -26,7 +26,15 @@ void Plane::draw() {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
+    auto scene = getScene();
+    if (scene->isOpenShadow()) {
+        drawShadowPhong();
+    }else {
+        drawSimplePhong();
+    }
+}
 
+void Plane::drawShadowPhong() {
     auto scene = getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";
@@ -63,7 +71,35 @@ void Plane::draw() {
     // draw vertex
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+}
 
+void Plane::drawSimplePhong() {
+    auto scene = getScene();
+    if (!scene) {
+        LOG(ERROR) << "scene ptr is nullptr";
+        return;
+    }
+    // set shader
+    auto camera = scene->getCamera();
+    auto resource_manager = scene->getResourceManager();
+    auto light = scene->getLight();
+    const glm::mat4 view = camera->getViewMatrix();
+    const glm::mat4 projection = camera->getProjectionMatrix();
+    auto shader = resource_manager->LoadShader("phong.vs", "phong.fs");
+    shader->use();
+    shader->setMatrix4("model", getModelMatrix());
+    shader->setMatrix4("view", view);
+    shader->setMatrix4("projection", projection);
+
+    shader->setVector4f("objectColor", getColor());
+    shader->setFloat("specularIntensity", 8.0f);
+    shader->setVector3f("cameraPos", camera->getPosition());
+    shader->setVector3f("light.position", light->getPosition());
+    shader->setVector3f("light.color", light->getColor());
+
+    // draw vertex
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 void Plane::SimpleColorDraw() {

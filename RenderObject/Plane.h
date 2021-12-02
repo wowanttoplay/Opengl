@@ -25,6 +25,10 @@ private:
     uint32_t VAO_,VBO_;
 
     void SimpleColorDraw();
+
+    void drawShadowPhong();
+
+    void drawSimplePhong();
 };
 
 

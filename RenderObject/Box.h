@@ -26,6 +26,8 @@ private:
     void simpleColorDraw();
 
     void drawSimplePhong();
+
+    void drawShadowPhong();
 };
 
 

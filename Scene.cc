@@ -22,6 +22,7 @@ Scene::~Scene() {
 void Scene::draw() {
     // 检测是否绘制阴影
     if (open_shadow_) drawShaow();
+    if (open_ao_) drawAoMap();
     normalDraw();
     debug();
 }
@@ -37,24 +38,23 @@ void Scene::normalDraw() {
 }
 
 void Scene::drawShaow() {
-    const uint32_t kShadowWidth = 1024;
     glViewport(0, 0, width_, height_);
-    light_->setAspect(width_/height_);
+    light_->setAspect(width_ / height_);
     if (!glIsFramebuffer(FBO_)) {
         LOG(WARNING) << "generate FBO";
         glGenFramebuffers(1, &FBO_);
     }
     if (!shadow_map_) {
-        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_NEAREST,
+        shadow_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER,
+                                             GL_CLAMP_TO_BORDER, GL_NEAREST,
                                              GL_NEAREST, GL_FLOAT);
         shadow_map_->generate(width_, height_, NULL);
-        glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
-        shadow_map_->bind();
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_map_->getId(), 0);
-        glDrawBuffer(GL_NONE);
-        glReadBuffer(GL_NONE);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
+    shadow_map_->bind();
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_map_->getId(), 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
 
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -159,18 +159,73 @@ void Scene::setDebugShadow(bool debug_shadow) {
 void Scene::debug() {
     // 是否绘制阴影debug图
     if (open_shadow_ && debug_shadow_) {
-        debugShadow();
+        debugShadowMap();
     }
-
-
+    if (open_ao_ && debug_ao_) {
+        debugAoMap();
+    }
 }
 
-void Scene::debugShadow() {
-    glViewport(width_ / 2, height_ / 2, width_ / 2, height_ / 2);
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void Scene::debugShadowMap() {
+    glViewport(width_ * 2 / 3, height_ * 2 / 3, width_ / 3, height_ / 3);
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
     debug_plane_->drawTexture(shadow_map_);
+}
+
+bool Scene::isOpenShadow() const {
+    return open_shadow_;
+}
+
+bool Scene::isOpenAo() const {
+    return open_ao_;
+}
+
+void Scene::setOpenAo(bool openAo) {
+    open_ao_ = openAo;
+}
+
+void Scene::setDebugAo(bool debugAo) {
+    debug_ao_ = debugAo;
+}
+
+void Scene::drawAoMap() {
+    glViewport(0, 0, width_, height_);
+    if (!glIsFramebuffer(FBO_)) {
+        LOG(WARNING) << "generate FBO";
+        glGenFramebuffers(1, &FBO_);
+    }
+    if (!ao_map_) {
+        ao_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER,
+                                         GL_NEAREST,
+                                         GL_NEAREST, GL_FLOAT);
+        ao_map_->generate(width_, height_, NULL);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0);
+    ao_map_->bind();
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ao_map_->getId(), 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        LOG(ERROR) << "frame buffer is not complete";
+    }
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    for (const auto &object: objects_) {
+        object->drawDepthMap(getCamera()->getViewMatrix(), getCamera()->getProjectionMatrix());
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Scene::debugAoMap() {
+    glViewport(width_ / 3, height_ * 2 / 3, width_ / 3, height_ / 3);
+    if (!debug_plane_) {
+        debug_plane_ = make_shared<DebugPlane>(shared_from_this());
+    }
+    debug_plane_->drawTexture(ao_map_);
 }
 

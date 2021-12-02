@@ -70,16 +70,35 @@ private:
     GLuint FBO_; // 常用的FBO，用于离屏渲染
 /////////////////////绘制阴影相关
     bool open_shadow_ = false;
+public:
+    bool isOpenShadow() const;
+
+private:
     bool debug_shadow_ = false;
     std::shared_ptr<Texture2D>shadow_map_ = nullptr;
+
+
+public:
+    void setOpenAo(bool openAo);
+
+    void setDebugAo(bool debugAo);
+
+    bool isOpenAo() const;
+
+private:
+    bool open_ao_ = false;
+    bool debug_ao_ = false;
+    std::shared_ptr<Texture2D>ao_map_ = nullptr;
 private:
     void drawShaow();
+    void drawAoMap();
+    void debugAoMap();
     void normalDraw();
 
 
 private:
     void debug();
-    void debugShadow();
+    void debugShadowMap();
     std::shared_ptr<DebugPlane> debug_plane_ = nullptr;
 };
 
