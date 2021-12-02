@@ -1,4 +1,6 @@
 # Opengl
+注意：由于之前的代码是在边学习边写的情况下完成的，导致在后续实现其他效果的时候没法做到很方便的扩展，所以在develop分支上重新进行了整理，目前还能够比较正常的开发。现在的develop分支已经重新实现了多种阴影效果，正在进行ao和RSM的开发。推荐切换到develop分支。代码中使用了Glog，assimp还有glew等库，编译时需要确保本地的环境正确，详细情况可以看cmakelist
+
 主要使用opengl和c++完成了的一些demo，PBR分支实现了IBL下的PBR效果，实现方法看scene.cc即可。shadow分支实现硬阴影、PCL、PCSS，用来对比阴影效果，rayTracing分支用来实现实时光追。
 
 #PBR效果
