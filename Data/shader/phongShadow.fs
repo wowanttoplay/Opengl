@@ -127,7 +127,7 @@ float PCSS(sampler2D shadowMap, vec4 shadowCoord) {
 
   float k = (zReceiver - blockDepth) / blockDepth;
 
-  filterRange = light.radius * 30 * filterRange * k; // 放大了100， 让效果更明显
+  filterRange = max(light.radius * 40 * filterRange * k, filterRange); // 放大了100， 让效果更明显
   // 计算遮挡比率，返回可见性
   const float bias = 0.0001;
   int visibilityNum = 0;
