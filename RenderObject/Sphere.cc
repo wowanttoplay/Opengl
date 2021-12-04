@@ -90,17 +90,11 @@ void Sphere::drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
-    auto scene = getScene();
-    if (!scene) {
-        LOG(ERROR) << "scene ptr is nullptr";
+
+    if (!ShaderTool::bindSimpleShadow(shared_from_this(), view, projection)) {
+        LOG(ERROR) << "bind simple shadow shader failed, return";
         return;
     }
-    auto resource_manager = scene->getResourceManager();
-    auto shader = resource_manager->LoadShader("simpleShadow.vs", "simpleShadow.fs");
-    shader->use();
-    shader->setMatrix4("model", getModelMatrix());
-    shader->setMatrix4("view", view);
-    shader->setMatrix4("projection", projection);
 
     glBindVertexArray(VAO_);
     glDrawElements(GL_TRIANGLES, indices_data.size(), GL_UNSIGNED_INT, 0);
@@ -121,69 +115,20 @@ void Sphere::draw() {
 }
 
 void Sphere::drawSimplePhong() {
-    auto scene = getScene();
-    if (!scene) {
-        LOG(ERROR) << "scene ptr is nullptr";
+    if (!ShaderTool::bindSimplePhong(shared_from_this())) {
+        LOG(ERROR) << "bind simple phong shader, return";
         return;
     }
-    // set shader
-    auto camera = scene->getCamera();
-    auto resource_manager = scene->getResourceManager();
-    auto light = scene->getLight();
-    const glm::mat4 view = camera->getViewMatrix();
-    const glm::mat4 projection = camera->getProjectionMatrix();
-    auto shader = resource_manager->LoadShader("phong.vs", "phong.fs");
-    shader->use();
-    shader->setMatrix4("model", getModelMatrix());
-    shader->setMatrix4("view", view);
-    shader->setMatrix4("projection", projection);
-
-    shader->setVector4f("objectColor", getColor());
-    shader->setFloat("specularIntensity", 8.0f);
-    shader->setVector3f("cameraPos", camera->getPosition());
-    shader->setVector3f("light.position", light->getPosition());
-    shader->setVector3f("light.color", light->getColor());
-
     // draw vertex
     glBindVertexArray(VAO_);
     glDrawElements(GL_TRIANGLES, indices_data.size(), GL_UNSIGNED_INT, 0);
 }
 
 void Sphere::drawShadowPhong() {
-    auto scene = getScene();
-    if (!scene) {
-        LOG(ERROR) << "scene ptr is nullptr";
+    if (!ShaderTool::bindShadowPhong(shared_from_this())){
+        LOG(ERROR) << "bind sahdow phong shader failed , return";
         return;
     }
-    // set shader
-    auto camera = scene->getCamera();
-    auto resource_manager = scene->getResourceManager();
-    auto light = scene->getLight();
-    const glm::mat4 view = camera->getViewMatrix();
-    const glm::mat4 projection = camera->getProjectionMatrix();
-    auto shader = resource_manager->LoadShader("phongShadow.vs", "phongShadow.fs");
-    shader->use();
-    shader->setMatrix4("model", getModelMatrix());
-    shader->setMatrix4("view", view);
-    shader->setMatrix4("projection", projection);
-    shader->setVector4f("objectColor", getColor());
-    shader->setFloat("specularIntensity", 32.0f);
-    shader->setVector3f("cameraPos", camera->getPosition());
-    shader->setVector3f("light.position", light->getPosition());
-    shader->setVector3f("light.color", light->getColor());
-    shader->setFloat("light.radius", light->getScale().x);
-    shader->setFloat("light.nearPlane", light->getNearPlane());
-    shader->setFloat("light.farPlane", light->getFarPlane());
-    // set shadow
-    shared_ptr<Texture2D> shadow_map = scene->getShadowMap();
-    shader->setInteger("shadowMap", 0);
-    shadow_map->bind();
-    auto light_view = light->getViewMatrix();
-    auto light_projection = light->getProjectionMatrix();
-    auto lightMVP = light_projection * light_view * getModelMatrix();
-    shader->setMatrix4("lightMVP", lightMVP);
-
-
     // draw vertex
     glBindVertexArray(VAO_);
     glDrawElements(GL_TRIANGLES, indices_data.size(), GL_UNSIGNED_INT, 0);
