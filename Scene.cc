@@ -160,9 +160,11 @@ void Scene::debug() {
     if (open_shadow_ && debug_shadow_) {
         debugShadowMap();
     }
+
     if (open_ao_ && debug_ao_) {
         debugAoMap();
     }
+
 }
 
 void Scene::debugShadowMap() {
@@ -170,7 +172,7 @@ void Scene::debugShadowMap() {
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
-    debug_plane_->drawTexture(shadow_map_);
+    debug_plane_->drawTexture(shadow_map_, DebugType::DebugType_Shadow);
 }
 
 bool Scene::isOpenShadow() const {
@@ -195,28 +197,45 @@ void Scene::drawAoMap() {
         LOG(WARNING) << "generate FBO";
         glGenFramebuffers(1, &FBO_);
     }
-    if (!ao_map_) {
-        ao_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER,
-                                         GL_NEAREST,
-                                         GL_NEAREST, GL_FLOAT);
-        ao_map_->generate(width_, height_, NULL);
+    if (!ao_depth_map_) {
+        ao_depth_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER,
+                                               GL_NEAREST,
+                                               GL_NEAREST, GL_FLOAT);
+        ao_depth_map_->generate(width_, height_, nullptr);
+    }
+    if (!ao_position_map_) {
+        ao_position_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ao_position_map_->generate(width_,height_, nullptr);
+    }
+    if (!ao_normal_map_) {
+        ao_normal_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ao_normal_map_->generate(width_,height_, nullptr);
+    }
+    if (!ao_albedoColor_map_) {
+        ao_albedoColor_map_ = make_shared<Texture2D>(GL_RGBA, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_UNSIGNED_BYTE);
+        ao_albedoColor_map_->generate(width_, height_, nullptr);
     }
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0);
-    ao_map_->bind();
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ao_map_->getId(), 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
+    ao_depth_map_->bind();
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ao_depth_map_->getId(), 0);
+    ao_position_map_->bind();
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ao_position_map_->getId(), 0);
+    ao_normal_map_->bind();
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, ao_normal_map_->getId(), 0);
+    ao_albedoColor_map_->bind();
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, ao_albedoColor_map_->getId(), 0);
+    GLuint attachments[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+    glDrawBuffers(3, attachments);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         LOG(ERROR) << "frame buffer is not complete";
     }
-    glClear(GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     for (const auto &object: objects_) {
-        object->drawDepthMap(getCamera()->getViewMatrix(), getCamera()->getProjectionMatrix());
+        object->drawGBuffer(getCamera()->getViewMatrix(), getCamera()->getProjectionMatrix());
     }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -225,6 +244,6 @@ void Scene::debugAoMap() {
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
-    debug_plane_->drawTexture(ao_map_);
+    debug_plane_->drawTexture(ao_depth_map_, DebugType::DebugType_Shadow);
 }
 

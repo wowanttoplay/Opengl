@@ -12,6 +12,7 @@
 #include "../Scene.h"
 #include "../Shader.h"
 #include "../Texture2D.h"
+#include "../ShaderTool.h"
 
 using namespace std;
 using namespace google;
@@ -29,7 +30,9 @@ void Plane::draw() {
     auto scene = getScene();
     if (scene->isOpenShadow()) {
         drawShadowPhong();
-    }else {
+    }else if (scene->isOpenAo()) {
+
+    }else{
         drawSimplePhong();
     }
 }
@@ -102,26 +105,14 @@ void Plane::drawSimplePhong() {
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Plane::SimpleColorDraw() {
+void Plane::simpleColorDraw() {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
-    auto scene = getScene();
-    if (!scene) {
-        LOG(ERROR) << "scene ptr is nullptr";
+    if (!ShaderTool::bindSimpleColorShader(shared_from_this())){
+        LOG(ERROR) << "bind simple color shader failed, return";
         return;
     }
-    auto camera = scene->getCamera();
-    auto resource_manager = scene->getResourceManager();
-    const glm::mat4 view = camera->getViewMatrix();
-    const glm::mat4 projective = camera->getProjectionMatrix();
-    auto MVP = projective * view * getModelMatrix();
-    auto shader = resource_manager->LoadShader("color.vs", "color.fs");
-
-    shader->use();
-    shader->setMatrix4("MVP", MVP);
-    shader->setVector4f("objectColor", getColor());
-
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -195,6 +186,10 @@ void Plane::drawTexture(std::shared_ptr<Texture2D> texture) {
     texture->bind();
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void Plane::drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) {
+
 }
 
 

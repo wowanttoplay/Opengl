@@ -17,7 +17,7 @@ public:
     void drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) override;
     void draw() override;
     void update() override;
-
+    void drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) override;
 private:
     void constructGeometry();
 private:

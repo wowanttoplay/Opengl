@@ -417,6 +417,30 @@ Shader.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/Shader.cc.s
 .PHONY : Shader.cc.s
 
+ShaderTool.o: ShaderTool.cc.o
+.PHONY : ShaderTool.o
+
+# target to build an object file
+ShaderTool.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/ShaderTool.cc.o
+.PHONY : ShaderTool.cc.o
+
+ShaderTool.i: ShaderTool.cc.i
+.PHONY : ShaderTool.i
+
+# target to preprocess a source file
+ShaderTool.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/ShaderTool.cc.i
+.PHONY : ShaderTool.cc.i
+
+ShaderTool.s: ShaderTool.cc.s
+.PHONY : ShaderTool.s
+
+# target to generate assembly for a file
+ShaderTool.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Opengl.dir/build.make CMakeFiles/Opengl.dir/ShaderTool.cc.s
+.PHONY : ShaderTool.cc.s
+
 Texture2D.o: Texture2D.cc.o
 .PHONY : Texture2D.o
 
@@ -534,6 +558,9 @@ help:
 	@echo "... Shader.o"
 	@echo "... Shader.i"
 	@echo "... Shader.s"
+	@echo "... ShaderTool.o"
+	@echo "... ShaderTool.i"
+	@echo "... ShaderTool.s"
 	@echo "... Texture2D.o"
 	@echo "... Texture2D.i"
 	@echo "... Texture2D.s"

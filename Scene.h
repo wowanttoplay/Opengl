@@ -88,7 +88,10 @@ public:
 private:
     bool open_ao_ = false;
     bool debug_ao_ = false;
-    std::shared_ptr<Texture2D>ao_map_ = nullptr;
+    std::shared_ptr<Texture2D>ao_depth_map_ = nullptr; // 记录深度值
+    std::shared_ptr<Texture2D>ao_position_map_ = nullptr; // 记录世界空间的位置信息
+    std::shared_ptr<Texture2D>ao_normal_map_ = nullptr; // 记录世界空间的法线信息
+    std::shared_ptr<Texture2D>ao_albedoColor_map_ = nullptr; // 记录基础颜色信息
 private:
     void drawShaow();
     void drawAoMap();

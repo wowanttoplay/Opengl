@@ -8,6 +8,7 @@
 #include "../Data/vertex_data.h"
 #include "../ResourceManager.h"
 #include "../Scene.h"
+#include "../ShaderTool.h"
 
 using namespace std;
 using namespace google;
@@ -51,6 +52,8 @@ void Box::draw() {
     auto scene = getScene();
     if (scene->isOpenShadow()) {
         drawShadowPhong();
+    }else if (scene->isOpenAo()) {
+
     }else {
         drawSimplePhong();
     }
@@ -125,21 +128,10 @@ void Box::drawSimplePhong() {
 }
 
 void Box::simpleColorDraw() {
-    auto scene = getScene();
-    if (!scene) {
-        LOG(ERROR) << "scene ptr is nullptr";
+    if (!ShaderTool::bindSimpleColorShader(shared_from_this())) {
+        LOG(ERROR) << "bind simple color shader failed, return";
         return;
     }
-    // set shader
-    auto camera = scene->getCamera();
-    auto resource_manager = scene->getResourceManager();
-    const glm::mat4 view = camera->getViewMatrix();
-    const glm::mat4 projective = camera->getProjectionMatrix();
-    auto MVP = projective * view * getModelMatrix();
-    auto shader = resource_manager->LoadShader("color.vs", "color.fs");
-    shader->use();
-    shader->setMatrix4("MVP", MVP);
-    shader->setVector4f("objectColor", getColor());
     // draw vertex
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -168,4 +160,8 @@ void Box::constructGeometry() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     LOG_AT_LEVEL(WARNING) << "constructGeometry() end, VAO_ :" << VAO_ << " VBO_ :" << VBO_;
+}
+
+void Box::drawGBuffer(const glm::mat4& view, const glm::mat4& projection) {
+
 }

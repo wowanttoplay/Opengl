@@ -151,6 +151,12 @@
 		<Unit filename="/Users/virgil/Opengl/Shader.h">
 			<Option target="Opengl"/>
 		</Unit>
+		<Unit filename="/Users/virgil/Opengl/ShaderTool.cc">
+			<Option target="Opengl"/>
+		</Unit>
+		<Unit filename="/Users/virgil/Opengl/ShaderTool.h">
+			<Option target="Opengl"/>
+		</Unit>
 		<Unit filename="/Users/virgil/Opengl/Texture2D.cc">
 			<Option target="Opengl"/>
 		</Unit>

@@ -23,7 +23,7 @@ DebugPlane::DebugPlane(std::shared_ptr<Scene> scene)
     LOG(WARNING) << "DebugPlane(), ptr : " << this;
 }
 
-void DebugPlane::drawTexture(std::shared_ptr<Texture2D> texture) {
+void DebugPlane::drawTexture(std::shared_ptr<Texture2D> texture, DebugType type) {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
@@ -35,11 +35,12 @@ void DebugPlane::drawTexture(std::shared_ptr<Texture2D> texture) {
 
     auto light = scene->getLight();
     auto resource_manager = scene->getResourceManager();
-    auto shader = resource_manager->LoadShader("debugShadow.vs", "debugShadow.fs");
+    auto shader = resource_manager->LoadShader("debugTexture.vs", "debugTexture.fs");
     shader->use();
     shader->setInteger("texUnit", 0);
     shader->setFloat("farPlane", light->getFarPlane());
     shader->setFloat("nearPlane", light->getNearPlane());
+    shader->setInteger("type", static_cast<int>(type));
     texture->bind();
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);

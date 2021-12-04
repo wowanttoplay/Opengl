@@ -127,13 +127,13 @@ float PCSS(sampler2D shadowMap, vec4 shadowCoord) {
 
   float k = (zReceiver - blockDepth) / blockDepth;
 
-  filterRange = light.radius * 100 * filterRange * k; // 放大了100， 让效果更明显
+  filterRange = light.radius * 30 * filterRange * k; // 放大了100， 让效果更明显
   // 计算遮挡比率，返回可见性
   const float bias = 0.0001;
   int visibilityNum = 0;
   for (int i = 0; i < NUM_SAMPLES; i++) {
     float depth = texture(shadowMap, poissonDisk[i] * filterRange + shadowCoord.xy).r;
-    if (depth + bias > shadowCoord.z || depth < EPS || shadowCoord.z > 1.0) {
+    if (depth + bias > shadowCoord.z || depth < EPS || shadowCoord.z >= 1.0) {
       visibilityNum += 1;
     }
   }

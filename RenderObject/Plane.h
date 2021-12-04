@@ -17,6 +17,7 @@ public:
     void draw() override;
     void update() override;
     void drawTexture(std::shared_ptr<Texture2D> texture);
+    void drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) override;
 private:
     /*
      * 构造VAO
@@ -24,7 +25,7 @@ private:
     void constructGeometry();
     uint32_t VAO_,VBO_;
 
-    void SimpleColorDraw();
+    void simpleColorDraw();
 
     void drawShadowPhong();
 

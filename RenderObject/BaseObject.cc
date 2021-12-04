@@ -58,3 +58,7 @@ void BaseObject::setScale(const glm::vec3 &scale) {
     scale_ = scale;
     updateModelMatrix();
 }
+
+void BaseObject::drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) {
+
+}

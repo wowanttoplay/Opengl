@@ -8,6 +8,7 @@
 #include "../Texture2D.h"
 #include "../Shader.h"
 #include "../Scene.h"
+#include "../ShaderTool.h"
 
 using namespace std;
 using namespace google;
@@ -112,6 +113,8 @@ void Sphere::draw() {
     auto scene = getScene();
     if (scene->isOpenShadow()) {
         drawShadowPhong();
+    }else if (scene->isOpenAo()){
+
     }else {
         drawSimplePhong();
     }
@@ -190,28 +193,20 @@ void Sphere::drawSimpleColor() {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
-
-    auto scene = getScene();
-    if (!scene) {
-        LOG(ERROR) << "scene ptr is nullptr";
+    if (!ShaderTool::bindSimpleColorShader(shared_from_this())) {
+        LOG(ERROR) << "bind simple color shader failed, return";
         return;
     }
-    // set shader
-    auto camera = scene->getCamera();
-    auto resource_manager = scene->getResourceManager();
-    const glm::mat4 view = camera->getViewMatrix();
-    const glm::mat4 projective = camera->getProjectionMatrix();
-    auto MVP = projective * view * getModelMatrix();
-    auto shader = resource_manager->LoadShader("color.vs", "color.fs");
-    shader->use();
-    shader->setMatrix4("MVP", MVP);
-    shader->setVector4f("objectColor", getColor());
     // draw vertex
     glBindVertexArray(VAO_);
     glDrawElements(GL_TRIANGLES, indices_data.size(), GL_UNSIGNED_INT, 0);
 }
 
 void Sphere::update() {
+
+}
+
+void Sphere::drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) {
 
 }
 
