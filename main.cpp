@@ -50,8 +50,8 @@ int main(int argc, char* argv[]) {
     scene->setCamera(camera);
     scene->setOpenShadow(true);
     scene->setDebugShadow(true);
-//    scene->setOpenAo(true);
-//    scene->setDebugAo(true);
+    scene->setOpenAo(true);
+    scene->setDebugAo(true);
 
     function<void(int,int)>key_func = [&scene](int key, int action)->void{
         scene->processKey(key, action);

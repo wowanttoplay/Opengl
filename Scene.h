@@ -93,15 +93,16 @@ private:
     std::shared_ptr<Texture2D>ao_normal_map_ = nullptr; // 记录世界空间的法线信息
     std::shared_ptr<Texture2D>ao_albedoColor_map_ = nullptr; // 记录基础颜色信息
 private:
-    void drawShaow();
-    void drawAoMap();
-    void debugAoMap();
-    void normalDraw();
-
+    void drawShaow(); // 准备光源的深度图
+    void drawGBufferMap(); // 准备g buffer的纹理，为了ao方便，所有的数据都是在观察空间的，小心搞错
+    void debugAOBufferMap(); // debug 显示g buffer的纹理
+    void forwardDraw(); //前向渲染
+    void drawAo(); // 延迟渲染
 
 private:
     void debug();
     void debugShadowMap();
     std::shared_ptr<DebugPlane> debug_plane_ = nullptr;
+    std::vector<std::function<void()>> debug_fucntions_;
 };
 

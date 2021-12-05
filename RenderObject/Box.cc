@@ -26,7 +26,7 @@ Box::~Box() {
 }
 
 void Box::drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) {
-    if (!ShaderTool::bindSimpleShadow(shared_from_this(), view, projection)) {
+    if (!ShaderTool::bindSimpleShadowShader(shared_from_this(), view, projection)) {
         LOG(ERROR) << "bind simple shadow failed, return";
         return;
     }
@@ -51,7 +51,7 @@ void Box::drawShadowPhong() {
         constructGeometry();
     }
 
-    if (!ShaderTool::bindShadowPhong(shared_from_this())) {
+    if (!ShaderTool::bindShadowPhongShader(shared_from_this())) {
         LOG(ERROR) << "bind shadow phong failed, return";
         return;
     }
@@ -65,7 +65,7 @@ void Box::drawSimplePhong() {
         constructGeometry();
     }
 
-    if (!ShaderTool::bindSimplePhong(shared_from_this())) {
+    if (!ShaderTool::bindSimplePhongShader(shared_from_this())) {
         LOG(ERROR) << "bind saimple phong failed, retunr";
         return;
     }
@@ -114,5 +114,15 @@ void Box::constructGeometry() {
 }
 
 void Box::drawGBuffer(const glm::mat4& view, const glm::mat4& projection) {
+    if (!glIsVertexArray(VAO_)) {
+        constructGeometry();
+    }
 
+    if (!ShaderTool::bindGbufferShader(shared_from_this(), view, projection)) {
+        LOG(ERROR) << "bind g buffer failed, return";
+        return;
+    }
+
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 }

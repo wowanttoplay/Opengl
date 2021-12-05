@@ -13,6 +13,7 @@ using namespace std;
 using namespace google;
 
 bool ShaderTool::bindSimpleColorShader(std::shared_ptr<BaseObject> object) {
+    if (!object) return false;
     auto scene = object->getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";
@@ -31,7 +32,8 @@ bool ShaderTool::bindSimpleColorShader(std::shared_ptr<BaseObject> object) {
     return true;
 }
 
-bool ShaderTool::bindSimplePhong(std::shared_ptr<BaseObject> object) {
+bool ShaderTool::bindSimplePhongShader(std::shared_ptr<BaseObject> object) {
+    if (!object) return false;
     auto scene = object->getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";
@@ -57,7 +59,8 @@ bool ShaderTool::bindSimplePhong(std::shared_ptr<BaseObject> object) {
     return true;
 }
 
-bool ShaderTool::bindShadowPhong(std::shared_ptr<BaseObject> object) {
+bool ShaderTool::bindShadowPhongShader(std::shared_ptr<BaseObject> object) {
+    if (!object) return false;
     auto scene = object->getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";
@@ -93,7 +96,8 @@ bool ShaderTool::bindShadowPhong(std::shared_ptr<BaseObject> object) {
     return true;
 }
 
-bool ShaderTool::bindSimpleShadow(std::shared_ptr<BaseObject> object, const glm::mat4& view, const glm::mat4& projection) {
+bool ShaderTool::bindSimpleShadowShader(std::shared_ptr<BaseObject> object, const glm::mat4& view, const glm::mat4& projection) {
+    if (!object) return false;
     auto scene = object->getScene();
     if (!scene) {
         LOG(ERROR) << "scene ptr is nullptr";
@@ -105,5 +109,23 @@ bool ShaderTool::bindSimpleShadow(std::shared_ptr<BaseObject> object, const glm:
     shader->setMatrix4("model", object->getModelMatrix());
     shader->setMatrix4("view", view);
     shader->setMatrix4("projection", projection);
+    return true;
+}
+
+bool
+ShaderTool::bindGbufferShader(std::shared_ptr<BaseObject> object, const glm::mat4 &view, const glm::mat4 &projection) {
+    if (!object) return false;
+    auto scene = object->getScene();
+    if (!scene) return false;
+    auto resource_manager  =scene->getResourceManager();
+    auto shader = resource_manager->LoadShader("gBuffer.vs", "gBuffer.fs");
+    shader->use();
+    shader->setMatrix4("model", object->getModelMatrix());
+    shader->setMatrix4("view", view);
+    shader->setMatrix4("projection", projection);
+    shader->setVector4f("albedoColor", object->getColor());
+    shader->setFloat("farPlane", scene->getCamera()->getFar());
+    shader->setFloat("nearPlane", scene->getCamera()->getNear());
+    shader->setFloat("specularIntensity", 32.0f);
     return true;
 }

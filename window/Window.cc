@@ -8,8 +8,8 @@
 using namespace std;
 using namespace google;
 
-const GLuint window_width = 800;
-const GLuint window_height = 600;
+const GLuint window_width = 1024;
+const GLuint window_height = 1024;
 const std::string window_title = "LearnOpenGL";
 function<void(int, int)>* Window::window_key_func = nullptr;
 function<void(double, double)>* Window::window_mouse_func = nullptr;

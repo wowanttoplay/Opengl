@@ -21,12 +21,17 @@ Scene::~Scene() {
 void Scene::draw() {
     // 检测是否绘制阴影
     if (open_shadow_) drawShaow();
-    if (open_ao_) drawAoMap();
-    normalDraw();
+    if (open_ao_) {
+        drawGBufferMap();
+//        drawAo();
+forwardDraw();
+    }else {
+        forwardDraw();
+    }
     debug();
 }
 
-void Scene::normalDraw() {
+void Scene::forwardDraw() {
     glViewport(0, 0, width_, height_);
     glClearColor(0.2, 0.2, 0.2, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -156,23 +161,29 @@ void Scene::setDebugShadow(bool debug_shadow) {
 }
 
 void Scene::debug() {
+    debug_fucntions_.clear();
     // 是否绘制阴影debug图
     if (open_shadow_ && debug_shadow_) {
         debugShadowMap();
     }
-
     if (open_ao_ && debug_ao_) {
-        debugAoMap();
+        debugAOBufferMap();
     }
-
+    float num = float(debug_fucntions_.size());
+    for (int i = 0; i < debug_fucntions_.size(); ++i) {
+        auto func = debug_fucntions_.at(i);
+        glViewport(width_ * i / debug_fucntions_.size(), height_ *(1 - 1.0/num), float(width_)/num, float(height_)/num);
+        debug_fucntions_.at(i)();
+    }
 }
 
 void Scene::debugShadowMap() {
-    glViewport(width_ * 2 / 3, height_ * 2 / 3, width_ / 3, height_ / 3);
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
-    debug_plane_->drawTexture(shadow_map_, DebugType::DebugType_Shadow);
+    debug_fucntions_.push_back([=](){
+        debug_plane_->drawTexture(shadow_map_, DebugType::DebugType_Shadow);
+    });
 }
 
 bool Scene::isOpenShadow() const {
@@ -191,7 +202,7 @@ void Scene::setDebugAo(bool debugAo) {
     debug_ao_ = debugAo;
 }
 
-void Scene::drawAoMap() {
+void Scene::drawGBufferMap() {
     glViewport(0, 0, width_, height_);
     if (!glIsFramebuffer(FBO_)) {
         LOG(WARNING) << "generate FBO";
@@ -204,12 +215,12 @@ void Scene::drawAoMap() {
         ao_depth_map_->generate(width_, height_, nullptr);
     }
     if (!ao_position_map_) {
-        ao_position_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
-        ao_position_map_->generate(width_,height_, nullptr);
+        ao_position_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ao_position_map_->generate(width_, height_, nullptr);
     }
     if (!ao_normal_map_) {
         ao_normal_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
-        ao_normal_map_->generate(width_,height_, nullptr);
+        ao_normal_map_->generate(width_, height_, nullptr);
     }
     if (!ao_albedoColor_map_) {
         ao_albedoColor_map_ = make_shared<Texture2D>(GL_RGBA, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_UNSIGNED_BYTE);
@@ -239,11 +250,25 @@ void Scene::drawAoMap() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Scene::debugAoMap() {
-    glViewport(width_ / 3, height_ * 2 / 3, width_ / 3, height_ / 3);
+void Scene::debugAOBufferMap() {
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
-    debug_plane_->drawTexture(ao_depth_map_, DebugType::DebugType_Shadow);
+    debug_fucntions_.push_back([=](){
+        debug_plane_->drawTexture(ao_depth_map_, DebugType::DebugType_Shadow);
+    });
+    debug_fucntions_.push_back([=](){
+        debug_plane_->drawTexture(ao_position_map_, DebugType::DebugType_RGB);
+    });
+    debug_fucntions_.push_back([=](){
+        debug_plane_->drawTexture(ao_normal_map_, DebugType::DebugType_RGB);
+    });
+    debug_fucntions_.push_back([=](){
+        debug_plane_->drawTexture(ao_albedoColor_map_, DebugType::DebugType_RGB);
+    });
+}
+
+void Scene::drawAo() {
+
 }
 

@@ -13,6 +13,10 @@ enum class DebugType{
     DebugType_Shadow = 0,
     DebugType_RGB = 1,
     DebugType_RGBA = 2,
+    DebugType_R = 3,
+    DebugType_G = 4,
+    DebugType_B = 5,
+    DebugType_A  =6
 };
 
 

@@ -106,3 +106,11 @@ void Camera::update() {
 void Camera::draw() {
 
 }
+
+float Camera::getNear() const {
+    return near_;
+}
+
+float Camera::getFar() const {
+    return far_;
+}

@@ -70,6 +70,12 @@ private:
     float fov_;
     float near_ = 0.01f;
     float far_ = 100.0f;
+public:
+    float getNear() const;
+
+    float getFar() const;
+
+private:
     glm::vec2 size_; // width, height
 
     glm::mat4 view_matrix_;

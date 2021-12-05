@@ -14,13 +14,23 @@ float LinearizeDepth(float depth) {
 }
 
 void main() {
+  vec4 data = texture(texUnit, vTexCoords);
   if (type == 0) {
-    float depth = texture(texUnit, vTexCoords).r;
+    float depth = data.r;
     fragColor = vec4(vec3(LinearizeDepth(depth) / farPlane), 1.0);
   } else if (type == 1) {
-    vec3 rgb = texture(texUnit, vTexCoords).rgb;
-    fragColor = vec4(rgb, 1.0);
+    fragColor = vec4(data.rgb, 1.0);
+  } else if (type == 2) {
+    fragColor = data;
+  } else if (type == 3) {
+    fragColor = vec4(vec3(data.r), 1.0);
+  } else if (type == 4) {
+    fragColor = vec4(vec3(data.g), 1.0);
+  } else if (type == 5) {
+    fragColor = vec4(vec3(data.b), 1.0);
+  } else if (type == 6) {
+    fragColor = vec4(vec3(data.a), 1.0);
   } else {
-    fragColor = texture(texUnit, vTexCoords);
+    fragColor = data;
   }
 }

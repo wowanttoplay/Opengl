@@ -91,7 +91,7 @@ void Sphere::drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) {
         constructGeometry();
     }
 
-    if (!ShaderTool::bindSimpleShadow(shared_from_this(), view, projection)) {
+    if (!ShaderTool::bindSimpleShadowShader(shared_from_this(), view, projection)) {
         LOG(ERROR) << "bind simple shadow shader failed, return";
         return;
     }
@@ -115,7 +115,7 @@ void Sphere::draw() {
 }
 
 void Sphere::drawSimplePhong() {
-    if (!ShaderTool::bindSimplePhong(shared_from_this())) {
+    if (!ShaderTool::bindSimplePhongShader(shared_from_this())) {
         LOG(ERROR) << "bind simple phong shader, return";
         return;
     }
@@ -125,7 +125,7 @@ void Sphere::drawSimplePhong() {
 }
 
 void Sphere::drawShadowPhong() {
-    if (!ShaderTool::bindShadowPhong(shared_from_this())){
+    if (!ShaderTool::bindShadowPhongShader(shared_from_this())){
         LOG(ERROR) << "bind sahdow phong shader failed , return";
         return;
     }
@@ -152,7 +152,17 @@ void Sphere::update() {
 }
 
 void Sphere::drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) {
+    if (!glIsVertexArray(VAO_)) {
+        constructGeometry();
+    }
 
+    if (!ShaderTool::bindGbufferShader(shared_from_this(), view, projection)) {
+        LOG(ERROR) << "bind g buffer failed, return";
+        return;
+    }
+
+    glBindVertexArray(VAO_);
+    glDrawElements(GL_TRIANGLES, indices_data.size(), GL_UNSIGNED_INT, 0);
 }
 
 

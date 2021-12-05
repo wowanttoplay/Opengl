@@ -38,7 +38,7 @@ void Plane::draw() {
 }
 
 void Plane::drawShadowPhong() {
-   if (!ShaderTool::bindShadowPhong(shared_from_this())) {
+   if (!ShaderTool::bindShadowPhongShader(shared_from_this())) {
        LOG(ERROR) << "bind shadow phong shader failed, return";
        return;
    }
@@ -49,7 +49,7 @@ void Plane::drawShadowPhong() {
 }
 
 void Plane::drawSimplePhong() {
-    if (!ShaderTool::bindSimplePhong(shared_from_this())) {
+    if (!ShaderTool::bindSimplePhongShader(shared_from_this())) {
         LOG(ERROR) << "bind simple phong failed , return";
         return;
     }
@@ -85,7 +85,7 @@ void Plane::drawDepthMap(const glm::mat4 &view, const glm::mat4 &projection) {
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
-    if (!ShaderTool::bindSimpleShadow(shared_from_this(), view, projection)) {
+    if (!ShaderTool::bindSimpleShadowShader(shared_from_this(), view, projection)) {
         LOG(ERROR) << "bind saimple shadow shader failed, return";
         return;
     }
@@ -136,7 +136,17 @@ void Plane::drawTexture(std::shared_ptr<Texture2D> texture) {
 }
 
 void Plane::drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) {
+    if (!glIsVertexArray(VAO_)) {
+        constructGeometry();
+    }
 
+    if (!ShaderTool::bindGbufferShader(shared_from_this(), view, projection)) {
+        LOG(ERROR) << "bind g buffer failed, return";
+        return;
+    }
+
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 
