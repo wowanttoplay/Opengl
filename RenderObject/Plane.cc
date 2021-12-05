@@ -130,7 +130,7 @@ void Plane::drawTexture(std::shared_ptr<Texture2D> texture) {
     auto shader = resource_manager->LoadShader("texture.vs", "texture.fs");
     shader->use();
     shader->setInteger("texUnit", 0);
-    texture->bind();
+    texture->bind(0);
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -148,5 +148,7 @@ void Plane::drawGBuffer(const glm::mat4 &view, const glm::mat4 &projection) {
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
+
+
 
 

@@ -2,6 +2,7 @@
 // Created by virgil on 2021/6/10.
 //
 
+#include <random>
 #include "Scene.h"
 #include "ResourceManager.h"
 #include "RenderObject/Box.h"
@@ -22,10 +23,10 @@ void Scene::draw() {
     // 检测是否绘制阴影
     if (open_shadow_) drawShaow();
     if (open_ao_) {
-        drawGBufferMap();
-//        drawAo();
-forwardDraw();
-    }else {
+        prepareAOGBuffer();
+//        prepareAOMap();
+        forwardDraw();
+    } else {
         forwardDraw();
     }
     debug();
@@ -55,7 +56,7 @@ void Scene::drawShaow() {
         shadow_map_->generate(width_, height_, NULL);
     }
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
-    shadow_map_->bind();
+    shadow_map_->bind(0);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadow_map_->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
@@ -172,7 +173,8 @@ void Scene::debug() {
     float num = float(debug_fucntions_.size());
     for (int i = 0; i < debug_fucntions_.size(); ++i) {
         auto func = debug_fucntions_.at(i);
-        glViewport(width_ * i / debug_fucntions_.size(), height_ *(1 - 1.0/num), float(width_)/num, float(height_)/num);
+        glViewport(width_ * i / debug_fucntions_.size(), height_ * (1 - 1.0 / num), float(width_) / num,
+                   float(height_) / num);
         debug_fucntions_.at(i)();
     }
 }
@@ -181,7 +183,7 @@ void Scene::debugShadowMap() {
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
-    debug_fucntions_.push_back([=](){
+    debug_fucntions_.push_back([=]() {
         debug_plane_->drawTexture(shadow_map_, DebugType::DebugType_Shadow);
     });
 }
@@ -202,38 +204,42 @@ void Scene::setDebugAo(bool debugAo) {
     debug_ao_ = debugAo;
 }
 
-void Scene::drawGBufferMap() {
+void Scene::prepareAOGBuffer() {
     glViewport(0, 0, width_, height_);
     if (!glIsFramebuffer(FBO_)) {
         LOG(WARNING) << "generate FBO";
         glGenFramebuffers(1, &FBO_);
     }
     if (!ao_depth_map_) {
-        ao_depth_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER,
+        ao_depth_map_ = make_shared<Texture2D>(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_CLAMP_TO_BORDER,
+                                               GL_CLAMP_TO_BORDER,
                                                GL_NEAREST,
                                                GL_NEAREST, GL_FLOAT);
         ao_depth_map_->generate(width_, height_, nullptr);
     }
     if (!ao_position_map_) {
-        ao_position_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ao_position_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST,
+                                                  GL_FLOAT);
         ao_position_map_->generate(width_, height_, nullptr);
     }
     if (!ao_normal_map_) {
-        ao_normal_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ao_normal_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST,
+                                                GL_FLOAT);
         ao_normal_map_->generate(width_, height_, nullptr);
     }
     if (!ao_albedoColor_map_) {
-        ao_albedoColor_map_ = make_shared<Texture2D>(GL_RGBA, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_UNSIGNED_BYTE);
+        ao_albedoColor_map_ = make_shared<Texture2D>(GL_RGBA, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST,
+                                                     GL_UNSIGNED_BYTE);
         ao_albedoColor_map_->generate(width_, height_, nullptr);
     }
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
-    ao_depth_map_->bind();
+    ao_depth_map_->bind(0);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ao_depth_map_->getId(), 0);
-    ao_position_map_->bind();
+    ao_position_map_->bind(0);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ao_position_map_->getId(), 0);
-    ao_normal_map_->bind();
+    ao_normal_map_->bind(0);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, ao_normal_map_->getId(), 0);
-    ao_albedoColor_map_->bind();
+    ao_albedoColor_map_->bind(0);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, ao_albedoColor_map_->getId(), 0);
     GLuint attachments[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
     glDrawBuffers(3, attachments);
@@ -254,21 +260,106 @@ void Scene::debugAOBufferMap() {
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
-    debug_fucntions_.push_back([=](){
+    debug_fucntions_.push_back([=]() {
         debug_plane_->drawTexture(ao_depth_map_, DebugType::DebugType_Shadow);
     });
-    debug_fucntions_.push_back([=](){
+    debug_fucntions_.push_back([=]() {
         debug_plane_->drawTexture(ao_position_map_, DebugType::DebugType_RGB);
     });
-    debug_fucntions_.push_back([=](){
+    debug_fucntions_.push_back([=]() {
         debug_plane_->drawTexture(ao_normal_map_, DebugType::DebugType_RGB);
     });
-    debug_fucntions_.push_back([=](){
+    debug_fucntions_.push_back([=]() {
         debug_plane_->drawTexture(ao_albedoColor_map_, DebugType::DebugType_RGB);
+    });
+
+    debug_fucntions_.push_back([=](){
+        debug_plane_->drawTexture(ao_map_, DebugType::DebugType_R);
     });
 }
 
-void Scene::drawAo() {
+void Scene::prepareAOMap() {
+    if (ssao_kernel_.empty()) {
+        // 生成ssao 向周围采样的
+        std::uniform_real_distribution<float> random_float(0.0f, 1.0f); // 随机浮点数，数值大小范围为0.0~1.0
+        std::default_random_engine generator;
+        const int sample_num = 64;
+        for (int i = 0; i < sample_num; ++i) {
+            glm::vec3 sample(random_float(generator) * 2.0 - 1.0, random_float(generator) * 2.0 - 1.0,
+                             random_float(generator));
+            sample = glm::normalize(sample);
+            sample *= random_float(generator);
+            float scale = float(i) / float(sample_num);
+            scale = lerp(0.1f, 1.0f, scale * scale);
+            sample *= scale;
+            ssao_kernel_.push_back(sample);
+        }
+    }
+    if (ssao_noise_.empty()) {
+        // 生成采样所需要的噪声
+        const int noise_num = 16;
+        std::uniform_real_distribution<float> random_float(0.0f, 1.0f); // 随机浮点数，数值大小范围为0.0~1.0
+        std::default_random_engine generator;
+        for (GLuint i = 0; i < 16; i++) {
+            glm::vec3 noise(random_float(generator) * 2.0 - 1.0, random_float(generator) * 2.0 - 1.0, 0.0f);
+            ssao_noise_.push_back(noise);
+        }
+        if (!ssao_noise_map_) {
+            ssao_noise_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST,
+                                                     GL_FLOAT);
+            ssao_noise_map_->generate(sqrt(noise_num), sqrt(noise_num), (unsigned char*)ssao_noise_.data());
+        }
+    }
+    if (!ao_map_) {
+        ao_map_ = make_shared<Texture2D>(GL_RED, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ao_map_->generate(width_, height_, nullptr);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
+    ao_map_->bind(0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ao_map_->getId(), 0);
+    GLuint attachments[] = {GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, attachments);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        LOG(ERROR) << "frame buffer is not complete";
+    }
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (!debug_plane_) {
+        debug_plane_ = make_shared<DebugPlane>(shared_from_this());
+    }
+    debug_plane_->prepareAOMap();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+uint32_t Scene::getWidth() const {
+    return width_;
+}
+
+uint32_t Scene::getHeight() const {
+    return height_;
+}
+
+const shared_ptr<Texture2D> &Scene::getAoPositionMap() const {
+    return ao_position_map_;
+}
+
+const shared_ptr<Texture2D> &Scene::getAoNormalMap() const {
+    return ao_normal_map_;
+}
+
+const shared_ptr<Texture2D> &Scene::getAoAlbedoColorMap() const {
+    return ao_albedoColor_map_;
+}
+
+const vector<glm::vec3> &Scene::getSsaoKernel() const {
+    return ssao_kernel_;
+}
+
+const vector<glm::vec3> &Scene::getSsaoNoise() const {
+    return ssao_noise_;
+}
+
+const shared_ptr<Texture2D> &Scene::getSsaoNoiseMap() const {
+    return ssao_noise_map_;
 }
 

@@ -7,6 +7,7 @@
 #include <glog/logging.h>
 #include "../../Data/vertex_data.h"
 #include "../../Scene.h"
+#include "../../ShaderTool.h"
 
 using namespace std;
 using namespace google;
@@ -18,8 +19,7 @@ DebugPlane::~DebugPlane() {
 }
 
 DebugPlane::DebugPlane(std::shared_ptr<Scene> scene)
-: BaseObject(ObjectType::DeubgPlane, scene, glm::vec3(1.0), glm::vec3(1.0))
-{
+        : BaseObject(ObjectType::DeubgPlane, scene, glm::vec3(1.0), glm::vec3(1.0)) {
     LOG(WARNING) << "DebugPlane(), ptr : " << this;
 }
 
@@ -27,21 +27,10 @@ void DebugPlane::drawTexture(std::shared_ptr<Texture2D> texture, DebugType type)
     if (!glIsVertexArray(VAO_)) {
         constructGeometry();
     }
-    auto scene = getScene();
-    if (!scene) {
-        LOG(ERROR) << "scene ptr is nullptr";
+    if (!ShaderTool::bindDebugShader(shared_from_this(), texture, type)) {
+        LOG(ERROR) << "bind debug shader failed, return";
         return;
     }
-
-    auto light = scene->getLight();
-    auto resource_manager = scene->getResourceManager();
-    auto shader = resource_manager->LoadShader("debugTexture.vs", "debugTexture.fs");
-    shader->use();
-    shader->setInteger("texUnit", 0);
-    shader->setFloat("farPlane", light->getFarPlane());
-    shader->setFloat("nearPlane", light->getNearPlane());
-    shader->setInteger("type", static_cast<int>(type));
-    texture->bind();
     glBindVertexArray(VAO_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -57,9 +46,9 @@ void DebugPlane::constructGeometry() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(RenderData::DebugVertcies), RenderData::DebugVertcies, GL_STATIC_DRAW);
     // attrib pointer
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *) (2 * sizeof(float)));
     // unload
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -73,6 +62,18 @@ void DebugPlane::draw() {
 
 void DebugPlane::update() {
 
+}
+
+void DebugPlane::prepareAOMap() {
+    if (!glIsVertexArray(VAO_)) {
+        constructGeometry();
+    }
+    if (!ShaderTool::bindAOShader(getScene())) {
+        LOG(ERROR) << "bind ao shader failed ,return";
+        return;
+    }
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 

@@ -27,6 +27,8 @@ public:
     void draw() override;
     void update() override;
     void drawTexture(std::shared_ptr<Texture2D> texture, DebugType type);
+
+    void prepareAOMap();
 private:
     /*
      * 构造VAO

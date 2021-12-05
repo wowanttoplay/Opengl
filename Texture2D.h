@@ -14,7 +14,7 @@ public:
 
     void generate(GLuint width, GLuint height, unsigned char* data);
 
-    void bind() const;
+    void bind(int position = 0) const;
 
     void setInternalFormat(GLuint internalFormat);
 

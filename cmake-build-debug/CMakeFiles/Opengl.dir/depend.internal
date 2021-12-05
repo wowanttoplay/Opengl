@@ -445,6 +445,7 @@ CMakeFiles/Opengl.dir/RenderObject/Box.cc.o
  /Users/virgil/Opengl/RenderObject/BaseObject.h
  /Users/virgil/Opengl/RenderObject/Box.cc
  /Users/virgil/Opengl/RenderObject/Box.h
+ /Users/virgil/Opengl/RenderObject/Debug/DebugPlane.h
  /Users/virgil/Opengl/RenderObject/Light/BaseLight.h
  /Users/virgil/Opengl/RenderObject/Sphere.h
  /Users/virgil/Opengl/ResourceManager.h
@@ -677,6 +678,7 @@ CMakeFiles/Opengl.dir/RenderObject/Debug/DebugPlane.cc.o
  /Users/virgil/Opengl/ResourceManager.h
  /Users/virgil/Opengl/Scene.h
  /Users/virgil/Opengl/Shader.h
+ /Users/virgil/Opengl/ShaderTool.h
  /Users/virgil/Opengl/Texture2D.h
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h
@@ -1283,6 +1285,7 @@ CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o
  /Users/virgil/Opengl/Camera.h
  /Users/virgil/Opengl/Data/vertex_data.h
  /Users/virgil/Opengl/RenderObject/BaseObject.h
+ /Users/virgil/Opengl/RenderObject/Debug/DebugPlane.h
  /Users/virgil/Opengl/RenderObject/Light/BaseLight.h
  /Users/virgil/Opengl/RenderObject/Plane.cc
  /Users/virgil/Opengl/RenderObject/Plane.h
@@ -1509,6 +1512,7 @@ CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o
 CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o
  /Users/virgil/Opengl/Camera.h
  /Users/virgil/Opengl/RenderObject/BaseObject.h
+ /Users/virgil/Opengl/RenderObject/Debug/DebugPlane.h
  /Users/virgil/Opengl/RenderObject/Light/BaseLight.h
  /Users/virgil/Opengl/RenderObject/Sphere.cc
  /Users/virgil/Opengl/RenderObject/Sphere.h
@@ -2595,6 +2599,7 @@ CMakeFiles/Opengl.dir/Shader.cc.o
 CMakeFiles/Opengl.dir/ShaderTool.cc.o
  /Users/virgil/Opengl/Camera.h
  /Users/virgil/Opengl/RenderObject/BaseObject.h
+ /Users/virgil/Opengl/RenderObject/Debug/DebugPlane.h
  /Users/virgil/Opengl/RenderObject/Light/BaseLight.h
  /Users/virgil/Opengl/RenderObject/Sphere.h
  /Users/virgil/Opengl/ResourceManager.h

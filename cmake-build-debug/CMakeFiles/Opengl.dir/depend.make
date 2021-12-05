@@ -445,6 +445,7 @@ CMakeFiles/Opengl.dir/RenderObject/Box.cc.o: \
  ../RenderObject/BaseObject.h \
  ../RenderObject/Box.cc \
  ../RenderObject/Box.h \
+ ../RenderObject/Debug/DebugPlane.h \
  ../RenderObject/Light/BaseLight.h \
  ../RenderObject/Sphere.h \
  ../ResourceManager.h \
@@ -677,6 +678,7 @@ CMakeFiles/Opengl.dir/RenderObject/Debug/DebugPlane.cc.o: \
  ../ResourceManager.h \
  ../Scene.h \
  ../Shader.h \
+ ../ShaderTool.h \
  ../Texture2D.h \
  /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h \
  /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h \
@@ -1283,6 +1285,7 @@ CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o: \
  ../Camera.h \
  ../Data/vertex_data.h \
  ../RenderObject/BaseObject.h \
+ ../RenderObject/Debug/DebugPlane.h \
  ../RenderObject/Light/BaseLight.h \
  ../RenderObject/Plane.cc \
  ../RenderObject/Plane.h \
@@ -1509,6 +1512,7 @@ CMakeFiles/Opengl.dir/RenderObject/Plane.cc.o: \
 CMakeFiles/Opengl.dir/RenderObject/Sphere.cc.o: \
  ../Camera.h \
  ../RenderObject/BaseObject.h \
+ ../RenderObject/Debug/DebugPlane.h \
  ../RenderObject/Light/BaseLight.h \
  ../RenderObject/Sphere.cc \
  ../RenderObject/Sphere.h \
@@ -2595,6 +2599,7 @@ CMakeFiles/Opengl.dir/Shader.cc.o: \
 CMakeFiles/Opengl.dir/ShaderTool.cc.o: \
  ../Camera.h \
  ../RenderObject/BaseObject.h \
+ ../RenderObject/Debug/DebugPlane.h \
  ../RenderObject/Light/BaseLight.h \
  ../RenderObject/Sphere.h \
  ../ResourceManager.h \

@@ -5,6 +5,8 @@
 #pragma once
 #include "Shader.h"
 #include "RenderObject/BaseObject.h"
+#include "RenderObject/Debug/DebugPlane.h"
+
 
 class ShaderTool {
 public:
@@ -46,5 +48,21 @@ public:
      * @return 绑定是否成功
      */
     static bool bindGbufferShader(std::shared_ptr<BaseObject>object, const glm::mat4& view , const glm::mat4& projection);
+
+    /**
+     * 绑定调试纹理使用的shader
+     * @param object
+     * @param texture 待调试纹理
+     * @param type 纹理的类型
+     * @return
+     */
+    static bool bindDebugShader(std::shared_ptr<BaseObject> object, std::shared_ptr<Texture2D> texture, DebugType type);
+
+    /**
+     * 绘制ao贴图
+     * @param scene 存储着绘制ao贴图所需纹理的场景
+     * @return 返回是否绑定纹理成功
+     */
+    static bool bindAOShader(std::shared_ptr<Scene> scene);
 };
 

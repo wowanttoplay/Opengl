@@ -47,8 +47,9 @@ void Texture2D::generate(GLuint width, GLuint height, unsigned char* data)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture2D::bind() const
+void Texture2D::bind(int position) const
 {
+    glActiveTexture(GL_TEXTURE0 + position);
     glBindTexture(GL_TEXTURE_2D, this->id_);
 }
 
