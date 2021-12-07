@@ -24,7 +24,7 @@ void Scene::draw() {
     if (open_shadow_) drawShaow();
     if (open_ao_) {
         prepareAOGBuffer();
-//        prepareAOMap();
+        prepareAOMap();
         forwardDraw();
     } else {
         forwardDraw();
@@ -323,11 +323,14 @@ void Scene::prepareAOMap() {
         LOG(ERROR) << "frame buffer is not complete";
     }
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, width_, height_);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
     if (!debug_plane_) {
         debug_plane_ = make_shared<DebugPlane>(shared_from_this());
     }
     debug_plane_->prepareAOMap();
+    glEnable(GL_DEPTH_TEST);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
