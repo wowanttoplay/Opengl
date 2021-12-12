@@ -272,7 +272,6 @@ void Scene::debugAOBufferMap() {
     debug_fucntions_.push_back([=]() {
         debug_plane_->drawTexture(ao_albedoColor_map_, DebugType::DebugType_RGB);
     });
-
     debug_fucntions_.push_back([=](){
         debug_plane_->drawTexture(ao_map_, DebugType::DebugType_R);
     });
@@ -283,7 +282,7 @@ void Scene::prepareAOMap() {
         // 生成ssao 向周围采样的
         std::uniform_real_distribution<float> random_float(0.0f, 1.0f); // 随机浮点数，数值大小范围为0.0~1.0
         std::default_random_engine generator;
-        const int sample_num = 64;
+        const int sample_num = 16;
         for (int i = 0; i < sample_num; ++i) {
             glm::vec3 sample(random_float(generator) * 2.0 - 1.0, random_float(generator) * 2.0 - 1.0,
                              random_float(generator));

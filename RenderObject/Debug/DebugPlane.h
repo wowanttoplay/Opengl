@@ -19,6 +19,20 @@ enum class DebugType{
     DebugType_A  =6
 };
 
+enum class BlurTargetType{
+    BlurTargetType_R = 0,
+    BlurTargetType_G = 1,
+    BlurTargetType_B = 2,
+    BlurTargetType_A = 3,
+    BlurTargetType_RGB = 4,
+    BlurTargetType_RGBA = 5
+};
+
+enum class BlurType{
+    BlurType_GaussianFiltering, // 高斯滤波（模糊）
+    BlurType_BilateralFiltering // 双边滤波（能更好的保存边界）
+};
+
 
 class DebugPlane : public BaseObject{
 public:
@@ -29,6 +43,8 @@ public:
     void drawTexture(std::shared_ptr<Texture2D> texture, DebugType type);
 
     void prepareAOMap();
+
+    void blurTexture(std::shared_ptr<Texture2D> texture, BlurTargetType target_type, BlurType blur_type);
 private:
     /*
      * 构造VAO
