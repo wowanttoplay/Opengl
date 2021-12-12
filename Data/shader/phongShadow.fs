@@ -25,7 +25,7 @@ fs_in;
 in vec4 positionFromLight;
 
 #define EPS 0.001
-#define NUM_SAMPLES 40  // 采样个数
+#define NUM_SAMPLES 20  // 采样个数
 #define NUM_RINGS 10    // 柏松采样的圈数,数据代表采样共形成多少圈
 #define PI 3.141592653589793
 #define PI2 6.283185307179586

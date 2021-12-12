@@ -1,5 +1,5 @@
 #version 330 core
-#define SAMPLE_NUM 64
+#define SAMPLE_NUM 16
 
 out float fragColor;
 
