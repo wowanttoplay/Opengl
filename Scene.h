@@ -109,7 +109,8 @@ private:
     std::vector<glm::vec3> ssao_noise_;    // ao采样使用的噪声
     // 噪声的纹理，这个噪声纹理会被repeat在整个屏幕上
     std::shared_ptr<Texture2D> ssao_noise_map_ = nullptr;
-    std::shared_ptr<Texture2D> ao_map_ = nullptr; // 生成的ao map
+    std::shared_ptr<Texture2D> ssao_map_ = nullptr; // 生成的ao map
+    std::shared_ptr<Texture2D> ssao_blur_map_ = nullptr; // ao map的模糊处理图
 public:
     const std::vector<glm::vec3> &getSsaoKernel() const;
 
@@ -129,6 +130,7 @@ private:
     void debugAOBufferMap(); // debug 显示g buffer的纹理
     void forwardDraw(); //前向渲染
     void prepareAOMap(); // 准备ao map
+    void blurAoMap();
 private:
     void debug();
     void debugShadowMap();

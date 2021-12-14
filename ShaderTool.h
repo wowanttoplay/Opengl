@@ -64,5 +64,7 @@ public:
      * @return 返回是否绑定纹理成功
      */
     static bool bindAOShader(std::shared_ptr<Scene> scene);
+
+    static bool bindBlurShader(std::shared_ptr<BaseObject> object, std::shared_ptr<Texture2D> texture, BlurType blur_type);
 };
 

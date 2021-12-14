@@ -76,6 +76,19 @@ void DebugPlane::prepareAOMap() {
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+void DebugPlane::blurTexture(std::shared_ptr<Texture2D> texture, BlurType blur_type) {
+    if (!glIsVertexArray(VAO_)) {
+        constructGeometry();
+    }
+
+    if (!ShaderTool::bindBlurShader(shared_from_this(), texture, blur_type)) {
+        LOG(ERROR) << "bind blur shader failed, return";
+        return;
+    }
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
 
 
 

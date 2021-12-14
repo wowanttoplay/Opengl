@@ -25,6 +25,7 @@ void Scene::draw() {
     if (open_ao_) {
         prepareAOGBuffer();
         prepareAOMap();
+        blurAoMap();
         forwardDraw();
     } else {
         forwardDraw();
@@ -273,7 +274,10 @@ void Scene::debugAOBufferMap() {
         debug_plane_->drawTexture(ao_albedoColor_map_, DebugType::DebugType_RGB);
     });
     debug_fucntions_.push_back([=](){
-        debug_plane_->drawTexture(ao_map_, DebugType::DebugType_R);
+        debug_plane_->drawTexture(ssao_map_, DebugType::DebugType_R);
+    });
+    debug_fucntions_.push_back([=](){
+        debug_plane_->drawTexture(ssao_blur_map_, DebugType::DebugType_R);
     });
 }
 
@@ -282,7 +286,7 @@ void Scene::prepareAOMap() {
         // 生成ssao 向周围采样的
         std::uniform_real_distribution<float> random_float(0.0f, 1.0f); // 随机浮点数，数值大小范围为0.0~1.0
         std::default_random_engine generator;
-        const int sample_num = 16;
+        const int sample_num = 8;
         for (int i = 0; i < sample_num; ++i) {
             glm::vec3 sample(random_float(generator) * 2.0 - 1.0, random_float(generator) * 2.0 - 1.0,
                              random_float(generator));
@@ -304,18 +308,18 @@ void Scene::prepareAOMap() {
             ssao_noise_.push_back(noise);
         }
         if (!ssao_noise_map_) {
-            ssao_noise_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST,
+            ssao_noise_map_ = make_shared<Texture2D>(GL_RGB16F, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST,
                                                      GL_FLOAT);
             ssao_noise_map_->generate(sqrt(noise_num), sqrt(noise_num), (unsigned char*)ssao_noise_.data());
         }
     }
-    if (!ao_map_) {
-        ao_map_ = make_shared<Texture2D>(GL_RED, GL_RGB, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
-        ao_map_->generate(width_, height_, nullptr);
+    if (!ssao_map_) {
+        ssao_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ssao_map_->generate(width_, height_, nullptr);
     }
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
-    ao_map_->bind(0);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ao_map_->getId(), 0);
+    ssao_map_->bind(0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ssao_map_->getId(), 0);
     GLuint attachments[] = {GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1, attachments);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -363,5 +367,29 @@ const vector<glm::vec3> &Scene::getSsaoNoise() const {
 
 const shared_ptr<Texture2D> &Scene::getSsaoNoiseMap() const {
     return ssao_noise_map_;
+}
+
+void Scene::blurAoMap() {
+    if (!ssao_blur_map_) {
+        ssao_blur_map_ = make_shared<Texture2D>(GL_RGBA16F, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_FLOAT);
+        ssao_blur_map_->generate(width_, height_, nullptr);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
+    ssao_blur_map_->bind(0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ssao_blur_map_->getId(), 0);
+    GLuint attachments[] = {GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, attachments);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        LOG(ERROR) << "frame buffer is not complete";
+    }
+
+    glViewport(0, 0, width_, height_);
+    glDisable(GL_DEPTH_TEST);
+    if (!debug_plane_) {
+        debug_plane_ = make_shared<DebugPlane>(shared_from_this());
+    }
+    debug_plane_->blurTexture(ssao_map_, BlurType::BlurType_GaussianFiltering);
+    glEnable(GL_DEPTH_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

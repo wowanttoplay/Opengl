@@ -1,8 +1,8 @@
 #version 330 core
-#define SAMPLE_NUM 16
+#define SAMPLE_NUM 8
 
 in vec2 vTexCoords;
-out float aoMap;
+out vec4 aoMap;
 
 uniform sampler2D fPosition;
 uniform sampler2D fNormal;
@@ -13,8 +13,7 @@ uniform vec3 samples[SAMPLE_NUM];
 uniform float screenWidth;
 uniform float screenHeight;
 
-const float radius = 0.2;  // 采样球半径
-const float bias = 0.02;  // 深度比较的容差
+const float radius = 0.5;  // 采样球半径
 
 void main() {
   vec3 fragPos = texture(fPosition, vTexCoords).rgb;
@@ -39,8 +38,9 @@ void main() {
     float sampleDepth = texture(fPosition, offsetPos.xy).z;
 
     float rangeCheck = smoothstep(0.0, 1.0, radius / abs(sampleDepth - fragPos.z));
-    occlusion += (sampleDepth >= samplePos.z + bias ? 1.0 : 0.0) * rangeCheck;
+    float dt = max(dot(normalize(samplePos - fragPos), normal), 0.0);
+    occlusion += (sampleDepth >= samplePos.z ? 1.0 : 0.0) * rangeCheck * dt;
   }
   occlusion = 1.0 - occlusion / float(SAMPLE_NUM);  // 越小，遮挡越多
-  aoMap = occlusion;
+  aoMap = vec4(occlusion);
 }

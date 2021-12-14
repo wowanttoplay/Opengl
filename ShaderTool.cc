@@ -136,8 +136,8 @@ bool ShaderTool::bindAOShader(std::shared_ptr<Scene> scene) {
     auto shader = resource_manager->LoadShader("ssao.vs", "ssao.fs");
     shader->use();
     shader->setMatrix4("projection", scene->getCamera()->getProjectionMatrix());
-    shader->setFloat("screenWidth", scene->getWidth());
-    shader->setFloat("screenHeight", scene->getHeight());
+    shader->setFloat("screenWidth", (float)scene->getWidth());
+    shader->setFloat("screenHeight", (float)scene->getHeight());
     shader->setInteger("fPosition", 0);
     shader->setInteger("fNormal", 1);
     shader->setInteger("fNoise", 2);
@@ -168,6 +168,22 @@ ShaderTool::bindDebugShader(std::shared_ptr<BaseObject> object, std::shared_ptr<
     shader->setFloat("farPlane", light->getFarPlane());
     shader->setFloat("nearPlane", light->getNearPlane());
     shader->setInteger("type", static_cast<int>(type));
+    texture->bind(0);
+    return true;
+}
+
+bool ShaderTool::bindBlurShader(std::shared_ptr<BaseObject> object, std::shared_ptr<Texture2D> texture, BlurType blur_type) {
+    auto scene = object->getScene();
+    if (!scene || !texture) {
+        LOG(ERROR) << "scene ptr is nullptr";
+        return false;
+    }
+
+    auto resource_manager = scene->getResourceManager();
+    auto shader = resource_manager->LoadShader("blur.vs", "blur.fs");
+    shader->use();
+    shader->setInteger("blurType", static_cast<int>(blur_type));
+    shader->setInteger("blurTarget", 0);
     texture->bind(0);
     return true;
 }
