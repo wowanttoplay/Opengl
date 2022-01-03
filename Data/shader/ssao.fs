@@ -28,15 +28,17 @@ void main() {
 
   float occlusion = 0.0;
   for (int i = 0; i < SAMPLE_NUM; i++) {
+    // get sample position
     vec3 samplePos = TBN * samples[i];
     samplePos = fragPos + samplePos * radius;
+    // project the sample position to screen
     vec4 offsetPos = vec4(samplePos, 1.0);
-    offsetPos = offsetPos * projection;
-    offsetPos.xyz = offsetPos.xyz / offsetPos.w;
-    offsetPos.xyz = offsetPos.xyz * 0.5 + 0.5;
-
+    offsetPos = projection * offsetPos;           // view to clip sapce
+    offsetPos.xyz = offsetPos.xyz / offsetPos.w;  // perpective divide
+    offsetPos.xyz = offsetPos.xyz * 0.5 + 0.5;    // transform to 0.0 - 1.0
+    // sample the position texture, get the offset z
     float sampleDepth = texture(fPosition, offsetPos.xy).z;
-
+    //
     float rangeCheck = smoothstep(0.0, 1.0, radius / abs(sampleDepth - fragPos.z));
     float dt = max(dot(normalize(samplePos - fragPos), normal), 0.0);
     occlusion += (sampleDepth >= samplePos.z ? 1.0 : 0.0) * rangeCheck * dt;
