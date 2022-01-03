@@ -26,7 +26,7 @@ void Scene::draw() {
         prepareAOGBuffer();
         prepareAOMap();
         blurAoMap();
-        forwardDraw();
+        deferredDraw();
     } else {
         forwardDraw();
     }
@@ -41,6 +41,16 @@ void Scene::forwardDraw() {
         object->draw();
     }
     light_->draw();
+}
+
+void Scene::deferredDraw() {
+    // clear and reset viewport
+    glViewport(0, 0, width_, height_);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.2, 0.2, 0.2 , 1.0);
+
+    // deferred draw
+    debug_plane_->deferredDraw();
 }
 
 void Scene::drawShaow() {
@@ -165,6 +175,7 @@ void Scene::setDebugShadow(bool debug_shadow) {
 void Scene::debug() {
     debug_fucntions_.clear();
     // 是否绘制阴影debug图
+    glDisable(GL_DEPTH_TEST);
     if (open_shadow_ && debug_shadow_) {
         debugShadowMap();
     }
@@ -178,6 +189,7 @@ void Scene::debug() {
                    float(height_) / num);
         debug_fucntions_.at(i)();
     }
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Scene::debugShadowMap() {
@@ -391,5 +403,9 @@ void Scene::blurAoMap() {
     debug_plane_->blurTexture(ssao_map_, BlurType::BlurType_GaussianFiltering);
     glEnable(GL_DEPTH_TEST);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+const shared_ptr<Texture2D> &Scene::getSsaoBlurMap() const {
+    return ssao_blur_map_;
 }
 

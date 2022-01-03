@@ -187,3 +187,41 @@ bool ShaderTool::bindBlurShader(std::shared_ptr<BaseObject> object, std::shared_
     texture->bind(0);
     return true;
 }
+
+bool ShaderTool::bindDeferredAoShader(std::shared_ptr<Scene> scene) {
+    if (!scene) {
+        LOG(ERROR) << "scene is nullptr";
+        return false;
+    }
+    auto resource_manager  =scene->getResourceManager();
+    auto shader = resource_manager->LoadShader("deferred.vs", "deferred.fs");
+    shader->use();
+    // set gbuffer
+    shader->setInteger("fPosition", 0);
+    shader->setInteger("fNormal", 1);
+    shader->setInteger("fAlberdo", 2);
+    shader->setInteger("fAoMap", 3);
+    shader->setInteger("shadowMap", 4);
+    scene->getAoPositionMap()->bind(0);
+    scene->getAoNormalMap()->bind(1);
+    scene->getAoAlbedoColorMap()->bind(2);
+    scene->getSsaoBlurMap()->bind(3);
+    scene->getShadowMap()->bind(4);
+
+    // set light information
+    auto light = scene->getLight();
+    auto camera = scene->getCamera();
+    glm::vec3 light_position = (camera->getViewMatrix() * glm::vec4(light->getPosition(), 1.0));
+
+    shader->setVector3f("light.position", glm::vec3(light_position.x, light_position.y, light_position.z));
+    shader->setVector3f("light.color", light->getColor());
+    shader->setFloat("light.radius", light->getScale().x);
+    shader->setFloat("light.nearPlane", light->getNearPlane());
+    shader->setFloat("light.farPlane", light->getFarPlane());
+    shader->setMatrix4("view", camera->getViewMatrix());
+    shader->setMatrix4("lightVP", light->getProjectionMatrix() * light->getViewMatrix());
+
+    return true;
+
+}
+

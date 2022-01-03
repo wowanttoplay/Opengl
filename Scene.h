@@ -98,8 +98,6 @@ private:
     bool debug_ao_ = false;
     std::shared_ptr<Texture2D>ao_depth_map_ = nullptr; // 记录深度值
     std::shared_ptr<Texture2D>ao_position_map_ = nullptr;
-public:
-
 
 private:
     // 记录世界空间的位置信息
@@ -110,7 +108,10 @@ private:
     // 噪声的纹理，这个噪声纹理会被repeat在整个屏幕上
     std::shared_ptr<Texture2D> ssao_noise_map_ = nullptr;
     std::shared_ptr<Texture2D> ssao_map_ = nullptr; // 生成的ao map
-    std::shared_ptr<Texture2D> ssao_blur_map_ = nullptr; // ao map的模糊处理图
+    std::shared_ptr<Texture2D> ssao_blur_map_ = nullptr;
+public:
+    const std::shared_ptr <Texture2D> &getSsaoBlurMap() const;
+    // ao map的模糊处理图
 public:
     const std::vector<glm::vec3> &getSsaoKernel() const;
 
@@ -130,6 +131,7 @@ private:
     void debugAOBufferMap(); // debug 显示g buffer的纹理
     void forwardDraw(); //前向渲染
     void prepareAOMap(); // 准备ao map
+    void deferredDraw(); // 延迟渲染
     void blurAoMap();
 private:
     void debug();

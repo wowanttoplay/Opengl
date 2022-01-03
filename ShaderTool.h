@@ -65,6 +65,19 @@ public:
      */
     static bool bindAOShader(std::shared_ptr<Scene> scene);
 
+    /**
+     * 绑定模糊的shader
+     * @param object
+     * @param texture 要模糊的纹理
+     * @param blur_type 模糊的方式
+     * @return
+     */
     static bool bindBlurShader(std::shared_ptr<BaseObject> object, std::shared_ptr<Texture2D> texture, BlurType blur_type);
+    /**
+     * 绑定延迟渲染带ao的shader
+     * @param scene 要延迟渲染的场景
+     * @return
+     */
+    static bool bindDeferredAoShader(std::shared_ptr<Scene> scene);
 };
 

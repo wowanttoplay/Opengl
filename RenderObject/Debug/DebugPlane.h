@@ -36,6 +36,8 @@ public:
 
     void prepareAOMap();
 
+    void deferredDraw();
+
     void blurTexture(std::shared_ptr<Texture2D> texture, BlurType blur_type);
 private:
     /*
