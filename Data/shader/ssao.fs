@@ -13,7 +13,7 @@ uniform vec3 samples[SAMPLE_NUM];
 uniform float screenWidth;
 uniform float screenHeight;
 
-const float radius = 0.5;  // 采样球半径
+const float radius = 2.0;  // 采样球半径
 
 void main() {
   vec3 fragPos = texture(fPosition, vTexCoords).rgb;
