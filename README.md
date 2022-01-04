@@ -19,19 +19,19 @@
 
 ## 一些已经实现的效果
 
-### PBR 效果
+### PBR 效果（开启泛光）
 
 按 K 键可以开启泛光
 ![image](https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.59.56.png)
 
 ### 阴影效果对比(在develop分支，没有做开关，需要自己在shader内修改)
-
+#### 硬阴影
 ![PBR](https://github.com/wowanttoplay/Opengl/blob/develop/asset/hardShadow.png)
-
+#### PCF阴影
 ![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCF.png)
-
+#### PCSS阴影
 ![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCSS.png)
-
+#### 带AO的阴影（跳了参数让ao显眼一些，所以显得亮）
 ![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/ao.png)
 
 # 实时光追
