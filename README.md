@@ -34,4 +34,7 @@
 #### 带AO的阴影（跳了参数让ao显眼一些，所以显得亮）
 ![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/ao.png)
 
-# 实时光追
+### 实时光追
+
+## 代码开发
+
