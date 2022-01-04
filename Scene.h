@@ -52,9 +52,9 @@ public:
      * 是否开启阴影
      * @param open_shadow
      */
-    void setOpenShadow(bool open_shadow);
+    void openShadow(bool open_shadow);
 
-    void setDebugShadow(bool debug_shadow);
+    void debugShadow(bool debug_shadow);
 
 public:
     // 外部回调
@@ -87,9 +87,9 @@ private:
 
 
 public:
-    void setOpenAo(bool openAo);
+    void openAo(bool openAo);
 
-    void setDebugAo(bool debugAo);
+    void debugAo(bool debugAo);
 
     bool isOpenAo() const;
 

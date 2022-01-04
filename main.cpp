@@ -48,10 +48,10 @@ int main(int argc, char* argv[]) {
     auto scene = make_shared<Scene>(width, height, resource_dir + "/Data/");
     auto camera = make_shared<Camera>(scene, glm::vec3(0, 6.0f, 13.0f));
     scene->setCamera(camera);
-    scene->setOpenShadow(true);
-    scene->setDebugShadow(true);
-    scene->setOpenAo(true);
-    scene->setDebugAo(true);
+    scene->openShadow(true);
+    scene->debugShadow(true);
+    scene->openAo(true);
+    scene->debugAo(true);
 
     function<void(int,int)>key_func = [&scene](int key, int action)->void{
         scene->processKey(key, action);

@@ -160,7 +160,7 @@ void Scene::setCamera(const shared_ptr<Camera> &camera) {
     camera_ = camera;
 }
 
-void Scene::setOpenShadow(bool open_shadow) {
+void Scene::openShadow(bool open_shadow) {
     open_shadow_ = open_shadow;
 }
 
@@ -168,7 +168,7 @@ const shared_ptr<Texture2D> &Scene::getShadowMap() const {
     return shadow_map_;
 }
 
-void Scene::setDebugShadow(bool debug_shadow) {
+void Scene::debugShadow(bool debug_shadow) {
     debug_shadow_ = debug_shadow;
 }
 
@@ -210,11 +210,11 @@ bool Scene::isOpenAo() const {
     return open_ao_;
 }
 
-void Scene::setOpenAo(bool openAo) {
+void Scene::openAo(bool openAo) {
     open_ao_ = openAo;
 }
 
-void Scene::setDebugAo(bool debugAo) {
+void Scene::debugAo(bool debugAo) {
     debug_ao_ = debugAo;
 }
 
