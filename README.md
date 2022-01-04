@@ -26,10 +26,12 @@
 
 ### 阴影效果对比(在develop分支，没有做开关，需要自己在shader内修改)
 
-![image](https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.32.20.png)
+![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/hardShadow.png)
 
-![image](https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.32.29.png)
+![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCF.png)
 
-![image](https://github.com/wowanttoplay/Opengl/blob/master/README.assets/%E6%88%AA%E5%B1%8F2021-10-10%20%E4%B8%8A%E5%8D%8812.32.38.png)
+![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCSS.png)
+
+![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/ao.png)
 
 # 实时光追
