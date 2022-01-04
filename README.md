@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-03 18:06:35
- * @LastEditTime: 2022-01-05 00:45:53
+ * @LastEditTime: 2022-01-05 01:30:12
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /shader/Users/virgil/Opengl/README.md
@@ -32,15 +32,15 @@
 
 #### PCF 阴影
 
-![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCF.png)
+![PCF](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCF.png)
 
 #### PCSS 阴影
 
-![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCSS.png)
+![PCSS](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCSS.png)
 
 #### 带 AO 的阴影（调了参数让 ao 显眼一些，所以显得亮）
 
-![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/ao.png)
+![AO](https://github.com/wowanttoplay/Opengl/blob/develop/asset/ao.png)
 
 ### 实时光追
 
