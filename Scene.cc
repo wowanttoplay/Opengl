@@ -183,6 +183,7 @@ void Scene::debug() {
         debugAOBufferMap();
     }
     float num = float(debug_fucntions_.size());
+    num = max(3.0f, num);
     for (int i = 0; i < debug_fucntions_.size(); ++i) {
         auto func = debug_fucntions_.at(i);
         glViewport(width_ * i / debug_fucntions_.size(), height_ * (1 - 1.0 / num), float(width_) / num,

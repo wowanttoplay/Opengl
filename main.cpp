@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     std::string resource_dir = getcwd(nullptr, 0);
     resource_dir = resource_dir.substr(0, resource_dir.rfind('/'));
     auto scene = make_shared<Scene>(width, height, resource_dir + "/Data/");
-    auto camera = make_shared<Camera>(scene, glm::vec3(0, 6.0f, 16.0f));
+    auto camera = make_shared<Camera>(scene, glm::vec3(0, 6.0f, 13.0f));
     scene->setCamera(camera);
     scene->setOpenShadow(true);
     scene->setDebugShadow(true);
@@ -89,7 +89,7 @@ void AddObjectToScene(const std::shared_ptr<Scene>& scene) {
     ground->setColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     scene->pushObject(ground);
 
-    shared_ptr<Box> right_box = std::make_shared<Box>(scene, glm::vec3(1.0f, 2.0, 1.0), glm::vec3(2.0, 0.5f, 0.0));
+    shared_ptr<Box> right_box = std::make_shared<Box>(scene, glm::vec3(1.0f, 2.0, 1.0), glm::vec3(2.3f, 0.5f, 0.0));
     right_box->setColor(glm::vec4(0.3f, 1.0f, 0.0f, 1.0f));
     scene->pushObject(right_box);
 //

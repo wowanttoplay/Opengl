@@ -185,7 +185,7 @@ vec3 blinnPhong(float visibility, float ao) {
   vec3 viewNormal = texture(fNormal, vTexCoords).rgb;
 
   // ambient
-  vec3 ambient = 0.05 * color;
+  vec3 ambient = 0.3 * color;
 
   // diffuse
   vec3 lightDir = normalize(light.position - viewPosition.xyz);
