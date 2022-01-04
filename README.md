@@ -26,7 +26,7 @@
 
 ### 阴影效果对比(在develop分支，没有做开关，需要自己在shader内修改)
 
-![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/hardShadow.png)
+![PBR](https://github.com/wowanttoplay/Opengl/blob/develop/asset/hardShadow.png)
 
 ![image](https://github.com/wowanttoplay/Opengl/blob/develop/asset/PCF.png)
 
